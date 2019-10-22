@@ -14,4 +14,4 @@ RUN npm install -g @angular/cli@8.3.8
 
 COPY . /app
 
-CMD ng serve --host 0.0.0.0
+CMD ng serve --host 0.0.0.0 --disable-host-check
