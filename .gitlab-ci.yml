@@ -1,6 +1,6 @@
 include:
   - project: 'GameBase/ci-configuration'
-    file: '.docker-deploy.yml'
+    file: 'docker-deploy.yml'
 
 ---
 
