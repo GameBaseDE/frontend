@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NavbarTopComponent } from './navbar-top.component';
+import {NavbarTopComponent} from './navbar-top.component';
+import {MatMenuModule, MatToolbar, MatToolbarRow} from '@angular/material';
 
 describe('NavbarTopComponent', () => {
   let component: NavbarTopComponent;
@@ -8,9 +9,10 @@ describe('NavbarTopComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavbarTopComponent ]
+      declarations: [NavbarTopComponent, MatToolbar, MatToolbarRow],
+      imports: [MatMenuModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
