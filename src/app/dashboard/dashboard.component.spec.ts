@@ -1,7 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {DashboardComponent} from './dashboard.component';
-import {MatMenuModule} from '@angular/material';
+import {MatExpansionModule, MatGridListModule, MatMenuModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -10,7 +11,7 @@ describe('DashboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
-      imports: [MatMenuModule]
+      imports: [BrowserAnimationsModule, MatMenuModule, MatExpansionModule, MatGridListModule]
     })
       .compileComponents();
   }));

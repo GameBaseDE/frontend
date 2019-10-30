@@ -3,8 +3,9 @@ import {AppComponent} from './app.component';
 import {NavbarTopComponent} from './navbar-top/navbar-top.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {MatMenuModule, MatToolbar, MatToolbarRow} from '@angular/material';
+import {MatExpansionModule, MatGridListModule, MatMenuModule, MatToolbar, MatToolbarRow} from '@angular/material';
 import {RouterTestingModule} from '@angular/router/testing';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -12,7 +13,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent, NavbarTopComponent, DashboardComponent, PageNotFoundComponent, MatToolbarRow, MatToolbar
       ],
-      imports: [MatMenuModule, RouterTestingModule]
+      imports: [BrowserAnimationsModule, MatMenuModule, RouterTestingModule, MatExpansionModule, MatGridListModule]
     }).compileComponents();
   }));
 

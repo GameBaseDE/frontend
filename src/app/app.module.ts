@@ -6,7 +6,14 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {NavbarTopComponent} from './navbar-top/navbar-top.component';
-import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatExpansionModule,
+  MatGridListModule,
+  MatIconModule,
+  MatMenuModule,
+  MatToolbarModule
+} from '@angular/material';
 import {RouterModule, Routes} from '@angular/router';
 
 const appRoutes: Routes = [
@@ -36,7 +43,9 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatGridListModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
