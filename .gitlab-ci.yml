@@ -11,15 +11,27 @@ cache:
   key: "$CI_BUILD_REF_NAME"
   paths:
     - node_modules/
+    
+stages:
+  - verify
+  - build
+  - push
+  - deploy
 
 before_script:
   - npm install
 
 Verify branch:
-  stage: build
+  stage: verify
   script:
     - npm run lint
     - npm run test
+
+Build Docker image:
+  stage: build
+  extends: Build image
+  dependencies:
+    - Verify branch
 
 Build release:
   stage: build
