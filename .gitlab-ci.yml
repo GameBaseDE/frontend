@@ -26,7 +26,7 @@ Verify branch:
   image: trion/ng-cli-karma
   script:
     - npm run lint
-    - npm run test --code-coverage --progress false --watch false
+    - ng test --code-coverage --progress false --watch false
   allow_failure: false
   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
   artifacts:
