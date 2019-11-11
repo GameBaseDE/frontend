@@ -19,7 +19,7 @@ Verify branch:
   stage: build
   script:
     - npm run lint
-    - npm run tc-test
+    - npm run test
 
 Build release:
   stage: build
