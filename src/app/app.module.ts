@@ -7,7 +7,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {NavbarTopComponent} from './navbar-top/navbar-top.component';
 import {
-  MatButtonModule,
+  MatButtonModule, MatChipsModule,
   MatExpansionModule,
   MatGridListModule,
   MatIconModule,
@@ -15,6 +15,7 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {RouterModule, Routes} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -46,6 +47,8 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatGridListModule,
     MatExpansionModule,
+    MatChipsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
