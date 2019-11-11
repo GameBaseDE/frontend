@@ -3,8 +3,6 @@ include:
   - project: 'GameBase/ci-configuration'
     file: 'docker-deploy.yml'
 
-image: node:13-slim
-
 # Keep mode_modules between jobs (results in lower build times)
 cache:
   untracked: true
@@ -17,9 +15,6 @@ stages:
   - build
   - push
   - deploy
-
-before_script:
-  - npm install
 
 Verify branch:
   stage: verify
