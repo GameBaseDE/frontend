@@ -23,15 +23,15 @@ before_script:
 
 Verify branch:
   stage: verify
+  image: trion/ng-cli-karma
   script:
     - npm run lint
-    - npm run test
-
-Build Docker image:
-  stage: build
-  extends: Build image
-  dependencies:
-    - Verify branch
+    - npm run test --code-coverage --progress false --watch false
+  allow_failure: false
+  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+  artifacts:
+    paths:
+      - coverage/
 
 Build release:
   stage: build
