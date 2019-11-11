@@ -3,8 +3,6 @@ include:
   - project: 'GameBase/ci-configuration'
     file: 'docker-deploy.yml'
 
----
-
 image: node:13-slim
 
 # Keep mode_modules between jobs (results in lower build times)
