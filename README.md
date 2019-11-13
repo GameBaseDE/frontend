@@ -1,4 +1,6 @@
 # GameBase Frontend
+[![pipeline status](https://gitlab.tandashi.de/GameBase/gamebase-frontend/badges/master/pipeline.svg?style=flat-square)](https://gitlab.tandashi.de/GameBase/gamebase-frontend/commits/master)
+[![coverage report](https://gitlab.tandashi.de/GameBase/gamebase-frontend/badges/master/coverage.svg?style=flat-square)](https://gitlab.tandashi.de/GameBase/gamebase-frontend/commits/master)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 It represents the frontend of our game server management system.
