@@ -6,16 +6,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {NavbarTopComponent} from './navbar-top/navbar-top.component';
-import {
-  MatButtonModule, MatChipsModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatMenuModule,
-  MatToolbarModule
-} from '@angular/material';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
+import { SidebarComponent } from './navbar-top/sidebar/sidebar.component';
+import { BreadcrumpComponent } from './breadcrump/breadcrump.component';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -33,6 +27,8 @@ const appRoutes: Routes = [
     DashboardComponent,
     NavbarTopComponent,
     PageNotFoundComponent,
+    SidebarComponent,
+    BreadcrumpComponent,
   ],
   imports: [
     RouterModule.forRoot(
@@ -41,13 +37,6 @@ const appRoutes: Routes = [
     ),
     BrowserModule,
     BrowserAnimationsModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatGridListModule,
-    MatExpansionModule,
-    MatChipsModule,
     FormsModule,
   ],
   providers: [],
