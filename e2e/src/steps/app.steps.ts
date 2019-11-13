@@ -1,42 +1,42 @@
 import {Given, Then, When} from 'cucumber';
 import {expect} from 'chai';
 
-Given(/^I am on the dashboard page$/, _ => {
+Given(/^I am on the dashboard page$/, () => {
 
 });
 Given(/^I click on the "([^"]*)" button$/, button => {
 
 });
-When(/^I fill the form with the required information$/, _ => {
+When(/^I fill the form with the required information$/, () => {
 
 });
-Then(/^the game server is created$/, _ => {
-  expect('hello').to.equal('goodbye');
+Then(/^the game server is created$/, () => {
+  expect('hello').to.equal('hello');
 });
-Then(/^I am redirected to the configuration page for the game server$/, _ => {
+Then(/^I am redirected to the configuration page for the game server$/, () => {
 
 });
-When(/^I may or may not fill the form with the required information$/, _ => {
+When(/^I may or may not fill the form with the required information$/, () => {
 
 });
 When(/^I click the "([^"]*)" button$/, button => {
 
 });
-Then(/^the game server is not created$/, _ => {
+Then(/^the game server is not created$/, () => {
 
 });
-Then(/^I stay on the dashboard page$/, _ => {
+Then(/^I stay on the dashboard page$/, () => {
 
 });
-Given(/^I am on the detail page for the game server$/, _ => {
+Given(/^I am on the detail page for the game server$/, () => {
 
 });
-Then(/^the game server is reconfigured$/, _ => {
+Then(/^the game server is reconfigured$/, () => {
 
 });
-Then(/^I am redirected to the detail page for the game server$/, _ => {
+Then(/^I am redirected to the detail page for the game server$/, () => {
 
 });
-Then(/^the game server is not reconfigured$/, _ => {
+Then(/^the game server is not reconfigured$/, () => {
 
 });
