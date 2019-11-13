@@ -20,6 +20,7 @@ Verify branch:
   stage: verify
   image: trion/ng-cli-karma
   script:
+    - npm install
     - npm run lint
     - ng test --code-coverage --progress false --watch false
   allow_failure: false
