@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-breadcrump',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BreadcrumpComponent implements OnInit {
 
-  constructor() { }
+  constructor(private titleService: Title) {
+  }
 
   ngOnInit() {
   }

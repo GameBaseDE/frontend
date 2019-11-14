@@ -1,6 +1,6 @@
 // Spacing Variables
 $navbar-base-height: 56px;
-$sidebar-base-width: 225px;
+$sidebar-base-width: 150px;
 $sidebar-collapsed-width: 90px;
 
 $white: #fff;
@@ -23,22 +23,6 @@ $gray-900: #212529;
         display: block;
       }
     }
-
-    .dropdown-menu {
-      position: absolute !important;
-      transform: none !important;
-      left: calc(#{$sidebar-collapsed-width} + 0.5rem) !important;
-      margin: 0;
-
-      &.dropup {
-        bottom: 0;
-        top: auto !important;
-      }
-    }
-
-    &.dropdown .dropdown-toggle::after {
-      display: none;
-    }
   }
 }
 
@@ -52,6 +36,10 @@ $gray-900: #212529;
     .nav-link {
       color: fade-out($white, 0.5);
 
+      span {
+        margin-left: 3px;
+      }
+
       &.active,
       &:active,
       &:focus,
@@ -64,6 +52,16 @@ $gray-900: #212529;
   &.toggled {
     width: 0 !important;
     overflow: hidden;
+
+    .nav-item .nav-link span {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar {
+    transition: width .5s ease-in;
   }
 }
 
