@@ -9,7 +9,7 @@ cache:
   key: "$CI_BUILD_REF_NAME"
   paths:
     - node_modules/
-    
+
 stages:
   - verify
   - build
@@ -20,6 +20,7 @@ Verify branch:
   stage: verify
   image: trion/ng-cli-karma
   script:
+    - npm install
     - npm run lint
     - ng test --code-coverage --progress false --watch false
   allow_failure: false
