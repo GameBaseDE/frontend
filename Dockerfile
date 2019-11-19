@@ -9,23 +9,9 @@ ARG configuration=production
 # copy package.json and package-lock.json
 COPY package*.json /app/
 RUN npm install
-RUN npm install -g @angular/cli@latest
+RUN npm install -g @angular/cli@8.3.8
 
 COPY ./ /app/
-RUN ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true
+RUN ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.gahr.dev
 
 # built files are in /app/dist/NG-Frontend/
-
-
-FROM nginx
-
-# Add application files
-COPY --from=build-stage /app/dist/NG-Frontend/ /var/www/html
-COPY --from=build-stage /app/nginx/site.conf /etc/nginx/conf.d/default.conf
-
-#Expose the port
-EXPOSE 4200
-
-STOPSIGNAL SIGTERM
-
-CMD ["nginx", "-g", "daemon off;"]
