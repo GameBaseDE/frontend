@@ -1,4 +1,4 @@
-FROM amio/node-chrome as build-stage
+FROM amio/node-chrome
 LABEL maintainer="Kevin Reis <reis.kevin@student.dhbw-karlsruhe.de>, Leonhard Gahr <leonhard@gahr.dev>"
 
 WORKDIR /app
