@@ -81,7 +81,7 @@ export class RestclientService {
         map((res: HttpResponse<number>) => {
           return res.status;
         })
-      )
+      );
   }
 
   /**
@@ -96,7 +96,7 @@ export class RestclientService {
         map((res: HttpResponse<number>) => {
           return res.status;
         })
-      )
+      );
   }
 
   /**
@@ -111,7 +111,7 @@ export class RestclientService {
         map((res: HttpResponse<number>) => {
           return res.status;
         })
-      )
+      );
   }
 
   /**
@@ -126,6 +126,6 @@ export class RestclientService {
         map((res: HttpResponse<number>) => {
           return res.status;
         })
-      )
+      );
   }
 }
