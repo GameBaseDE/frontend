@@ -9,11 +9,14 @@ import {Title} from '@angular/platform-browser';
 })
 export class PageNotFoundComponent implements OnInit {
 
+  requestedUrl: string;
+
   constructor(private router: Router, private titleService: Title) {
   }
 
   ngOnInit() {
     this.titleService.setTitle('GameBase | Error 404');
+    this.requestedUrl = this.router.url.split('?')[0];
   }
 
 }

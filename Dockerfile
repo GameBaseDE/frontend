@@ -1,14 +1,17 @@
 FROM amio/node-chrome
-LABEL maintainer="Kevin Reis <reis.kevin@student.dhbw-karlsruhe.de>"
+LABEL maintainer="Kevin Reis <reis.kevin@student.dhbw-karlsruhe.de>, Leonhard Gahr <leonhard@gahr.dev>"
 
 WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
+ARG configuration=production
 
-COPY package.json /app/package.json
+# copy package.json and package-lock.json
+COPY package*.json /app/
 RUN npm install
 RUN npm install -g @angular/cli@8.3.8
 
-COPY . /app
+COPY ./ /app/
+RUN ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.gahr.dev
 
-CMD ng serve --prod --host 0.0.0.0 --disable-host-check
+# built files are in /app/dist/NG-Frontend/

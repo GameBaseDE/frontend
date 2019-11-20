@@ -8,10 +8,13 @@ import {Title} from '@angular/platform-browser';
 })
 export class BreadcrumpComponent implements OnInit {
 
+  currentPage: string;
+
   constructor(private titleService: Title) {
   }
 
   ngOnInit() {
+    this.currentPage = this.titleService.getTitle().split('|').pop().trim();
   }
 
 }
