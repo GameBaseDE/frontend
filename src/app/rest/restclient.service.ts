@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, throwError} from 'rxjs';
 import {GameServerStatus} from './response/GameServerStatus';
-import {catchError, retry} from 'rxjs/operators';
+import {catchError, map, retry} from 'rxjs/operators';
 import {GameServerTemplate} from './response/GameServerTemplate';
 
 /**
@@ -73,11 +73,59 @@ export class RestclientService {
    * Delete existing container.
    * @param id of server to be deleted
    */
-  deleteServer(id: string): Observable<GameServerStatus> {
-    return this.http.delete<GameServerStatus>(this.apiURL + '/api/destroy/' + id, this.httpOptions)
+  deleteServer(id: string): Observable<number> {
+    return this.http.delete(this.apiURL + '/api/destroy/' + id, {observe: 'response'})
       .pipe(
         retry(1),
-        catchError(RestclientService.handleError)
-      );
+        catchError(RestclientService.handleError),
+        map((res: HttpResponse<number>) => {
+          return res.status;
+        })
+      )
+  }
+
+  /**
+   * Start existing container
+   * @param id of server to be started
+   */
+  startServer(id: string): Observable<number> {
+    return this.http.post(this.apiURL + '/api/start/' + id, {observe: 'response'})
+      .pipe(
+        retry(1),
+        catchError(RestclientService.handleError),
+        map((res: HttpResponse<number>) => {
+          return res.status;
+        })
+      )
+  }
+
+  /**
+   * Stop existing container.
+   * @param id of server to be stopped
+   */
+  stopServer(id: string): Observable<number> {
+    return this.http.post(this.apiURL + '/api/stop/' + id, {observe: 'response'})
+      .pipe(
+        retry(1),
+        catchError(RestclientService.handleError),
+        map((res: HttpResponse<number>) => {
+          return res.status;
+        })
+      )
+  }
+
+  /**
+   * Restart existing container.
+   * @param id of server to be restarted
+   */
+  restartServer(id: string): Observable<number> {
+    return this.http.post(this.apiURL + '/api/stop/' + id, {observe: 'response'})
+      .pipe(
+        retry(1),
+        catchError(RestclientService.handleError),
+        map((res: HttpResponse<number>) => {
+          return res.status;
+        })
+      )
   }
 }
