@@ -21,10 +21,10 @@
           </button>
         </div>
         <h3 class="mr-0 ml-auto"><small>
-          <span *ngIf="gameServer.status==='Running'" class="badge badge-success">Running</span>
-          <span *ngIf="gameServer.status==='Restarting'" class="badge badge-info">Restarting</span>
-          <span *ngIf="gameServer.status==='Stopped'" class="badge badge-danger">Stopped</span>
-          <span *ngIf="gameServer.status==='Error'" class="badge badge-danger">Error</span>
+          <span *ngIf="gameServer.status===statusEnum.RUNNING" class="badge badge-success">Running</span>
+          <span *ngIf="gameServer.status===statusEnum.RESTARTING" class="badge badge-info">Restarting</span>
+          <span *ngIf="gameServer.status===statusEnum.STOPPED" class="badge badge-danger">Stopped</span>
+          <span *ngIf="gameServer.status===statusEnum.ERROR" class="badge badge-danger">Error</span>
         </small></h3>
       </div>
     </div>
