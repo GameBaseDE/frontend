@@ -1,20 +1,42 @@
+<div *ngIf="gameServers.length === 0">
+  No Gameservers du noob bobo hurensohn
+</div>
 <div *ngFor="let gameServer of gameServers" class="accordion" id="accordionExample">
   <div class="card">
     <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne">
       <div class="row px-3">
-        <h3 class="mr-4"> Game server {{gameServer.id}} </h3>
-        <h3 class="mr-0 ml-auto"><small><span class="badge badge-success">Running</span></small></h3>
+        <h3 class="mr-4 my-auto"> Game server {{gameServer.id}} </h3>
+        <div class="btn-group my-auto" role="group" aria-label="Basic example">
+          <button class="btn btn-info" [class.disabled]="!restartPossible(gameServer.id)"
+                  (click)="restartServerEvent($event, gameServer.id)">
+            <em class="fas fa-sync"></em>
+          </button>
+          <button class="btn btn-danger" [class.disabled]="!stopPossible(gameServer.id)"
+                  (click)="stopServerEvent($event, gameServer.id)">
+            <em class="fas fa-stop"></em>
+          </button>
+          <button class="btn btn-success" [class.disabled]="!startPossible(gameServer.id)"
+                  (click)="startServerEvent($event, gameServer.id)">
+            <em class="fas fa-play"></em>
+          </button>
+        </div>
+        <h3 class="mr-0 ml-auto"><small>
+          <span *ngIf="gameServer.status==='Running'" class="badge badge-success">Running</span>
+          <span *ngIf="gameServer.status==='Restarting'" class="badge badge-info">Restarting</span>
+          <span *ngIf="gameServer.status==='Stopped'" class="badge badge-danger">Stopped</span>
+          <span *ngIf="gameServer.status==='Error'" class="badge badge-danger">Error</span>
+        </small></h3>
       </div>
     </div>
 
     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
       <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon
-        officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
-        moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim
-        keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur
-        butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
-        haven't heard of them accusamus labore sustainable VHS.
+        <ul>
+          <li>Image: {{gameServer.image}}</li>
+          <li>Ports: {{gameServer.ports}}</li>
+          <li>Slots: {{gameServer.slots}}</li>
+          <li>Kevin ist cool</li>
+        </ul>
       </div>
     </div>
   </div>

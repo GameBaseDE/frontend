@@ -1,3 +1,7 @@
 .accordion .card .card-header {
   cursor: pointer;
 }
+
+.btn.disabled {
+  cursor: not-allowed;
+}
