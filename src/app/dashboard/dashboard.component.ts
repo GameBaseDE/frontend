@@ -23,6 +23,20 @@ export class DashboardComponent implements OnInit {
         ports: [1, 2, 3],
         slots: 12,
         status: Status.RUNNING,
+      },
+      {
+        id: '2',
+        image: 'minecraft',
+        ports: [4, 5, 6],
+        slots: 12,
+        status: Status.RUNNING,
+      },
+      {
+        id: '3',
+        image: 'minecraft',
+        ports: [7, 8, 9],
+        slots: 12,
+        status: Status.RUNNING,
       }
     ];
     this.randomizeStatus();

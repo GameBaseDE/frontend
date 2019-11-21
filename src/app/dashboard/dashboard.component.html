@@ -1,9 +1,9 @@
 <div *ngIf="gameServers.length === 0">
   No Gameservers du noob bobo hurensohn
 </div>
-<div *ngFor="let gameServer of gameServers" class="accordion" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne">
+<div class="accordion" id="accordionServers">
+  <div *ngFor="let gameServer of gameServers" class="card">
+    <div class="card-header" id="headingOne" data-toggle="collapse" [attr.data-target]="'#gameServer'+gameServer.id">
       <div class="row px-3">
         <h3 class="mr-4 my-auto"> Game server {{gameServer.id}} </h3>
         <div class="btn-group my-auto" role="group" aria-label="Basic example">
@@ -29,7 +29,8 @@
       </div>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div [attr.id]="'gameServer'+gameServer.id" class="collapse" [ngClass]="gameServers[0] === gameServer ? 'show' : ''" aria-labelledby="headingOne"
+         data-parent="#accordionServers">
       <div class="card-body">
         <ul>
           <li>Image: {{gameServer.image}}</li>
