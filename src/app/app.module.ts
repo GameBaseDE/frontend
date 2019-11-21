@@ -11,6 +11,7 @@ import {FormsModule} from '@angular/forms';
 import {SidebarComponent} from './navbar-top/sidebar/sidebar.component';
 import {BreadcrumpComponent} from './breadcrump/breadcrump.component';
 import {HttpClientModule} from '@angular/common/http';
+import {ToastrModule} from 'ngx-toastr';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -40,6 +41,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

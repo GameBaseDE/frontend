@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {RestclientService} from '../rest/restclient.service';
 import {GameServerStatus} from '../rest/response/GameServerStatus';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,9 @@ import {GameServerStatus} from '../rest/response/GameServerStatus';
 export class DashboardComponent implements OnInit {
   gameServers: GameServerStatus[];
 
-  constructor(private titleService: Title, private restClient: RestclientService) {
+  constructor(private titleService: Title,
+              private restClient: RestclientService,
+              private toastr: ToastrService) {
     this.gameServers = [
       {
         id: '1',
@@ -33,8 +36,10 @@ export class DashboardComponent implements OnInit {
   restartServerEvent(event: Event, id: string) {
     event.preventDefault();
     if (!this.restartPossible(id)) {
+      this.toastr.error('Could not restart server.', `Restarting game server #${id} failed!`);
       return;
     }
+    this.toastr.success('Restarted server.', `Restarted game server #${id} successfully!`);
     console.log(`Restarting GameServer #${id}`);
   }
 
@@ -47,8 +52,10 @@ export class DashboardComponent implements OnInit {
   startServerEvent(event: Event, id: string) {
     event.preventDefault();
     if (!this.startPossible(id)) {
+      this.toastr.error('Could not start server.', `Starting game server #${id} failed!`);
       return;
     }
+    this.toastr.success('Started server.', `Started game server #${id} successfully!`);
     console.log(`Starting GameServer #${id}`);
   }
 
@@ -61,8 +68,10 @@ export class DashboardComponent implements OnInit {
   stopServerEvent(event: Event, id: string) {
     event.preventDefault();
     if (!this.stopPossible(id)) {
+      this.toastr.error('Could not stop server.', `Stopping game server #${id} failed!`);
       return;
     }
+    this.toastr.success('Stopped server.', `Stopped game server #${id} successfully!`);
     console.log(`Stopping GameServer #${id}`);
   }
 
