@@ -37,11 +37,24 @@ export class DashboardComponent implements OnInit {
   restartServerEvent(event: Event, id: string) {
     event.stopPropagation();
     if (!this.restartPossible(id)) {
-      this.toastr.error('Could not restart server.', `Restarting game server #${id} failed!`);
+      this.toastr.error(`Restarting game server #${id} failed!`, 'Error');
       return;
     }
-    this.toastr.success('Restarted server.', `Restarted game server #${id} successfully!`);
-    console.log(`Restarting GameServer #${id}`);
+    console.error(`Restarting game server #${id}...`);
+    this.restClient.restartServer(id)
+      .subscribe(res => {
+          if (res === 200) {
+            this.toastr.success(`Restarted game server #${id} successfully!`, 'Success');
+            console.log(`Restarted game server #${id} successfully!`);
+          } else {
+            this.toastr.error(`Restarting game server #${id} failed!`, 'Error');
+            console.error(`Restarting game server #${id} failed!`);
+          }
+        },
+        error => {
+          this.toastr.error(`Started game server #${id} failed!`, 'Error');
+          console.error(`Started game server #${id} failed!`);
+        });
   }
 
   /**
@@ -53,11 +66,24 @@ export class DashboardComponent implements OnInit {
   startServerEvent(event: Event, id: string) {
     event.stopPropagation();
     if (!this.startPossible(id)) {
-      this.toastr.error('Could not start server.', `Starting game server #${id} failed!`);
+      this.toastr.error(`Starting game server #${id} failed!`, 'Error');
       return;
     }
-    this.toastr.success('Started server.', `Started game server #${id} successfully!`);
-    console.log(`Starting GameServer #${id}`);
+    console.error(`Starting game server #${id}...`);
+    this.restClient.startServer(id)
+      .subscribe(res => {
+          if (res === 200) {
+            this.toastr.success(`Started game server #${id} successfully!`, 'Success');
+            console.log(`Started game server #${id} successfully!`);
+          } else {
+            this.toastr.error(`Started game server #${id} failed!`, 'Error');
+            console.error(`Started game server #${id} failed!`);
+          }
+        },
+        error => {
+          this.toastr.error(`Started game server #${id} failed!`, 'Error');
+          console.error(`Started game server #${id} failed!`);
+        });
   }
 
   /**
@@ -69,11 +95,25 @@ export class DashboardComponent implements OnInit {
   stopServerEvent(event: Event, id: string) {
     event.stopPropagation();
     if (!this.stopPossible(id)) {
-      this.toastr.error('Could not stop server.', `Stopping game server #${id} failed!`);
+      this.toastr.error(`Stopped game server #${id} failed!`, 'Error');
       return;
     }
-    this.toastr.success('Stopped server.', `Stopped game server #${id} successfully!`);
-    console.log(`Stopping GameServer #${id}`);
+    console.error(`Stopped game server #${id}...`);
+    this.restClient.stopServer(id)
+      .subscribe(
+        res => {
+          if (res === 200) {
+            this.toastr.success(`Stopped game server #${id} successfully!`, 'Success');
+            console.log(`Stopped game server #${id} successfully!`);
+          } else {
+            this.toastr.error(`Stopped game server #${id} failed!`, 'Error');
+            console.error(`Stopped game server #${id} failed!`);
+          }
+        },
+        error => {
+          this.toastr.error(`Stopped game server #${id} failed!`, 'Error');
+          console.error(`Stopped game server #${id} failed!`);
+        });
   }
 
   /**

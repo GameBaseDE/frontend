@@ -40,7 +40,6 @@ export class RestclientService {
       message = `Error Code: ${error.status}\nReason: ${error.error.message}`;
     }
 
-    window.alert(message);
     return throwError(message);
   }
 
