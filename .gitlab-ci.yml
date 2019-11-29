@@ -1,9 +1,10 @@
 # Keep mode_modules between jobs (results in lower build times)
-cache:
+cache: &global_cache
   untracked: true
   key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+  policy: pull-push
 
 stages:
   - install
@@ -20,6 +21,11 @@ Install dependencies:
     - angular
 
 Verify lint:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
   stage: verify
   image: trion/ng-cli-karma
   script: npm run lint
@@ -28,6 +34,11 @@ Verify lint:
     - docker
 
 Verify karma-test:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
   stage: verify
   image: trion/ng-cli-karma
   script: ng test --code-coverage --progress false --watch false
@@ -39,6 +50,11 @@ Verify karma-test:
     - docker
 
 Verify E2E-test:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
   stage: verify
   image: trion/ng-cli-karma
   script: npm run e2e
@@ -47,6 +63,11 @@ Verify E2E-test:
     - docker
 
 Build:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
   stage: build
   script:
     - npm run build
