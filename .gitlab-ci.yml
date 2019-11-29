@@ -6,21 +6,33 @@ cache:
     - node_modules/
 
 stages:
+  - install
   - verify
   - build
   - deploy
 
-Verify branch:
+Install dependencies:
+  stage: install
+  image: trion/ng-cli
+  script: npm i
+
+Verify lint:
   stage: verify
   image: trion/ng-cli-karma
-  script:
-    - npm install
-    - npm run lint
-    - ng test --code-coverage --progress false --watch false
-  allow_failure: false
+  script: npm run lint
+
+Verify karma-test:
+  stage: verify
+  image: trion/ng-cli-karma
+  script: ng test --code-coverage --progress false --watch false
   artifacts:
     paths:
       - coverage/
+
+Verify E2E-test:
+  stage: verify
+  image: trion/ng-cli-karma
+  script: npm run e2e
 
 Build release:
   stage: build
@@ -36,7 +48,7 @@ Build release:
 Deploy releaase:
   stage: deploy
   script:
-    - cp dist/* /opt/gamebase/frontend/live/
+    - cp dist/NG-Frontend/* /opt/gamebase/frontend/live/
   only:
     - master
   tags:
@@ -57,7 +69,7 @@ Build dev:
 Deploy dev:
   stage: deploy
   script:
-    - cp dist/* /opt/gamebase/frontend/dev/
+    - cp dist/NG-Frontend/* /opt/gamebase/frontend/dev/
   except:
     - master
   tags:
