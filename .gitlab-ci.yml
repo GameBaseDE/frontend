@@ -15,17 +15,21 @@ Install dependencies:
   stage: install
   image: trion/ng-cli
   script: npm i
+  tags:
+    - GameBase
+    - docker
 
 Verify lint:
   stage: verify
+  image: trion/ng-cli
   script: npm run lint
   tags:
     - GameBase
     - docker
-    - angular
 
 Verify karma-test:
   stage: verify
+  image: trion/ng-cli-karma
   script: ng test --code-coverage --progress false --watch false
   artifacts:
     paths:
@@ -33,15 +37,14 @@ Verify karma-test:
   tags:
     - GameBase
     - docker
-    - angular
 
 Verify E2E-test:
   stage: verify
+  image: trion/ng-cli-karma
   script: npm run e2e
   tags:
     - GameBase
     - docker
-    - angular
 
 Build release:
   stage: build
