@@ -43,6 +43,16 @@ export class RestclientService {
     return throwError(message);
   }
 
+  /**
+   * Return a list of all existing containers.
+   */
+  getServerList(): Observable<GameServerStatus[]> {
+    return this.http.get<GameServerStatus[]>(this.apiURL + '/api/', this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(RestclientService.handleError)
+      );
+  }
 
   /**
    * Return status of an existing container.
@@ -118,7 +128,7 @@ export class RestclientService {
    * @param id of server to be restarted
    */
   restartServer(id: string): Observable<number> {
-    return this.http.post(this.apiURL + '/api/stop/' + id, {observe: 'response'})
+    return this.http.post(this.apiURL + '/api/restart/' + id, {observe: 'response'})
       .pipe(
         retry(1),
         catchError(RestclientService.handleError),

@@ -10,36 +10,16 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  gameServers: GameServerStatus[];
+  gameServers: GameServerStatus[] = [];
   statusEnum = Status;
 
   constructor(private titleService: Title,
               private restClient: RestclientService,
               private toastr: ToastrService) {
-    this.gameServers = [
-      {
-        id: '1',
-        image: 'minecraft',
-        ports: [1, 2, 3],
-        slots: 12,
-        status: Status.RUNNING,
-      },
-      {
-        id: '2',
-        image: 'minecraft',
-        ports: [4, 5, 6],
-        slots: 12,
-        status: Status.RUNNING,
-      },
-      {
-        id: '3',
-        image: 'minecraft',
-        ports: [7, 8, 9],
-        slots: 12,
-        status: Status.RUNNING,
-      }
-    ];
-    this.randomizeStatus();
+
+    restClient.getServerList().subscribe(res => this.gameServers = res,
+      error => console.log(error)
+    );
   }
 
   /**
@@ -55,9 +35,14 @@ export class DashboardComponent implements OnInit {
       return;
     }
     console.error(`Restarting game server #${id}...`);
+
+    const gameServer = this.gameServers.find(server => server.id === id);
+    gameServer.status = Status.RESTARTING;
+
     this.restClient.restartServer(id)
       .subscribe(res => {
           if (res === 200) {
+            gameServer.status = Status.RUNNING;
             this.toastr.success(`Restarted game server #${id} successfully!`, 'Success');
             console.log(`Restarted game server #${id} successfully!`);
           } else {
@@ -66,7 +51,8 @@ export class DashboardComponent implements OnInit {
           }
         },
         error => {
-          this.toastr.error(`Started game server #${id} failed!`, 'Error');
+          gameServer.status = Status.ERROR;
+          this.toastr.error(`Restarting game server #${id} failed!`, 'Error');
           console.error(`Started game server #${id} failed!`);
         });
   }
@@ -98,6 +84,8 @@ export class DashboardComponent implements OnInit {
           this.toastr.error(`Started game server #${id} failed!`, 'Error');
           console.error(`Started game server #${id} failed!`);
         });
+
+    this.gameServers.find(server => server.id === id).status = Status.RUNNING;
   }
 
   /**
@@ -128,6 +116,8 @@ export class DashboardComponent implements OnInit {
           this.toastr.error(`Stopped game server #${id} failed!`, 'Error');
           console.error(`Stopped game server #${id} failed!`);
         });
+
+    this.gameServers.find(server => server.id === id).status = Status.STOPPED;
   }
 
   /**
@@ -155,17 +145,6 @@ export class DashboardComponent implements OnInit {
   startPossible(id: string) {
     const gameServer = this.gameServers.find(value => value.id === id);
     return gameServer.status === Status.STOPPED || gameServer.status === Status.ERROR;
-  }
-
-  // test function
-  randomizeStatus() {
-    setInterval(() => {
-      this.gameServers.forEach(value => {
-        const keys = Object.keys(Status).filter(k => !(Math.abs(parseInt(k, 0)) + 1));
-        const enumKey = keys[Math.floor(Math.random() * keys.length)];
-        value.status = Status[enumKey];
-      });
-    }, 1000);
   }
 
   ngOnInit() {
