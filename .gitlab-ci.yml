@@ -1,19 +1,13 @@
-# Docker Deployment configuration: https://gitlab.tandashi.de/GameBase/ci-configuration/blob/master/docker-deploy.yml
-include:
-  - project: 'GameBase/ci-configuration'
-    file: 'docker-deploy.yml'
-
 # Keep mode_modules between jobs (results in lower build times)
 cache:
   untracked: true
   key: "$CI_BUILD_REF_NAME"
   paths:
     - node_modules/
-    
+
 stages:
   - verify
   - build
-  - push
   - deploy
 
 Verify branch:
@@ -37,3 +31,33 @@ Build release:
   artifacts:
     paths:
       - dist/*
+
+Deploy releaase:
+  stage: deploy
+  script:
+    - ls
+  only:
+    - master
+  tags:
+    - GameBase
+    - shell
+
+Build dev:
+  stage: build
+  script:
+    - npm run build
+  except:
+    - master
+  artifacts:
+    paths:
+      - dist/*
+
+Deploy dev:
+  stage: deploy
+  script:
+    - ls
+  except:
+    - master
+  tags:
+    - GameBase
+    - shell
