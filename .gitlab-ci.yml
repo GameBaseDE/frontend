@@ -18,25 +18,33 @@ Install dependencies:
 
 Verify lint:
   stage: verify
-  image: trion/ng-cli-karma
   script: npm run lint
+  tags:
+    - GameBase
+    - docker
+    - angular
 
 Verify karma-test:
   stage: verify
-  image: trion/ng-cli-karma
   script: ng test --code-coverage --progress false --watch false
   artifacts:
     paths:
       - coverage/
+  tags:
+    - GameBase
+    - docker
+    - angular
 
 Verify E2E-test:
   stage: verify
-  image: trion/ng-cli-karma
   script: npm run e2e
+  tags:
+    - GameBase
+    - docker
+    - angular
 
 Build release:
   stage: build
-  image: trion/ng-cli
   script:
     - npm run build
   only:
@@ -44,6 +52,10 @@ Build release:
   artifacts:
     paths:
       - dist/*
+  tags:
+    - GameBase
+    - docker
+    - angular
 
 Deploy releaase:
   stage: deploy
@@ -57,7 +69,6 @@ Deploy releaase:
 
 Build dev:
   stage: build
-  image: trion/ng-cli
   script:
     - npm run build
   except:
@@ -65,6 +76,10 @@ Build dev:
   artifacts:
     paths:
       - dist/*
+  tags:
+    - GameBase
+    - docker
+    - angular
 
 Deploy dev:
   stage: deploy
