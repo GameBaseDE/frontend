@@ -36,7 +36,7 @@ Build release:
 Deploy releaase:
   stage: deploy
   script:
-    - ls
+    - cp dist/* /opt/gamebase/frontend/live/
   only:
     - master
   tags:
@@ -57,7 +57,7 @@ Build dev:
 Deploy dev:
   stage: deploy
   script:
-    - ls
+    - cp dist/* /opt/gamebase/frontend/dev/
   except:
     - master
   tags:
