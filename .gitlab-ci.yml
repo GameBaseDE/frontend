@@ -46,12 +46,10 @@ Verify E2E-test:
     - docker
     - angular
 
-Build release:
+Build:
   stage: build
   script:
     - npm run build
-  only:
-    - master
   artifacts:
     paths:
       - dist/*
@@ -62,7 +60,9 @@ Build release:
 
 Deploy releaase:
   stage: deploy
+  cache: {}  # no cache required for deployment
   script:
+    - rm /opt/gamebase/frontend/live/*
     - cp dist/NG-Frontend/* /opt/gamebase/frontend/live/
   only:
     - master
@@ -70,23 +70,11 @@ Deploy releaase:
     - GameBase
     - shell
 
-Build dev:
-  stage: build
-  script:
-    - npm run build
-  except:
-    - master
-  artifacts:
-    paths:
-      - dist/*
-  tags:
-    - GameBase
-    - docker
-    - angular
-
 Deploy dev:
   stage: deploy
+  cache: {}  # no cache required for deployment
   script:
+    - rm /opt/gamebase/frontend/dev/*
     - cp dist/NG-Frontend/* /opt/gamebase/frontend/dev/
   except:
     - master
