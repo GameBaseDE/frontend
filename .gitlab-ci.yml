@@ -12,7 +12,7 @@ stages:
 
 Verify branch:
   stage: verify
-  image: trion/ng-cli
+  image: trion/ng-cli-karma
   script:
     - npm install
     - npm run lint
@@ -24,7 +24,7 @@ Verify branch:
 
 Build release:
   stage: build
-  image: trion/ng-cli-karma
+  image: trion/ng-cli
   script:
     - npm run build
   only:
