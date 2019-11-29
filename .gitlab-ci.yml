@@ -62,7 +62,7 @@ Verify E2E-test:
     - GameBase
     - docker
 
-Build:
+Build release:
   cache:
     # inherit all global cache settings
     <<: *global_cache
@@ -70,7 +70,9 @@ Build:
     policy: pull
   stage: build
   script:
-    - npm run build
+    - npm run build-live
+  only:
+    - master
   artifacts:
     paths:
       - dist/*
@@ -79,7 +81,26 @@ Build:
     - docker
     - angular
 
-Deploy releaase:
+Build dev:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
+  stage: build
+  script:
+    - npm run build-dev
+  except:
+    - master
+  artifacts:
+    paths:
+      - dist/*
+  tags:
+    - GameBase
+    - docker
+    - angular
+
+Deploy release:
   stage: deploy
   cache: {}  # no cache required for deployment
   script:
