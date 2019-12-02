@@ -8,8 +8,10 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {NavbarTopComponent} from './navbar-top/navbar-top.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import { SidebarComponent } from './navbar-top/sidebar/sidebar.component';
-import { BreadcrumpComponent } from './breadcrump/breadcrump.component';
+import {SidebarComponent} from './navbar-top/sidebar/sidebar.component';
+import {BreadcrumpComponent} from './breadcrump/breadcrump.component';
+import {HttpClientModule} from '@angular/common/http';
+import {ToastrModule} from 'ngx-toastr';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -38,6 +40,8 @@ const appRoutes: Routes = [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

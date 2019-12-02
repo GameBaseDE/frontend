@@ -6,6 +6,9 @@
 @import "~bootswatch/dist/darkly/bootswatch";
 @import "~@fortawesome/fontawesome-free/css/all.css";
 
+// regular style toast
+@import '~ngx-toastr/toastr';
+
 html, body {
   height: 100%;
   margin: 0;
