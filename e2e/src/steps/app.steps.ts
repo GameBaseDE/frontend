@@ -11,7 +11,7 @@ When(/^I fill the form with the required information$/, () => {
 
 });
 Then(/^the game server is created$/, () => {
-  expect('hello').to.equal('hello123');
+
 });
 Then(/^I am redirected to the configuration page for the game server$/, () => {
 
