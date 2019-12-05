@@ -105,7 +105,7 @@ Deploy release:
   cache: {}  # no cache required for deployment
   script:
     - rm /opt/gamebase/frontend/live/*
-    - cp dist/NG-Frontend/* /opt/gamebase/frontend/live/
+    - cp dist/GameBase-Frontend/* /opt/gamebase/frontend/live/
   only:
     - master
   tags:
@@ -117,7 +117,7 @@ Deploy dev:
   cache: {}  # no cache required for deployment
   script:
     - rm /opt/gamebase/frontend/dev/*
-    - cp dist/NG-Frontend/* /opt/gamebase/frontend/dev/
+    - cp dist/GameBase-Frontend/* /opt/gamebase/frontend/dev/
   except:
     - master
   tags:

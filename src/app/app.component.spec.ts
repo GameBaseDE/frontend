@@ -1,20 +1,16 @@
-import {async, TestBed} from '@angular/core/testing';
-import {AppComponent} from './app.component';
-import {NavbarTopComponent} from './navbar-top/navbar-top.component';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {RouterTestingModule} from '@angular/router/testing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SidebarComponent} from './navbar-top/sidebar/sidebar.component';
-import {BreadcrumpComponent} from './breadcrump/breadcrump.component';
+import { TestBed, async } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent, NavbarTopComponent, DashboardComponent, PageNotFoundComponent, SidebarComponent, BreadcrumpComponent
+      imports: [
+        RouterTestingModule
       ],
-      imports: [BrowserAnimationsModule, RouterTestingModule]
+      declarations: [
+        AppComponent
+      ],
     }).compileComponents();
   }));
 
@@ -28,12 +24,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('GameBase');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('app-navbar-top .navbar-brand').textContent).toContain('GameBase');
   });
 });

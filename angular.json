@@ -3,9 +3,13 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "NG-Frontend": {
+    "GameBase-Frontend": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -13,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/NG-Frontend",
+            "outputPath": "dist/GameBase-Frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -26,11 +30,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/popper.js/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "NG-Frontend:build"
+            "browserTarget": "GameBase-Frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "NG-Frontend:build:production"
+              "browserTarget": "GameBase-Frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "NG-Frontend:build"
+            "browserTarget": "GameBase-Frontend:build"
           }
         },
         "test": {
@@ -115,21 +115,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "NG-Frontend:serve"
+            "devServerTarget": "GameBase-Frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "NG-Frontend:serve:production"
+              "devServerTarget": "GameBase-Frontend:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "NG-Frontend",
-  "schematics": {
-    "@schematics/angular:component": {
-      "styleext": "scss"
-    }
-  }
+  "defaultProject": "GameBase-Frontend"
 }
