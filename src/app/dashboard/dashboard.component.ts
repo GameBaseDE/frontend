@@ -1,5 +1,22 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {NbIconLibraries, NbThemeService} from '@nebular/theme';
+import {ToastrService} from 'ngx-toastr';
+
+export enum Status {
+  RUNNING,
+  RESTARTING,
+  STOPPED,
+  ERROR
+}
+
+export class GameServerStatus {
+  id: string;
+  image: string;
+  status: Status;
+  ports: number[];
+  slots: number;
+}
+
 
 @Component({
   selector: 'app-dashboard',
@@ -9,8 +26,26 @@ import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   options: any = {};
   themeSubscription: any;
+  statusEnum = Status;
 
-  constructor(iconsLibrary: NbIconLibraries, private theme: NbThemeService) {
+  gameServers: GameServerStatus[] = [
+    {
+      id: '1',
+      image: 'minecraft',
+      status: Status.RUNNING,
+      ports: [1, 2],
+      slots: 21
+    },
+    {
+      id: '2',
+      image: 'auch minecraft',
+      status: Status.RUNNING,
+      ports: [1, 2],
+      slots: 21
+    }
+  ];
+
+  constructor(iconsLibrary: NbIconLibraries, private theme: NbThemeService, private toastr: ToastrService) {
     iconsLibrary.registerFontPack('fa', {packClass: 'fa', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('far', {packClass: 'far', iconClassPrefix: 'fa'});
@@ -150,5 +185,53 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
   }
+
+  /**
+   * Button click event handler for the restart GameServer button
+   *
+   * @param event the click event
+   * @param id the GameServer id to restart
+   */
+  restartServerEvent(event: Event, id: string) {
+    event.stopPropagation();
+    if (!this.restartPossible(id)) {
+      this.toastr.error(`Restarting game server #${id} failed!`, 'Error');
+      return;
+    }
+    console.error(`Restarting game server #${id}...`);
+    this.toastr.error(`Restarting game server #${id} failed!`, 'Error');
+
+    const gameServer = this.gameServers.find(server => server.id === id);
+    gameServer.status = Status.RESTARTING;
+  }
+
+
+  /**
+   *  Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
+   */
+  restartPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.RUNNING;
+  }
+
+  /**
+   * Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
+   */
+  stopPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.RUNNING;
+  }
+
+  /**
+   * Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
+   */
+  startPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.STOPPED || gameServer.status === Status.ERROR;
+  }
+
 
 }

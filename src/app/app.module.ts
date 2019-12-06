@@ -11,17 +11,22 @@ import {PageNotFoundComponent} from './layout/page-not-found/page-not-found.comp
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   NbAccordionModule,
-  NbActionsModule, NbAlertModule,
+  NbActionsModule,
+  NbAlertModule,
   NbButtonModule,
-  NbCardModule, NbContextMenuModule,
+  NbCardModule,
+  NbContextMenuModule,
   NbIconModule,
   NbLayoutModule,
-  NbMenuModule, NbSearchModule,
+  NbMenuModule,
+  NbSearchModule,
   NbSidebarModule,
-  NbThemeModule, NbUserModule
+  NbThemeModule,
+  NbUserModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -50,7 +55,8 @@ import {NgxEchartsModule} from 'ngx-echarts';
     NbContextMenuModule,
     NbAccordionModule,
     NbAlertModule,
-    NgxEchartsModule
+    NgxEchartsModule,
+    ToastrModule.forRoot({positionClass: 'toast-bottom-right'})
   ],
   providers: [],
   bootstrap: [AppComponent]

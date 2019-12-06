@@ -1,16 +1,28 @@
 <nb-accordion multi>
-  <nb-accordion-item>
+  <nb-accordion-item *ngFor="let gameServer of gameServers">
     <nb-accordion-item-header>
-      Reviews
+      {{gameServer.id }}: {{gameServer.image}}
       <div class="button-group">
-        <button class="status-button" nbButton status="danger" size="small" shape="round">
+        <button class="status-button" nbButton [disabled]="!restartPossible(gameServer.id)"  status="info" size="small"
+                (click)="restartServerEvent($event, gameServer.id)" shape="round">
           <nb-icon pack="fas" icon="sync"></nb-icon>
         </button>
-        <button class="status-button" nbButton status="info" size="small" shape="round">
-          <nb-icon pack="fas" icon="sync"></nb-icon>
+        <button class="status-button" nbButton [disabled]="!stopPossible(gameServer.id)" status="danger" size="small"
+                shape="round">
+          <nb-icon pack="fas" icon="stop"></nb-icon>
+        </button>
+        <button class="status-button" nbButton [disabled]="!startPossible(gameServer.id)" status="success" size="small"
+                shape="round">
+          <nb-icon pack="fas" icon="play"></nb-icon>
         </button>
       </div>
-      <nb-alert class="server-status" status="warning">Error</nb-alert>
+      <nb-alert *ngIf="gameServer.status == statusEnum.ERROR" class="server-status" status="danger">Error</nb-alert>
+      <nb-alert *ngIf="gameServer.status == statusEnum.RUNNING" class="server-status" status="success">Running
+      </nb-alert>
+      <nb-alert *ngIf="gameServer.status == statusEnum.RESTARTING" class="server-status" status="info">Restarting
+      </nb-alert>
+      <nb-alert *ngIf="gameServer.status == statusEnum.STOPPED" class="server-status" status="warning">Stopped
+      </nb-alert>
     </nb-accordion-item-header>
     <nb-accordion-item-body>
       <nb-card>
@@ -18,19 +30,9 @@
         <nb-card-body>
           <div echarts [options]="options" class="echart"></div>
         </nb-card-body>
+        This is a {{gameServer.image}} image
       </nb-card>
 
-    </nb-accordion-item-body>
-  </nb-accordion-item>
-
-  <nb-accordion-item>
-    <nb-accordion-item-header>
-      Edit
-    </nb-accordion-item-header>
-    <nb-accordion-item-body>
-      A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases.
-      Originally, nebula was a name for any diffuse astronomical object,
-      including galaxies beyond the Milky Way.
     </nb-accordion-item-body>
   </nb-accordion-item>
 </nb-accordion>

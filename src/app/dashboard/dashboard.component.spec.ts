@@ -4,6 +4,7 @@ import {DashboardComponent} from './dashboard.component';
 import {NbAccordionModule, NbAlertModule, NbCardModule, NbIconModule, NbThemeModule} from '@nebular/theme';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxEchartsModule} from 'ngx-echarts';
+import {ToastrModule} from 'ngx-toastr';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -13,7 +14,7 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
       imports: [NbAccordionModule, NbIconModule, NbAlertModule, BrowserAnimationsModule, NbCardModule, NgxEchartsModule,
-        NbThemeModule.forRoot()]
+        NbThemeModule.forRoot(), ToastrModule.forRoot()]
     })
       .compileComponents();
   }));
