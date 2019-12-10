@@ -46,7 +46,7 @@ export class ApiService extends BaseService {
      */
     id: string;
 
-  }): Observable<StrictHttpResponse<Array<GameServerStatus>>> {
+  }): Observable<StrictHttpResponse<GameServerStatus>> {
 
     const rb = new RequestBuilder(this.rootUrl, ApiService.GetStatusPath, 'get');
     if (params) {
@@ -60,7 +60,7 @@ export class ApiService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<GameServerStatus>>;
+        return r as StrictHttpResponse<GameServerStatus>;
       })
     );
   }
@@ -78,10 +78,10 @@ export class ApiService extends BaseService {
      */
     id: string;
 
-  }): Observable<Array<GameServerStatus>> {
+  }): Observable<GameServerStatus> {
 
     return this.getStatus$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<GameServerStatus>>) => r.body as Array<GameServerStatus>)
+      map((r: StrictHttpResponse<GameServerStatus>) => r.body as GameServerStatus)
     );
   }
 
@@ -269,12 +269,12 @@ export class ApiService extends BaseService {
    */
   deployContainer$Response(params: {
 
-  
+
   /**
    * Game server template which will be used for server creation
    */
   body: GameServerDeployTemplate
-  }): Observable<StrictHttpResponse<Array<GameServerStatus>>> {
+  }): Observable<StrictHttpResponse<GameServerStatus>> {
 
     const rb = new RequestBuilder(this.rootUrl, ApiService.DeployContainerPath, 'post');
     if (params) {
@@ -288,7 +288,7 @@ export class ApiService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<GameServerStatus>>;
+        return r as StrictHttpResponse<GameServerStatus>;
       })
     );
   }
@@ -301,15 +301,15 @@ export class ApiService extends BaseService {
    */
   deployContainer(params: {
 
-  
+
   /**
    * Game server template which will be used for server creation
    */
   body: GameServerDeployTemplate
-  }): Observable<Array<GameServerStatus>> {
+  }): Observable<GameServerStatus> {
 
     return this.deployContainer$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<GameServerStatus>>) => r.body as Array<GameServerStatus>)
+      map((r: StrictHttpResponse<GameServerStatus>) => r.body as GameServerStatus)
     );
   }
 
@@ -326,7 +326,7 @@ export class ApiService extends BaseService {
    */
   configureContainer$Response(params: {
 
-  
+
   /**
    * Configuration for game server
    */
@@ -358,7 +358,7 @@ export class ApiService extends BaseService {
    */
   configureContainer(params: {
 
-  
+
   /**
    * Configuration for game server
    */

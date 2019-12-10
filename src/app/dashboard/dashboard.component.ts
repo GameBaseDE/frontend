@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   themeSubscription: any;
   statusEnum = Status;
 
-  gameServers: GameServerStatus[];
+  gameServers: GameServerStatus[] = [];
 
   constructor(iconsLibrary: NbIconLibraries, private theme: NbThemeService, private toastr: ToastrService, private api: ApiService) {
     iconsLibrary.registerFontPack('fa', {packClass: 'fa', iconClassPrefix: 'fa'});
@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               this.gameServers[i] = result.message;
             }
           },
-          error => this.toastr.error(`Something went wrong with your GameServer ${this.gameServers[i].id}`)
+          () => this.toastr.error(`Something went wrong with your GameServer ${this.gameServers[i].id}`)
         );
       }
     }, 5000);
@@ -188,9 +188,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
-    this.gameServers.forEach(server => {
-      this.api.deleteContainer({id: server.id});
-    });
   }
 
   deployServer(image: string) {
@@ -219,7 +216,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     console.error(`Restarting game server #${id}...`);
 
     this.api.restartContainer({id}).subscribe(
-      result => {
+      () => {
         gameServer.status = Status.RUNNING;
         this.toastr.success(`GameServer ${id} restarted`, `Restart successful`);
       },
@@ -277,7 +274,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     console.error(`Restarting game server #${id}...`);
 
     this.api.startContainer({id}).subscribe(
-      result => {
+      () => {
         gameServer.status = Status.RUNNING;
         this.toastr.success(`GameServer ${id} started`, `Start successful`);
       },

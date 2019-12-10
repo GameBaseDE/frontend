@@ -17,6 +17,7 @@ export interface GameServerStatus  {
   image: string;
   map?: string;
   mapRotation?: Array<string>;
+  message: any;
 
   /**
    * Current players on server
