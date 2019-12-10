@@ -16,17 +16,20 @@ import {
   NbButtonModule,
   NbCardModule,
   NbContextMenuModule,
-  NbIconModule,
+  NbIconModule, NbInputModule,
   NbLayoutModule,
   NbMenuModule,
   NbSearchModule,
-  NbSidebarModule,
+  NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
+import {ApiModule} from './rest-client/api.module';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,12 @@ import {ToastrModule} from 'ngx-toastr';
     NbAccordionModule,
     NbAlertModule,
     NgxEchartsModule,
-    ToastrModule.forRoot({positionClass: 'toast-bottom-right'})
+    ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
+    ApiModule.forRoot({rootUrl: 'https://backend.dev.gahr.dev'}),
+    HttpClientModule,
+    NbStepperModule,
+    FormsModule,
+    NbInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

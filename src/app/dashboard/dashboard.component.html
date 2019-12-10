@@ -1,18 +1,60 @@
+<nb-card id="stepper-card">
+  <nb-card-header>Configure new server</nb-card-header>
+  <nb-card-body>
+    <nb-stepper #stepper linear="true">
+
+      <nb-step [stepControl]="imageForm" label="Image">
+        <form #imageForm="ngForm" class="step-container">
+          <div class="input-group">
+            <input type="text"
+                   placeholder="Enter an image name"
+                   class="form-control"
+                   name="name"
+                   required
+                   nbInput
+                   ngModel
+                   #name="ngModel"
+                   [status]="name.invalid ? 'danger' : 'basic'">
+            <button nbButton nbStepperNext>next</button>
+          </div>
+        </form>
+      </nb-step>
+
+      <nb-step [stepControl]="configForm" label="More config">
+        <form #configForm="ngForm" class="step-container">
+          <div class="input-group">
+            Currently there are no other configuration options
+            <button nbButton nbStepperNext (click)="deployServer(name.value)">finish</button>
+          </div>
+        </form>
+      </nb-step>
+
+      <nb-step [stepControl]="configForm" [hidden]="true" label="More config">
+        <div class="step-container">
+          <h3>Wizard completed!</h3>
+          <button nbButton (click)="stepper.reset()">Try again</button>
+        </div>
+      </nb-step>
+
+    </nb-stepper>
+  </nb-card-body>
+</nb-card>
+
 <nb-accordion multi>
   <nb-accordion-item *ngFor="let gameServer of gameServers">
     <nb-accordion-item-header>
       {{gameServer.id }}: {{gameServer.image}}
       <div class="button-group">
-        <button class="status-button" nbButton [disabled]="!restartPossible(gameServer.id)"  status="info" size="small"
+        <button class="status-button" nbButton [disabled]="!restartPossible(gameServer.id)" status="info" size="small"
                 (click)="restartServerEvent($event, gameServer.id)" shape="round">
           <nb-icon pack="fas" icon="sync"></nb-icon>
         </button>
         <button class="status-button" nbButton [disabled]="!stopPossible(gameServer.id)" status="danger" size="small"
-                shape="round">
+                (click)="stopServerEvent($event, gameServer.id)" shape="round">
           <nb-icon pack="fas" icon="stop"></nb-icon>
         </button>
         <button class="status-button" nbButton [disabled]="!startPossible(gameServer.id)" status="success" size="small"
-                shape="round">
+                (click)="startServerEvent($event, gameServer.id)" shape="round">
           <nb-icon pack="fas" icon="play"></nb-icon>
         </button>
       </div>

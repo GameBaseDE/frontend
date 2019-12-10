@@ -8,7 +8,8 @@
     "build-live": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://gamebase.gahr.dev",
     "test": "ng test --code-coverage --progress false --watch false",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "openapi": "ng-openapi-gen --input openapi.yaml --output ./src/app/rest-client"
   },
   "private": true,
   "dependencies": {
