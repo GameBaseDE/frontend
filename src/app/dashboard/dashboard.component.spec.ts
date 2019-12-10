@@ -17,7 +17,8 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
       imports: [NbAccordionModule, NbIconModule, NbAlertModule, BrowserAnimationsModule, NbCardModule, NgxEchartsModule,
-        NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule]
+        NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule,
+        ApiModule.forRoot({rootUrl: 'https://backend.dev.gahr.dev'})]
     })
       .compileComponents();
   }));
