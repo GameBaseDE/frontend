@@ -72,9 +72,9 @@
     </nb-accordion-item-header>
     <nb-accordion-item-body>
       <nb-card>
-        <button></button>
         <nb-card-header>Interesting Values that make sense</nb-card-header>
         <nb-card-body>
+          <button nbButton status="danger" outline (click)="deleteContainer(gameServer.id)">Delete Container <nb-icon icon="trash"></nb-icon></button>
           <div echarts [options]="options" class="echart"></div>
         </nb-card-body>
         This is a {{gameServer.image}} image

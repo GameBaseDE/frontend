@@ -36,14 +36,41 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    setInterval(() => {
-      this.api.getStatus(null).subscribe(
-        // @ts-ignore
-        result => this.gameServers = result.filter(value => value.id !== ''),
-        () => this.toastr.error(`Something went wrong updating the GameServers`)
-      );
-    }, 5000);
+    this.updateAll();
+    setInterval(() => this.updateAll(), 5000);
+  }
 
+  updateAll() {
+    this.api.getStatus(null).subscribe(
+      result => {
+        // @ts-ignore
+        result = result.filter(value => value.id !== '');
+        // @ts-ignore
+        if (result.length === 0) {
+          this.gameServers = [];
+        }
+
+        let newIds = [];
+
+        // @ts-ignore
+        result.forEach(gameServer => {
+          newIds = [...newIds, gameServer.id];
+          const present = this.gameServers.find(value => value.id === gameServer.id);
+          if (present && present !== gameServer) {
+            Object.assign(present, gameServer);
+          } else if (!present) {
+            this.gameServers = [...this.gameServers, gameServer];
+          }
+        });
+
+        this.gameServers.forEach(server => {
+          if (!newIds.includes(server.id)) {
+            this.gameServers = this.gameServers.filter(value => value.id !== server.id);
+          }
+        });
+      },
+      () => this.toastr.error(`Something went wrong updating the GameServers`)
+    );
   }
 
   ngAfterViewInit() {
@@ -185,6 +212,22 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Deletes a deployment
+   *
+   * @param id the id of the deployment to delete
+   */
+  deleteContainer(id: string) {
+    this.api.deleteContainer({id}).subscribe(
+      result => {
+        this.toastr.success(`Container '${id}' removed`, 'Deletion successful');
+        this.gameServers = this.gameServers.filter(value => value.id !== id);
+      },
+      error => this.toastr.error(`Container '${id}' not removed`, 'Deletion failed')
+    );
+  }
+
+
+  /**
    * Button click event handler for the restart GameServer button
    *
    * @param event the click event
@@ -201,12 +244,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const gameServer = this.gameServers.find(server => server.id === id);
     gameServer.status = Status.RESTARTING;
 
-    console.error(`Restarting game server #${id}...`);
+    console.error(`
+  Restarting
+  game
+  server
+#${id}
+...`);
 
     this.api.restartContainer({id}).subscribe(
       () => {
         gameServer.status = Status.RUNNING;
-        this.toastr.success(`GameServer ${id} restarted`, `Restart successful`);
+        this.toastr.success(`
+  GameServer ${id}
+  restarted
+`, `
+  Restart
+  successful
+`);
       },
       error => {
         gameServer.status = Status.ERROR;
@@ -230,12 +284,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const gameServer = this.gameServers.find(server => server.id === id);
-    console.error(`Stopping game server #${id}...`);
+    console.error(`
+  Stopping
+  game
+  server
+#${id}
+...`);
 
     this.api.stopContainer({id}).subscribe(
       () => {
         gameServer.status = Status.STOPPED;
-        this.toastr.success(`GameServer ${id} stopped`, `Stop successful`);
+        this.toastr.success(`
+  GameServer ${id}
+  stopped
+`, `
+  Stop
+  successful
+`);
       },
       error => {
         gameServer.status = Status.ERROR;
@@ -259,12 +324,23 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const gameServer = this.gameServers.find(server => server.id === id);
-    console.error(`Restarting game server #${id}...`);
+    console.error(`
+  Restarting
+  game
+  server
+#${id}
+...`);
 
     this.api.startContainer({id}).subscribe(
       () => {
         gameServer.status = Status.RUNNING;
-        this.toastr.success(`GameServer ${id} started`, `Start successful`);
+        this.toastr.success(`
+  GameServer ${id}
+  started
+`, `
+  Start
+  successful
+`);
       },
       error => {
         gameServer.status = Status.ERROR;
@@ -276,7 +352,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayError(step: string, error: any) {
     console.error(error);
-    this.toastr.error(`Error during ${step}: ${error.error.message}`, `${step} failed`);
+    this.toastr.error(`
+  Error
+  during ${step}: ${error.error.message}`, `${step}
+  failed
+`);
   }
 
   /**
