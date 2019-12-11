@@ -40,6 +40,10 @@
   </nb-card-body>
 </nb-card>
 
+<nb-card *ngIf="gameServers.length == 0">
+  <nb-card-body>There are currently no GameServers deployed.<br>Go create one!</nb-card-body>
+</nb-card>
+
 <nb-accordion multi>
   <nb-accordion-item *ngFor="let gameServer of gameServers">
     <nb-accordion-item-header>
@@ -68,6 +72,7 @@
     </nb-accordion-item-header>
     <nb-accordion-item-body>
       <nb-card>
+        <button></button>
         <nb-card-header>Interesting Values that make sense</nb-card-header>
         <nb-card-body>
           <div echarts [options]="options" class="echart"></div>

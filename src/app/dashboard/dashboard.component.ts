@@ -2,7 +2,6 @@ import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 import {ToastrService} from 'ngx-toastr';
 import {ApiService} from '../rest-client/services/api.service';
-import {GameServerDeployTemplate} from '../rest-client/models/game-server-deploy-template';
 
 export enum Status {
   STOPPED,
@@ -37,25 +36,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    const config: GameServerDeployTemplate = {
-      image: 'docker'
-    };
-    this.api.deployContainer({body: config}).subscribe(value => {
-      this.gameServers = [value.message];
-    });
-
     setInterval(() => {
-      for (let i = 0; i < this.gameServers.length; i++) {
-        this.api.getStatus({id: this.gameServers[i].id}).subscribe(
-          result => {
-            if (this.gameServers[i].status !== result.message.status) {
-              this.gameServers[i] = result.message;
-            }
-          },
-          () => this.toastr.error(`Something went wrong with your GameServer ${this.gameServers[i].id}`)
-        );
-      }
+      this.api.getStatus(null).subscribe(
+        // @ts-ignore
+        result => this.gameServers = result.filter(value => value.id !== ''),
+        () => this.toastr.error(`Something went wrong updating the GameServers`)
+      );
     }, 5000);
+
   }
 
   ngAfterViewInit() {
