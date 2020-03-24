@@ -57,7 +57,9 @@ Verify E2E-test:
     policy: pull
   stage: verify
   image: trion/ng-cli-karma
-  script: npm run e2e
+  script: 
+    - ng --version
+    - npm run e2e
   tags:
     - GameBase
     - docker
