@@ -128,5 +128,8 @@
       }
     }
   },
-  "defaultProject": "GameBase-Frontend"
+  "defaultProject": "GameBase-Frontend",
+  "cli": {
+    "analytics": false
+  }
 }
