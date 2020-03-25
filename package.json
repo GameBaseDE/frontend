@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-dev": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.gahr.dev",
+    "build-dev": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.gamebase.gahr.dev",
     "build-live": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://gamebase.gahr.dev",
     "test": "ng test --code-coverage --progress false --watch false",
     "lint": "ng lint",
