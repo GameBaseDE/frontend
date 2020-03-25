@@ -56,7 +56,7 @@ Verify E2E-test:
     # override the policy
     policy: pull
   stage: verify
-  image: trion/ng-cli-karma
+  image: trion/ng-cli-e2e
   script: npm run e2e
   tags:
     - GameBase
