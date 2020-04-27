@@ -1,4 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {environment} from '../../environments/environment';
 
 import {DashboardComponent} from './dashboard.component';
 import {NbAccordionModule, NbAlertModule, NbCardModule, NbIconModule, NbInputModule, NbStepperModule, NbThemeModule} from '@nebular/theme';
@@ -18,7 +19,7 @@ describe('DashboardComponent', () => {
       declarations: [DashboardComponent],
       imports: [NbAccordionModule, NbIconModule, NbAlertModule, BrowserAnimationsModule, NbCardModule, NgxEchartsModule,
         NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule,
-        ApiModule.forRoot({rootUrl: 'https://backend.dev.gahr.dev'})]
+        ApiModule.forRoot({rootUrl: environment.restApiURL})]
     })
       .compileComponents();
   }));

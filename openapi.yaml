@@ -11,9 +11,9 @@ externalDocs:
   description: Learn more about GameBase
   url: https://gahr.dev
 servers:
-  - url: https://backend.dev.gahr.dev/
+  - url: https://api.dev.game-base.de/
     description: Dev Backend version of REST service
-  - url: https://backend.gamebase.gahr.dev/
+  - url: https://api.game-base.de/
     description: Live Backend version of REST service
 tags:
   - name: api

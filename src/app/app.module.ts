@@ -1,5 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {environment} from '../environments/environment';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -60,7 +61,7 @@ import {FormsModule} from '@angular/forms';
     NbAlertModule,
     NgxEchartsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
-    ApiModule.forRoot({rootUrl: 'https://backend.dev.gahr.dev'}),
+    ApiModule.forRoot({rootUrl: environment.restApiURL}),
     HttpClientModule,
     NbStepperModule,
     FormsModule,
