@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  restApiURL: 'https://backend.dev.gahr.dev'
+  restApiURL: 'https://api.game-base.de'
 };
 
 /*

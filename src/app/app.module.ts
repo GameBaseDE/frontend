@@ -1,47 +1,71 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {environment} from '../environments/environment';
 
+import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {LayoutComponent} from './layout/layout.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {NavbarTopComponent} from './navbar-top/navbar-top.component';
-import {RouterModule, Routes} from '@angular/router';
-import {FormsModule} from '@angular/forms';
-import {SidebarComponent} from './navbar-top/sidebar/sidebar.component';
-import {BreadcrumpComponent} from './breadcrump/breadcrump.component';
-import {HttpClientModule} from '@angular/common/http';
+import {FooterComponent} from './layout/footer/footer.component';
+import {HeaderComponent} from './layout/header/header.component';
+import {PageNotFoundComponent} from './layout/page-not-found/page-not-found.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {
+  NbAccordionModule,
+  NbActionsModule,
+  NbAlertModule,
+  NbButtonModule,
+  NbCardModule,
+  NbContextMenuModule,
+  NbIconModule, NbInputModule,
+  NbLayoutModule,
+  NbMenuModule,
+  NbSearchModule,
+  NbSidebarModule, NbStepperModule,
+  NbThemeModule,
+  NbUserModule
+} from '@nebular/theme';
+import {NbEvaIconsModule} from '@nebular/eva-icons';
+import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
-
-const appRoutes: Routes = [
-  {path: 'dashboard', component: DashboardComponent},
-  {
-    path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full'
-  },
-  {path: '**', component: PageNotFoundComponent}
-];
+import {ApiModule} from './rest-client/api.module';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LayoutComponent,
     DashboardComponent,
-    NavbarTopComponent,
-    PageNotFoundComponent,
-    SidebarComponent,
-    BreadcrumpComponent,
+    FooterComponent,
+    HeaderComponent,
+    PageNotFoundComponent
   ],
   imports: [
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: true} // <-- debugging purposes only
-    ),
     BrowserModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule,
+    NbThemeModule.forRoot({name: 'dark'}),
+    NbLayoutModule,
+    NbEvaIconsModule,
+    NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
+    NbCardModule,
+    NbButtonModule,
+    NbIconModule,
+    NbActionsModule,
+    NbSearchModule,
+    NbUserModule,
+    NbContextMenuModule,
+    NbAccordionModule,
+    NbAlertModule,
+    NgxEchartsModule,
+    ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
+    ApiModule.forRoot({rootUrl: environment.restApiURL}),
     HttpClientModule,
-    ToastrModule.forRoot()
+    NbStepperModule,
+    FormsModule,
+    NbInputModule
   ],
   providers: [],
   bootstrap: [AppComponent]

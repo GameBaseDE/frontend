@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  restApiURL: 'https://backend.dev.gahr.dev'
+  restApiURL: 'https://api.game-base.de'
 };

@@ -56,7 +56,7 @@ Verify E2E-test:
     # override the policy
     policy: pull
   stage: verify
-  image: trion/ng-cli-karma
+  image: trion/ng-cli-e2e
   script: npm run e2e
   tags:
     - GameBase
@@ -69,8 +69,7 @@ Build release:
     # override the policy
     policy: pull
   stage: build
-  script:
-    - npm run build-live
+  script: npm run build-live
   only:
     - master
   artifacts:
@@ -88,8 +87,7 @@ Build dev:
     # override the policy
     policy: pull
   stage: build
-  script:
-    - npm run build-dev
+  script: npm run build-dev
   except:
     - master
   artifacts:
@@ -105,7 +103,7 @@ Deploy release:
   cache: {}  # no cache required for deployment
   script:
     - rm /opt/gamebase/frontend/live/*
-    - cp dist/NG-Frontend/* /opt/gamebase/frontend/live/
+    - cp dist/GameBase-Frontend/* /opt/gamebase/frontend/live/
   only:
     - master
   tags:
@@ -117,7 +115,7 @@ Deploy dev:
   cache: {}  # no cache required for deployment
   script:
     - rm /opt/gamebase/frontend/dev/*
-    - cp dist/NG-Frontend/* /opt/gamebase/frontend/dev/
+    - cp dist/GameBase-Frontend/* /opt/gamebase/frontend/dev/
   except:
     - master
   tags:
