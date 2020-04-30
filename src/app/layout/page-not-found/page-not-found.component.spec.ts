@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PageNotFoundComponent } from './page-not-found.component';
+import {PageNotFoundComponent} from './page-not-found.component';
+import {NbButtonModule, NbCardModule, NbMenuService} from '@nebular/theme';
 
 describe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
@@ -8,9 +9,11 @@ describe('PageNotFoundComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageNotFoundComponent ]
+      providers: [NbMenuService],
+      imports: [NbCardModule, NbButtonModule],
+      declarations: [PageNotFoundComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

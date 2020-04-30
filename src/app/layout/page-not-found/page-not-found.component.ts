@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {NbMenuService} from '@nebular/theme';
 
 @Component({
   selector: 'app-page-not-found',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PageNotFoundComponent implements OnInit {
 
-  constructor() { }
+  constructor(private menuService: NbMenuService) {
+  }
 
   ngOnInit() {
   }
 
+  goToHome() {
+    this.menuService.navigateHome();
+  }
 }
