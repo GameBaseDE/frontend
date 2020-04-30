@@ -12,7 +12,7 @@ exports.config = {
   ],
   capabilities: {
     chromeOptions: {
-      args: ["--headless"]
+      args: ["headless", "no-sandbox"]
     },
     'browserName': 'chrome'
   },

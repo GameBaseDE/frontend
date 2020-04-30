@@ -1,0 +1,49 @@
+.header-container {
+  display: flex;
+  align-items: center;
+  width: auto;
+
+  &.right {
+    float: right;
+  }
+
+  &.left {
+    float: left;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
+
+  .logo {
+    padding: 0 1.25rem;
+    font-size: 1.75rem;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+}
+
+nb-action {
+  height: auto;
+  display: flex;
+  align-content: center;
+}
+
+nb-user {
+  cursor: pointer;
+}
+
+::ng-deep nb-search button {
+  padding: 0 !important;
+}
+
+.sidebar-toggle {
+  text-decoration: none;
+  color: nb-theme(text-hint-color);
+
+  nb-icon {
+    font-size: 1.75rem;
+  }
+}
