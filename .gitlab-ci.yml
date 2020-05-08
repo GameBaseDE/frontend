@@ -121,3 +121,53 @@ Deploy dev:
   tags:
     - GameBase
     - shell
+
+pages:
+  stage: deploy
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    key: pages
+    paths:
+      - public
+    policy: pull-push
+  dependencies:
+    - Verify karma-test
+  script:
+    - mv coverage/Frontend/* coverage/
+    - mkdir -p public/
+    - cp -a coverage/* public/
+  only:
+    - master
+  artifacts:
+    name: "$CI_PIPELINE_ID"
+    paths:
+      - public
+  tags:
+    - GameBase
+    - docker
+
+pages:
+  stage: deploy
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    key: pages
+    paths:
+      - public
+    policy: pull-push
+  dependencies:
+    - Verify karma-test
+  script:
+    - mv coverage/GameBase-Frontend/* coverage/
+    - mkdir -p public/dev/
+    - cp -a coverage/* public/dev/
+  except:
+    - master
+  artifacts:
+    name: "$CI_PIPELINE_ID"
+    paths:
+      - public
+  tags:
+    - GameBase
+    - docker
