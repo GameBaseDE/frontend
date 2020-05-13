@@ -1,1 +1,157 @@
-<p>createserver works!</p>
+<!-- <nb-card>
+  <nb-card-body>
+    <nb-layout>
+      <nb-layout-header>General Details</nb-layout-header>
+      <nb-layout-column>
+        <h1>Server Name</h1>
+        <p>Name of server that will be displayed on your Dashboard</p>
+        <input type="text" nbInput fullWidth status="basic" placeholder="Server name...">
+      </nb-layout-column>
+    </nb-layout>
+  </nb-card-body>
+</nb-card> -->
+
+<nb-card>
+  <nb-card-header>General Details</nb-card-header>
+  <nb-card-body>
+    <nb-layout>
+      <nb-layout-column>
+        <form class="form-server-creation">
+          <label class="label" for="input-server-name">Server Name</label><br />
+          <div class="description">Name of server that will be displayed on your Dashboard</div>
+          <input  class="form-control"
+                  name="name"
+                  required
+                  nbInput
+                  ngModel
+                  #name="ngModel"
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="Server name">
+        </form>
+
+        <form class="form-server-creation">
+          <label class="label" for="input-server-owner">Server Owner</label><br />
+          <div class="description">Owner of server that will have full control of this game server</div>
+          <input  class="form-control"
+                  name="owner"
+                  required
+                  nbInput
+                  ngModel
+                  #name="ngModel"
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="Type some letters to start searching user">
+        </form>
+      </nb-layout-column>
+      <nb-layout-column>
+        <form class="form-server-creation">
+          <label class="label" for="input-server-description">Description</label><br />
+          <div class="description">Short description of this server which will be displayed on the Dashboard</div>
+          <textarea class="form-control"
+                    name="description"
+                    required
+                    nbInput
+                    ngModel
+                    #name="ngModel"
+                    type="text"
+                    fullWidth
+                    status="basic"
+                    placeholder="This is my game server. It runs v1.0."></textarea>
+        </form>
+      </nb-layout-column>
+    </nb-layout>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-header>Resource Allocation & Container Settings</nb-card-header>
+  <nb-card-body>
+    <nb-layout>
+      <nb-layout-column>
+        <form class="form-server-creation">
+          <label class="label" for="input-server-name">Docker image</label><br />
+          <input  class="form-control"
+                  name="image"
+                  required
+                  nbInput
+                  ngModel
+                  #name="ngModel"
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="myusername/mycustomgameserver:v1.0">
+        </form>
+
+        <form class="form-server-creation">
+          <label class="label" for="input-server-owner">Port allocation</label><br />
+          <div class="description">Max values: 1024-65565 - Comma-separated values</div>
+          <input  class="form-control"
+                  name="owner"
+                  required
+                  nbInput
+                  ngModel
+                  #name="ngModel"
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="25565">
+        </form>
+
+        <form class="form-server-creation">
+          <label class="label" for="input-server-owner">Memory allocation</label><br />
+          <div class="description">Values should be in MB - Use -1 to ignore limits</div>
+          <input  class="form-control"
+                  name="owner"
+                  required
+                  nbInput
+                  ngModel
+                  #name="ngModel"
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="-1">
+        </form>
+      </nb-layout-column>
+      <nb-layout-column>
+        <form class="form-server-creation">
+          <label class="label" for="input-server-description">Startup arguments</label><br />
+          <div class="description">Command with arguments that will be run upon container creation</div>
+          <input class="form-control"
+                    name="description"
+                    required
+                    nbInput
+                    ngModel
+                    #name="ngModel"
+                    type="text"
+                    fullWidth
+                    status="basic"
+                    placeholder="This is my game server. It runs v1.0.">
+        </form>
+
+        <form class="form-server-creation">
+          <label class="label" for="input-server-description">Restart behaviour</label><br />
+          <textarea class="form-control"
+                    name="description"
+                    required
+                    nbInput
+                    ngModel
+                    #name="ngModel"
+                    type="text"
+                    fullWidth
+                    status="basic"
+                    placeholder="This is my game server. It runs v1.0."></textarea>
+        </form>
+      </nb-layout-column>
+    </nb-layout>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-body class="button-group">
+    <button nbButton status="basic">Cancel</button>
+    <button nbButton status="info">Create Game Server</button>
+  </nb-card-body>
+</nb-card>
