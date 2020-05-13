@@ -31,6 +31,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import { CreateServerWizardComponent } from './createserver/createserver.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {FormsModule} from '@angular/forms';
     DashboardComponent,
     FooterComponent,
     HeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CreateServerWizardComponent
   ],
   imports: [
     BrowserModule,
