@@ -117,7 +117,7 @@
 
         <form class="form-server-creation">
           <label class="label" for="input-server-description">Restart behavior</label><br />
-          <nb-radio-group [(ngModel)]="restartBehaviorOptions">
+          <nb-radio-group [(ngModel)]="restartBehaviorOptions" name="restartBehavior">
             <nb-radio
               *ngFor="let option of restartBehaviorOptions"
               [value]="option.value"
