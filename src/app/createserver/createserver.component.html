@@ -73,7 +73,8 @@
       <form class="form-server-creation">
         <label class="label" for="input-port-allocation">Port allocation</label><br/>
         <div class="description">Max values: 1024-65565 - Comma-separated values</div>
-        <input [(ngModel)]="portAlloc"
+        <input [(ngModel)]="portAlloc.value"
+               (keyup)="onInputPortAlloc($event)"
                class="form-control"
                name="input-port-allocation"
                required
@@ -89,7 +90,8 @@
       <form class="form-server-creation">
         <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
         <div class="description">Values should be in MB - Use -1 to ignore limits</div>
-        <input [(ngModel)]="memoryAlloc"
+        <input [(ngModel)]="memoryAlloc.value"
+               (keyup)="onInputMemoryAlloc($event)"
                class="form-control"
                name="input-memory-allocation"
                required
