@@ -12,3 +12,8 @@ div.description {
     margin-right: 0.5rem;
     justify-content: flex-end;
 }
+
+textarea {
+    resize: vertical;
+    min-height: 1vh;
+}

@@ -23,7 +23,9 @@ import {
   NbSearchModule,
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
-  NbUserModule
+  NbUserModule,
+  NbFormFieldModule,
+  NbRadioModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
@@ -61,6 +63,7 @@ import { CreateServerWizardComponent } from './createserver/createserver.compone
     NbContextMenuModule,
     NbAccordionModule,
     NbAlertModule,
+    NbRadioModule,
     NgxEchartsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
     ApiModule.forRoot({rootUrl: environment.restApiURL}),
