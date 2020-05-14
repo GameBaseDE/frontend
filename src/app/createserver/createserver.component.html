@@ -56,9 +56,10 @@
   <nb-card-body>
     <div class="col-1">
       <form class="form-server-creation">
-        <label class="label" for="input-server-name">Docker image</label><br/>
-        <input class="form-control"
-               name="image"
+        <label class="label" for="input-docker-image">Docker image</label><br/>
+        <input [(ngModel)]="dockerImage"
+               class="form-control"
+               name="input-docker-image"
                required
                nbInput
                ngModel
@@ -70,10 +71,11 @@
       </form>
 
       <form class="form-server-creation">
-        <label class="label" for="input-server-owner">Port allocation</label><br/>
+        <label class="label" for="input-port-allocation">Port allocation</label><br/>
         <div class="description">Max values: 1024-65565 - Comma-separated values</div>
-        <input class="form-control"
-               name="owner"
+        <input [(ngModel)]="portAlloc"
+               class="form-control"
+               name="input-port-allocation"
                required
                nbInput
                ngModel
@@ -85,10 +87,11 @@
       </form>
 
       <form class="form-server-creation">
-        <label class="label" for="input-server-owner">Memory allocation</label><br/>
+        <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
         <div class="description">Values should be in MB - Use -1 to ignore limits</div>
-        <input class="form-control"
-               name="owner"
+        <input [(ngModel)]="memoryAlloc"
+               class="form-control"
+               name="input-memory-allocation"
                required
                nbInput
                ngModel
@@ -101,14 +104,14 @@
     </div>
     <div class="col-2">
       <form class="form-server-creation">
-        <label class="label" for="input-server-description">Startup arguments</label><br/>
+        <label class="label" for="input-startup-arguments">Startup arguments</label><br/>
         <div class="description">Command with arguments that will be run upon container creation</div>
-        <input class="form-control"
-               name="description"
+        <input [(ngModel)]="startupArgs"
+               class="form-control"
+               name="input-startup-arguments"
                required
                nbInput
                ngModel
-               #name="ngModel"
                type="text"
                fullWidth
                status="basic"
@@ -116,7 +119,7 @@
       </form>
 
         <form class="form-server-creation">
-          <label class="label" for="input-server-description">Restart behavior</label><br />
+          <label class="label" for="input-restart-behaviors">Restart behavior</label><br />
           <nb-radio-group [(ngModel)]="restartBehaviorOptions" name="restartBehavior">
             <nb-radio
               *ngFor="let option of restartBehaviorOptions"
@@ -133,6 +136,6 @@
 <nb-card>
   <nb-card-body class="button-group">
     <button nbButton status="basic">Cancel</button>
-    <button nbButton status="info">Create Game Server</button>
+    <button nbButton status="info" (click)="submit()">Create Game Server</button>
   </nb-card-body>
 </nb-card>

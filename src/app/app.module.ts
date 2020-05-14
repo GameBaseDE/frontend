@@ -24,7 +24,6 @@ import {
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule,
-  NbFormFieldModule,
   NbRadioModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';

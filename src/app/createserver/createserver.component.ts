@@ -14,9 +14,24 @@ export class CreateServerWizardComponent implements OnInit {
     { value: 'always', label: 'Always' },
   ];
 
+  dockerImage = '';
+
+  startupArgs = '';
+
+  memoryAlloc = '';
+
+  portAlloc = '';
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  submit(): void {
+    console.log('> Create Game Server clicked!');
+    console.log('>> Docker image: ' + this.dockerImage);
+    console.log('>> Startup args: ' + this.startupArgs);
+    console.log('>> Memory alloc: ' + this.memoryAlloc);
+    console.log('>> Port alloc: ' + this.portAlloc);
+  }
 }
