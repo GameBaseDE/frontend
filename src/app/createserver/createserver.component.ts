@@ -74,7 +74,7 @@ export class CreateServerWizardComponent implements OnInit {
     }
   }
 
-  onCancelButtonClick(): void {
+  onCancelButtonClick(event: any): void {
     this.router.navigate(CreateServerWizardComponent.dashboardRoute);
   }
 
