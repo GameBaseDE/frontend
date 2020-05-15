@@ -62,9 +62,13 @@ export class CreateServerWizardComponent implements OnInit {
     } else {
       this.deployTemplate.image = this.dockerImage;
 
-      this.api.deployContainer({body: this.deployTemplate}).subscribe(result => {
+      this.api.deployContainer({body: this.deployTemplate}).subscribe((result) => {
         this.router.navigate(['dashboard']);
         this.displaySuccess('Success!', 'Your container ' + result.id + ' has been deployed!');
+      },
+      (error) => {
+        this.displayError('Deployment error', 'An error occurred while deploying your container: ' + error);
+        console.error(error);
       });
     }
   }
