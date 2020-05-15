@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GameServerDeployTemplate } from '../rest-client/models';
+import { ToastrService } from 'ngx-toastr';
+import { ApiService } from '../rest-client/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-createserverwizard',
@@ -41,7 +44,7 @@ export class CreateServerWizardComponent implements OnInit {
   private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
   private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
 
-  constructor() { }
+  constructor(private toastr: ToastrService, private api: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -52,6 +55,18 @@ export class CreateServerWizardComponent implements OnInit {
     console.log('>> Startup args: ' + this.startupArgs);
     console.log('>> Memory alloc: ' + this.memoryAlloc);
     console.log('>> Port alloc: ' + this.portAlloc);
+
+    if (this.memoryAlloc.hasError && this.portAlloc.hasError) {
+      this.displayError('Error while submitting', 'There are errors in your provided input values.');
+      return;
+    } else {
+      this.deployTemplate.image = this.dockerImage;
+
+      this.api.deployContainer({body: this.deployTemplate}).subscribe(result => {
+        this.router.navigate(['dashboard']);
+        this.displaySuccess('Success!', 'Your container ' + result.id + ' has been deployed!');
+      });
+    }
   }
 
   onInputMemoryAlloc(event: any): void {
@@ -91,6 +106,14 @@ export class CreateServerWizardComponent implements OnInit {
     });
 
     this.portAlloc.errorMessage = "The following values are not in allowed range: " + this.portAlloc.faultyValues;
+  }
+
+  private displayError(title: string, description: string): void {
+    this.toastr.error(description, title);
+  }
+
+  private displaySuccess(title: string, description: string): void {
+    this.toastr.success(description, title);
   }
 
   private isNumericList(input: string): boolean {
