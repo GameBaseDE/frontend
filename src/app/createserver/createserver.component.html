@@ -101,7 +101,7 @@
                #name="ngModel"
                type="text"
                fullWidth
-               status="basic"
+               [status]="memoryAlloc.hasError ? 'danger' : 'basic'"
                placeholder="-1">
         <gb-error-container *ngIf="memoryAlloc.hasError" [errorMessage]="memoryAlloc.errorMessage"></gb-error-container>
       </form>

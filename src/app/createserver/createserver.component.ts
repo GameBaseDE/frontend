@@ -39,6 +39,7 @@ export class CreateServerWizardComponent implements OnInit {
   };
 
   private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
+  private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
 
   constructor() { }
 
@@ -54,10 +55,14 @@ export class CreateServerWizardComponent implements OnInit {
   }
 
   onInputMemoryAlloc(event: any): void {
-    // let value = event.target.value;
-    // if (this.isNumericList(value) && this.isValueInValidRange(value)) {
-    //   console.log(value + " is a numericLis")
-    // }
+    let value = event.target.value;
+    this.memoryAlloc.hasError = false;
+
+    if (!(this.isNumericOnly(value) || value == -1)) {
+      this.memoryAlloc.hasError = true;
+      this.memoryAlloc.errorMessage = 'Only numeric values are allowed!';
+      return;
+    }
   }
 
   onInputPortAlloc(event: any): void {
@@ -70,7 +75,7 @@ export class CreateServerWizardComponent implements OnInit {
 
     this.portAlloc.hasError = !this.isNumericList(value);
     if (this.portAlloc.hasError) {
-      this.portAlloc.errorMessage = "Your input does not match a comma-separated list!";
+      this.portAlloc.errorMessage = 'Your input does not match a comma-separated list!';
       return;
     }
 
@@ -95,5 +100,10 @@ export class CreateServerWizardComponent implements OnInit {
 
   private isValueInValidRange(input: any): boolean {
     return input >= 1024 && input <= 65565;
+  }
+
+  private isNumericOnly(input: any): boolean {
+    let result = input.match(CreateServerWizardComponent.numericValuesOnlyRegExp);
+    return result !== null && result.length > 0;
   }
 }
