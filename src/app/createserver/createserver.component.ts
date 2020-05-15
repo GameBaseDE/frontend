@@ -23,7 +23,10 @@ export class CreateServerWizardComponent implements OnInit {
     ownerId: null
   }
 
-  dockerImage = '';
+  dockerImage = {
+    value: '',
+    hasError: false,
+  };
 
   startupArgs = '';
 
@@ -57,11 +60,13 @@ export class CreateServerWizardComponent implements OnInit {
     console.log('>> Memory alloc: ' + this.memoryAlloc);
     console.log('>> Port alloc: ' + this.portAlloc);
 
-    if (this.memoryAlloc.hasError && this.portAlloc.hasError) {
+    if ((this.memoryAlloc.hasError || !(this.memoryAlloc.value.length > 0))
+        && (this.portAlloc.hasError || !(this.portAlloc.rawValue.length > 0))
+        && (this.dockerImage.hasError || !(this.dockerImage.value.length > 0))) {
       this.displayError('Error while submitting', 'There are errors in your provided input values.');
       return;
     } else {
-      this.deployTemplate.image = this.dockerImage;
+      this.deployTemplate.image = this.dockerImage.value;
 
       this.api.deployContainer({body: this.deployTemplate}).subscribe((result) => {
         this.router.navigate(['dashboard']);
@@ -76,6 +81,11 @@ export class CreateServerWizardComponent implements OnInit {
 
   onCancelButtonClick(event: any): void {
     this.router.navigate(CreateServerWizardComponent.dashboardRoute);
+  }
+
+  onInputDockerImage(event: any): void {
+    let value = event.target.value;
+    this.dockerImage.hasError = !(value.length > 0);
   }
 
   onInputMemoryAlloc(event: any): void {

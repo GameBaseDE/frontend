@@ -57,7 +57,8 @@
     <div class="col-1">
       <form class="form-server-creation">
         <label class="label" for="input-docker-image">Docker image</label><br/>
-        <input [(ngModel)]="dockerImage"
+        <input [(ngModel)]="dockerImage.value"
+               (keyup)="onInputDockerImage($event)"
                class="form-control"
                name="input-docker-image"
                required
@@ -66,8 +67,9 @@
                #name="ngModel"
                type="text"
                fullWidth
-               status="basic"
+               [status]="dockerImage.hasError ? 'danger' : 'basic'"
                placeholder="myusername/mycustomgameserver:v1.0">
+        <gb-error-container *ngIf="dockerImage.hasError" errorMessage="This field must not be empty!"></gb-error-container>
       </form>
 
       <form class="form-server-creation">
