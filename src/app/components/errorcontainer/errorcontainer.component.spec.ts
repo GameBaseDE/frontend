@@ -22,4 +22,12 @@ describe('ErrorContainerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display error message', () => {
+    let expected: string = 'This is a test message';
+    component.errorMessage = expected;
+
+    let actual: string = component.errorMessage;
+    expect(actual).toEqual(expected);
+  })
 });
