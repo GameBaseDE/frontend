@@ -33,6 +33,7 @@ import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { CreateServerWizardComponent } from './createserver/createserver.component';
+import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CreateServerWizardComponent } from './createserver/createserver.compone
     FooterComponent,
     HeaderComponent,
     PageNotFoundComponent,
-    CreateServerWizardComponent
+    CreateServerWizardComponent,
+    ErrorContainerComponent
   ],
   imports: [
     BrowserModule,
