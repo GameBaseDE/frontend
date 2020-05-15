@@ -26,12 +26,16 @@ export class CreateServerWizardComponent implements OnInit {
 
   memoryAlloc = {
     value: '',
-    hasError: false
+    hasError: false,
+    errorMessage: null,
   };
 
   portAlloc = {
-    value: '',
-    hasError: false
+    rawValue: '',
+    parsedValues: [],
+    hasError: false,
+    errorMessage: null,
+    faultyValues: [],
   };
 
   private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
@@ -58,12 +62,30 @@ export class CreateServerWizardComponent implements OnInit {
 
   onInputPortAlloc(event: any): void {
     let value = event.target.value;
+    this.portAlloc.hasError = false;
+    this.portAlloc.faultyValues = [];
+
     console.log("> onInputPortAlloc(" + value + ")");
     console.log(">> isNumericList: " + this.isNumericList(value));
+
+    this.portAlloc.hasError = !this.isNumericList(value);
+    if (this.portAlloc.hasError) {
+      this.portAlloc.errorMessage = "Your input does not match a comma-separated list!";
+      return;
+    }
+
     value.split(",").forEach(element => {
       if (!(element.length > 0)) { return; }
+      this.portAlloc.parsedValues.push(element);
       console.log(">> isValueInValidRange(" + element + "): " + this.isValueInValidRange(element));
+
+      if (!this.isValueInValidRange(element)) {
+        this.portAlloc.hasError = true;
+        this.portAlloc.faultyValues.push(element);
+      }
     });
+
+    this.portAlloc.errorMessage = "The following values are not in allowed range: " + this.portAlloc.faultyValues;
   }
 
   private isNumericList(input: string): boolean {
