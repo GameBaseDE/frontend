@@ -27,6 +27,36 @@ describe('CreateServerWizardComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should validate Docker image input and display error', () => {
+    let expected = '';
+    let input = fixture.debugElement.query(By.css('input[name="input-docker-image"]'));
+    let element = input.nativeElement;
+
+    expect(element).toBeTruthy();
+
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+
+    let actual = component.dockerImage.value;
+    expect(actual).toEqual(expected);
+    expect(component.dockerImage.hasError).toBeTrue();
+  });
+
+  it('should validate Docker image input and display no error', () => {
+    let expected = 'hello-world';
+    let input = fixture.debugElement.query(By.css('input[name="input-docker-image"]'));
+    let element = input.nativeElement;
+
+    expect(element).toBeTruthy();
+
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+
+    let actual = component.dockerImage.value;
+    expect(actual).toEqual(expected);
+    expect(component.dockerImage.hasError).toBeFalse();
+  });
+
   it('should validate memory allocation and display error', () => {
     let expected = 'abcdef';
     let input = fixture.debugElement.query(By.css('input[name="input-memory-allocation"]'));
