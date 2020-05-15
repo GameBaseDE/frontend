@@ -140,7 +140,7 @@
 
 <nb-card>
   <nb-card-body class="button-group">
-    <button nbButton status="basic">Cancel</button>
-    <button nbButton status="info" (click)="submit()">Create Game Server</button>
+    <button nbButton status="basic" (click)="onCancelButtonClick($event)">Cancel</button>
+    <button nbButton status="info" (click)="onSubmitButtonClick($event)">Create Game Server</button>
   </nb-card-body>
 </nb-card>

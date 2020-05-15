@@ -43,13 +43,14 @@ export class CreateServerWizardComponent implements OnInit {
 
   private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
   private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
+  private static dashboardRoute = ['dashboard'];
 
   constructor(private toastr: ToastrService, private api: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  submit(): void {
+  onSubmitButtonClick(): void {
     console.log('> Create Game Server clicked!');
     console.log('>> Docker image: ' + this.dockerImage);
     console.log('>> Startup args: ' + this.startupArgs);
@@ -71,6 +72,10 @@ export class CreateServerWizardComponent implements OnInit {
         console.error(error);
       });
     }
+  }
+
+  onCancelButtonClick(): void {
+    this.router.navigate(CreateServerWizardComponent.dashboardRoute);
   }
 
   onInputMemoryAlloc(event: any): void {
