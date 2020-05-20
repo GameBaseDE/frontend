@@ -15,15 +15,15 @@ export class LayoutComponent {
       link: '/dashboard',
       home: true,
     },
-    {
-      title: 'SERVERS',
-      group: true
-    },
-    {
-      title: 'Create Server',
-      icon: 'plus-circle-outline',
-      link: '/createserver'
-    },
+    // {
+    //   title: 'SERVERS',
+    //   group: true
+    // },
+    // {
+    //   title: 'Create Server',
+    //   icon: 'plus-circle-outline',
+    //   link: '/createserver'
+    // },
     {
       title: 'FEATURES',
       group: true,

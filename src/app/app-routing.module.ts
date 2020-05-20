@@ -11,7 +11,7 @@ const routes: Routes = [
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
-  {path: 'createserver', component: ServerConfigurationComponent},
+  //{path: 'createserver', component: ServerConfigurationComponent},
   {path: '**', component: PageNotFoundComponent}
 ];
 
