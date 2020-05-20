@@ -5,16 +5,18 @@
       <form class="form-server-creation">
         <label class="label" for="input-server-name">Server Name</label><br/>
         <div class="description">Name of server that will be displayed on your Dashboard</div>
-        <input class="form-control"
-               name="name"
-               required
-               nbInput
-               ngModel
-               #name="ngModel"
-               type="text"
-               fullWidth
-               status="basic"
-               placeholder="Server name">
+        <input  [(ngModel)]="generalDetails.serverName"
+                (keyup)="updateServerName(serverName.value)"
+                class="form-control"
+                name="name"
+                required
+                nbInput
+                ngModel
+                #serverName
+                type="text"
+                fullWidth
+                [status]="isStringEmptyOrNull(serverName.value) ? 'danger' : 'basic'"
+                placeholder="Server name">
       </form>
 
       <form class="form-server-creation">
@@ -22,10 +24,8 @@
         <div class="description">Owner of server that will have full control of this game server</div>
         <input class="form-control"
                name="owner"
-               required
                nbInput
                ngModel
-               #name="ngModel"
                type="text"
                fullWidth
                status="basic"
@@ -36,12 +36,14 @@
       <form class="form-server-creation">
         <label class="label" for="input-server-description">Description</label><br/>
         <div class="description">Short description of this server which will be displayed on the Dashboard</div>
-        <textarea class="form-control"
+        <textarea [(ngModel)]="generalDetails.description"
+                  (keyup)="updateDescription(description.value)"
+                  #description
+                  class="form-control"
                   name="description"
                   required
                   nbInput
                   ngModel
-                  #name="ngModel"
                   type="text"
                   fullWidth
                   status="basic"
@@ -57,26 +59,27 @@
     <div class="col-1">
       <form class="form-server-creation">
         <label class="label" for="input-docker-image">Docker image</label><br/>
-        <input [(ngModel)]="dockerImage.value"
-               (keyup)="onInputDockerImage($event)"
+        <input [(ngModel)]="resources.dockerImage.value"
+               (keyup)="updateDockerImage(dockerImage.value)"
+               #dockerImage
                class="form-control"
                name="input-docker-image"
                required
                nbInput
                ngModel
-               #name="ngModel"
                type="text"
                fullWidth
-               [status]="dockerImage.hasError ? 'danger' : 'basic'"
+               [status]="resources.dockerImage.hasError ? 'danger' : 'basic'"
                placeholder="myusername/mycustomgameserver:v1.0">
-        <gb-error-container *ngIf="dockerImage.hasError" errorMessage="This field must not be empty!"></gb-error-container>
+        <gb-error-container *ngIf="resources.dockerImage.hasError" errorMessage="This field must not be empty!"></gb-error-container>
       </form>
 
       <form class="form-server-creation">
         <label class="label" for="input-port-allocation">Port allocation</label><br/>
         <div class="description">Max values: 1024-65565 - Comma-separated values</div>
-        <input [(ngModel)]="portAlloc.rawValue"
-               (keyup)="onInputPortAlloc($event)"
+        <input [(ngModel)]="resources.portAlloc.rawValue"
+               (keyup)="updatePortAlloc(portAlloc.value)"
+               #portAlloc
                class="form-control"
                name="input-port-allocation"
                required
@@ -85,16 +88,17 @@
                #name="ngModel"
                type="text"
                fullWidth
-               [status]="portAlloc.hasError ? 'danger' : 'basic'"
+               [status]="resources.portAlloc.hasError ? 'danger' : 'basic'"
                placeholder="25565">
-        <gb-error-container *ngIf="portAlloc.hasError" [errorMessage]="portAlloc.errorMessage"></gb-error-container>
+        <gb-error-container *ngIf="resources.portAlloc.hasError" [errorMessage]="resources.portAlloc.errorMessage"></gb-error-container>
       </form>
 
       <form class="form-server-creation">
         <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
         <div class="description">Values should be in MB - Use -1 to ignore limits</div>
-        <input [(ngModel)]="memoryAlloc.value"
-               (keyup)="onInputMemoryAlloc($event)"
+        <input [(ngModel)]="resources.memoryAlloc.value"
+               (keyup)="updateDescription(memoryAlloc.value)"
+               #memoryAlloc
                class="form-control"
                name="input-memory-allocation"
                required
@@ -103,9 +107,9 @@
                #name="ngModel"
                type="text"
                fullWidth
-               [status]="memoryAlloc.hasError ? 'danger' : 'basic'"
+               [status]="resources.memoryAlloc.hasError ? 'danger' : 'basic'"
                placeholder="-1">
-        <gb-error-container *ngIf="memoryAlloc.hasError" [errorMessage]="memoryAlloc.errorMessage"></gb-error-container>
+        <gb-error-container *ngIf="resources.memoryAlloc.hasError" [errorMessage]="resources.memoryAlloc.errorMessage"></gb-error-container>
       </form>
 
     </div>
@@ -113,21 +117,23 @@
       <form class="form-server-creation">
         <label class="label" for="input-startup-arguments">Startup arguments</label><br/>
         <div class="description">Command with arguments that will be run upon container creation</div>
-        <input [(ngModel)]="startupArgs"
-               class="form-control"
-               name="input-startup-arguments"
-               required
-               nbInput
-               ngModel
-               type="text"
-               fullWidth
-               status="basic"
-               placeholder="./start_server.sh --myargs random_value">
+        <input  [(ngModel)]="resources.startupArgs"
+                (keyup)="updateStartupArgs(startupArgs.value)"
+                #startupArgs
+                class="form-control"
+                name="input-startup-arguments"
+                required
+                nbInput
+                ngModel
+                type="text"
+                fullWidth
+                status="basic"
+                placeholder="./start_server.sh --myargs random_value">
       </form>
 
         <form class="form-server-creation">
           <label class="label" for="input-restart-behaviors">Restart behavior</label><br />
-          <nb-radio-group name="restartBehavior">
+          <nb-radio-group [(ngModel)]="resources.restartBehavior" name="restartBehavior">
             <nb-radio
               *ngFor="let option of restartBehaviorOptions"
               [value]="option.value"
@@ -142,7 +148,7 @@
 
 <nb-card>
   <nb-card-body class="button-group">
-    <button nbButton status="basic" (click)="onCancelButtonClick($event)">Cancel</button>
-    <button nbButton status="info" (click)="onSubmitButtonClick($event)">Create Game Server</button>
+    <button nbButton status="basic" (click)="cancel()">Cancel</button>
+    <button nbButton status="info" (click)="apply()">Apply</button>
   </nb-card-body>
 </nb-card>

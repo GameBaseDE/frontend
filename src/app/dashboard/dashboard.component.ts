@@ -3,7 +3,7 @@ import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 import {ToastrService} from 'ngx-toastr';
 import {ApiService} from '../rest-client/services/api.service';
 import { GameServerStatus, Exception, Status } from '../rest-client/models';
-import { Global } from '../global';
+import { Constants } from '../global';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,10 +14,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   options: any = {};
   themeSubscription: any;
 
+  statusEnum = Status;
 
   gameServers: GameServerStatus[] = [];
 
-  private static ownerId = Global.dummyOwnerId;
+  private static ownerId = Constants.dummyOwnerId;
 
   constructor(iconsLibrary: NbIconLibraries, private theme: NbThemeService, private toastr: ToastrService, private api: ApiService) {
     iconsLibrary.registerFontPack('fa', {packClass: 'fa', iconClassPrefix: 'fa'});
@@ -316,7 +317,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayError(step: string, error: any) {
     console.error(error);
-    this.toastr.error(`Error during ${step}: ${error.error.message}`, `${step} failed`);
+    this.toastr.error(`Error during ${step}: ${error.details}`, `${step} failed`);
   }
 
   /**

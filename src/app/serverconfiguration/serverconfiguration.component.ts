@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { GameServerDeployTemplate } from '../rest-client/models';
+import { GameServerConfigurationTemplate } from '../rest-client/models';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../rest-client/services';
 import { Router, ActivatedRoute, ParamMap, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { Constants, StringUtils } from '../global';
 
 @Component({
   selector: 'app-serverconfiguration',
   templateUrl: './serverconfiguration.component.html',
   styleUrls: ['./serverconfiguration.component.scss']
 })
-export class ServerConfigurationComponent implements OnInit, Resolve<null> {
+export class ServerConfigurationComponent implements OnInit {
 
   restartBehaviorOptions = [
     { value: 'none', label: 'None', checked: true },
@@ -20,37 +21,43 @@ export class ServerConfigurationComponent implements OnInit, Resolve<null> {
     { value: 'always', label: 'Always' },
   ];
 
-  deployTemplate: GameServerDeployTemplate = {
-    image: null,
-    ownerId: null
+  // deployTemplate: GameServerDeployTemplate = {
+  //   image: null,
+  //   ownerId: Global.dummyOwnerId
+  // }
+
+  generalDetails = {
+    serverName: '',
+    description: null,
+    ownerId: Constants.dummyOwnerId
   }
 
-  dockerImage = {
-    value: '',
-    hasError: false,
-  };
-
-  startupArgs = '';
-
-  memoryAlloc = {
-    value: '',
-    hasError: false,
-    errorMessage: null,
-  };
-
-  portAlloc = {
-    rawValue: '',
-    parsedValues: [],
-    hasError: false,
-    errorMessage: null,
-    faultyValues: [],
-  };
+  resources = {
+    dockerImage: {
+      value: '',
+      hasError: false,
+    },
+    startupArgs: '',
+    memoryAlloc: {
+      value: '',
+      hasError: false,
+      errorMessage: null,
+    },
+    portAlloc: {
+      rawValue: '',
+      parsedValues: [],
+      hasError: false,
+      errorMessage: null,
+      faultyValues: [],
+    },
+    restartBehavior: ''
+  }
 
   private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
   private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
-  private static dashboardRoute = ['dashboard'];
+  private static redirectRoute = ['/dashboard'];
 
-  private serverId: Observable<string>;
+  private serverId: string;
 
   constructor(
     private toastr: ToastrService,
@@ -59,104 +66,155 @@ export class ServerConfigurationComponent implements OnInit, Resolve<null> {
     private route: ActivatedRoute
   ) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let id = route.paramMap.get('id');
+  ngOnInit() {
+    const serverId$ = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => params.get('id'))
+    );
 
-    if (id === null || id.length === 0) {
-      this.router.navigate(ServerConfigurationComponent.dashboardRoute);
-      this.displayError('Error on access!', 'Could not access configuration page as the provided ID is invalid.');
-    } else {
-      return null;
-    }
-  }
-
-  ngOnInit(): void {
-    this.serverId = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) =>
-        params.get('id')
-      )
+    serverId$.subscribe(
+      value => {
+        if (StringUtils.isEmptyOrNull(value)) {
+          this.router.navigate(ServerConfigurationComponent.redirectRoute);
+          this.displayErrorWithStrings('Error on access!', 'Could not access configuration page as the provided ID is invalid.');
+        } else {
+          this.serverId = value;
+        }
+      },
+      error => {
+        this.router.navigate(ServerConfigurationComponent.redirectRoute);
+        this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID is invalid. (${error})`);
+      }
     );
   }
 
-  onSubmitButtonClick(): void {
+  apply() {
+    const resources = this.resources;
+    const generalDetails = this.generalDetails;
     console.log('> Create Game Server clicked!');
-    console.log('>> Docker image: ' + this.dockerImage);
-    console.log('>> Startup args: ' + this.startupArgs);
-    console.log('>> Memory alloc: ' + this.memoryAlloc);
-    console.log('>> Port alloc: ' + this.portAlloc);
+    console.log('>> Docker image: ' + resources.dockerImage);
+    console.log('>> Startup args: ' + resources.startupArgs);
+    console.log('>> Memory alloc: ' + resources.memoryAlloc);
+    console.log('>> Port alloc: ' + resources.portAlloc);
 
-    if ((this.memoryAlloc.hasError || !(this.memoryAlloc.value.length > 0))
-        && (this.portAlloc.hasError || !(this.portAlloc.rawValue.length > 0))
-        && (this.dockerImage.hasError || !(this.dockerImage.value.length > 0))) {
-      this.displayError('Error while submitting', 'There are errors in your provided input values.');
+    if ((resources.memoryAlloc.hasError || StringUtils.isEmptyOrNull(resources.memoryAlloc.value))
+        && (resources.portAlloc.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.rawValue))
+        && (resources.dockerImage.hasError || StringUtils.isEmptyOrNull(resources.dockerImage.value))
+        && StringUtils.isEmptyOrNull(generalDetails.serverName)) {
+      this.displayErrorWithStrings('Error while submitting', 'There are errors in your provided input values.');
       return;
     } else {
-      this.deployTemplate.image = this.dockerImage.value;
+      //this.deployTemplate.image = this.dockerImage.value;
 
-      this.api.deployContainer({body: this.deployTemplate}).subscribe((result) => {
-        this.router.navigate(ServerConfigurationComponent.dashboardRoute);
-        this.displaySuccess('Success!', 'Your container ' + /*result. +*/ ' has been deployed!');
-      },
-      (error) => {
-        this.displayError('Deployment error', 'An error occurred while deploying your container: ' + error);
-        console.error(error);
-      });
+      // this.api.deployContainer({body: this.deployTemplate}).subscribe(
+      //   (result) => {
+      //     this.router.navigate(ServerConfigurationComponent.dashboardRoute);
+      //     this.displaySuccess('Success!', `Your game server has been deployed`);
+      //   },
+      //   (error) => {
+      //     this.displayError('Deployment error', error);
+      //     console.error(error);
+      // });
+      let configuration: GameServerConfigurationTemplate = {
+        details: {
+          ownerId: Constants.dummyOwnerId,
+          description: generalDetails.description,
+          serverName: generalDetails.serverName
+        },
+        resources: {
+          image: resources.dockerImage.value,
+          memory: resources.memoryAlloc.value as unknown as number,
+          //ports: resources.portAlloc.parsedValues,
+          //restartBehavior: resources.restartBehavior,
+          startupArgs: resources.startupArgs
+        }
+      };
+
+      this.api.configureContainer({body: configuration}).subscribe(
+        result => {
+          this.router.navigate(ServerConfigurationComponent.redirectRoute);
+          this.displaySuccess('Configuration applied', `Your new configurations have been applied to game server #${this.serverId}.`);
+          console.log(result);
+        },
+        error => {
+          this.displayError('Configuration failed', error);
+          console.error(error);
+        }
+      );
     }
   }
 
-  onCancelButtonClick(event: any): void {
-    this.router.navigate(ServerConfigurationComponent.dashboardRoute);
+  cancel() {
+    this.router.navigate(ServerConfigurationComponent.redirectRoute);
   }
 
-  onInputDockerImage(event: any): void {
-    let value = event.target.value;
-    this.dockerImage.hasError = !(value.length > 0);
+  updateDescription(description: string) {
+    this.generalDetails.description = description;
   }
 
-  onInputMemoryAlloc(event: any): void {
-    let value = event.target.value;
-    this.memoryAlloc.hasError = false;
+  updateDockerImage(image: string) {
+    this.resources.dockerImage.hasError = !(image.length > 0);
+  }
 
+  updateMemoryAlloc(value: string) {
+    this.resources.memoryAlloc.hasError = false;
+
+    // @ts-ignore
     if (!(this.isNumericOnly(value) || value == -1)) {
-      this.memoryAlloc.hasError = true;
-      this.memoryAlloc.errorMessage = 'Only numeric values are allowed!';
+      this.resources.memoryAlloc.hasError = true;
+      this.resources.memoryAlloc.errorMessage = 'Only numeric values are allowed!';
       return;
     }
   }
 
-  onInputPortAlloc(event: any): void {
-    let value = event.target.value;
-    this.portAlloc.hasError = false;
-    this.portAlloc.faultyValues = [];
+  updatePortAlloc(value: string) {
+    this.resources.portAlloc.hasError = false;
+    this.resources.portAlloc.faultyValues = [];
 
     console.log("> onInputPortAlloc(" + value + ")");
     console.log(">> isNumericList: " + this.isNumericList(value));
 
-    this.portAlloc.hasError = !this.isNumericList(value);
-    if (this.portAlloc.hasError) {
-      this.portAlloc.errorMessage = 'Your input does not match a comma-separated list!';
+    this.resources.portAlloc.hasError = !this.isNumericList(value);
+    if (this.resources.portAlloc.hasError) {
+      this.resources.portAlloc.errorMessage = 'Your input does not match a comma-separated list!';
       return;
     }
 
     value.split(",").forEach(element => {
       if (!(element.length > 0)) { return; }
-      this.portAlloc.parsedValues.push(element);
+      this.resources.portAlloc.parsedValues.push(element);
       console.log(">> isValueInValidRange(" + element + "): " + this.isValueInValidRange(element));
 
       if (!this.isValueInValidRange(element)) {
-        this.portAlloc.hasError = true;
-        this.portAlloc.faultyValues.push(element);
+        this.resources.portAlloc.hasError = true;
+        this.resources.portAlloc.faultyValues.push(element);
       }
     });
 
-    this.portAlloc.errorMessage = "The following values are not in allowed range: " + this.portAlloc.faultyValues;
+    this.resources.portAlloc.errorMessage = `The following values are not in allowed range: ${this.resources.portAlloc.faultyValues}`;
   }
 
-  private displayError(title: string, description: string): void {
+  updateServerName(name: string) {
+    this.generalDetails.serverName = name;
+  }
+
+  updateStartupArgs(args: string) {
+    this.resources.startupArgs = args;
+  }
+
+  /**
+   * This is a wrapper which is to be used in HTML templates only!
+   */
+  isStringEmptyOrNull = StringUtils.isEmptyOrNull;
+
+  private displayError(title: string, error: any) {
+    this.toastr.error(error.details, title);
+  }
+
+  private displayErrorWithStrings(title: string, description: string) {
     this.toastr.error(description, title);
   }
 
-  private displaySuccess(title: string, description: string): void {
+  private displaySuccess(title: string, description: string) {
     this.toastr.success(description, title);
   }
 
@@ -166,7 +224,7 @@ export class ServerConfigurationComponent implements OnInit, Resolve<null> {
   }
 
   private isValueInValidRange(input: any): boolean {
-    return input >= 1024 && input <= 65565;
+    return input >= 1 && input <= 65565;
   }
 
   private isNumericOnly(input: any): boolean {

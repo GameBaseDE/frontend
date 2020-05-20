@@ -13,8 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'server/configure/:id',
-    component: ServerConfigurationComponent,
-    resolve: {resolver: ServerConfigurationComponent}
+    component: ServerConfigurationComponent
   },
   {path: '**', component: PageNotFoundComponent}
 ];
