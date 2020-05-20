@@ -1,24 +1,24 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {CreateServerWizardComponent} from './createserver.component';
+import {ServerConfigurationComponent} from './serverconfiguration.component';
 import {NbCardModule, NbRadioModule} from '@nebular/theme';
 import {FormsModule} from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-describe('CreateServerWizardComponent', () => {
-  let component: CreateServerWizardComponent;
-  let fixture: ComponentFixture<CreateServerWizardComponent>;
+describe('ServerConfigurationComponent', () => {
+  let component: ServerConfigurationComponent;
+  let fixture: ComponentFixture<ServerConfigurationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateServerWizardComponent],
+      declarations: [ServerConfigurationComponent],
       imports: [NbCardModule, FormsModule]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateServerWizardComponent);
+    fixture = TestBed.createComponent(ServerConfigurationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
