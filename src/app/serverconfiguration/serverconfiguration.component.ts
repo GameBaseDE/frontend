@@ -5,11 +5,11 @@ import { ApiService } from '../rest-client/services';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-createserverwizard',
-  templateUrl: './createserver.component.html',
-  styleUrls: ['./createserver.component.scss']
+  selector: 'app-serverconfiguration',
+  templateUrl: './serverconfiguration.component.html',
+  styleUrls: ['./serverconfiguration.component.scss']
 })
-export class CreateServerWizardComponent implements OnInit {
+export class ServerConfigurationComponent implements OnInit {
 
   restartBehaviorOptions = [
     { value: 'none', label: 'None', checked: true },
@@ -80,7 +80,7 @@ export class CreateServerWizardComponent implements OnInit {
   }
 
   onCancelButtonClick(event: any): void {
-    this.router.navigate(CreateServerWizardComponent.dashboardRoute);
+    this.router.navigate(ServerConfigurationComponent.dashboardRoute);
   }
 
   onInputDockerImage(event: any): void {
@@ -136,7 +136,7 @@ export class CreateServerWizardComponent implements OnInit {
   }
 
   private isNumericList(input: string): boolean {
-    let result = input.match(CreateServerWizardComponent.numericListRegExp);
+    let result = input.match(ServerConfigurationComponent.numericListRegExp);
     return result !== null && result.length > 0;
   }
 
@@ -145,7 +145,7 @@ export class CreateServerWizardComponent implements OnInit {
   }
 
   private isNumericOnly(input: any): boolean {
-    let result = input.match(CreateServerWizardComponent.numericValuesOnlyRegExp);
+    let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
     return result !== null && result.length > 0;
   }
 }

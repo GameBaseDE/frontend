@@ -32,7 +32,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import { CreateServerWizardComponent } from './createserver/createserver.component';
+import { ServerConfigurationComponent } from './serverconfiguration/serverconfiguration.component';
 import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
 
 @NgModule({
@@ -43,7 +43,7 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     FooterComponent,
     HeaderComponent,
     PageNotFoundComponent,
-    CreateServerWizardComponent,
+    ServerConfigurationComponent,
     ErrorContainerComponent
   ],
   imports: [
