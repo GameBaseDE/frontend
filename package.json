@@ -9,7 +9,7 @@
     "test": "ng test --code-coverage --progress false --watch false",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "openapi": "ng-openapi-gen --input openapi.yaml --output ./src/app/rest-client",
+    "openapi": "ng-openapi-gen --input ./vendor/swagger-rest-api/yaml-resolved/gamebase-api-specification.yaml --output ./src/app/rest-client",
     "preinstall": "npx npm-force-resolutions"
   },
   "private": true,
