@@ -28,6 +28,8 @@ Generate swagger client:
     # override the policy
     policy: pull
   stage: generate-swagger-client
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   script: npm run openapi
   artifacts:
     paths:
