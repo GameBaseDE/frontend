@@ -8,6 +8,7 @@ cache: &global_cache
 
 stages:
   - install
+  - generate-swagger-client
   - verify
   - build
   - deploy
@@ -15,6 +16,22 @@ stages:
 Install dependencies:
   stage: install
   script: npm i
+  tags:
+    - GameBase
+    - docker
+    - angular
+
+Generate swagger client:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
+  stage: generate-swagger-client
+  script: npm run openapi
+  artifacts:
+    paths:
+      - src/app/rest-client/
   tags:
     - GameBase
     - docker
