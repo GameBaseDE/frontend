@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { GameServerDeployTemplate } from '../rest-client/models';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../rest-client/services';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-serverconfiguration',
   templateUrl: './serverconfiguration.component.html',
   styleUrls: ['./serverconfiguration.component.scss']
 })
-export class ServerConfigurationComponent implements OnInit {
+export class ServerConfigurationComponent implements OnInit, Resolve<null> {
 
   restartBehaviorOptions = [
     { value: 'none', label: 'None', checked: true },
@@ -48,9 +50,32 @@ export class ServerConfigurationComponent implements OnInit {
   private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
   private static dashboardRoute = ['dashboard'];
 
-  constructor(private toastr: ToastrService, private api: ApiService, private router: Router) { }
+  private serverId: Observable<string>;
+
+  constructor(
+    private toastr: ToastrService,
+    private api: ApiService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    let id = route.paramMap.get('id');
+
+    if (id === null || id.length === 0) {
+      this.router.navigate(ServerConfigurationComponent.dashboardRoute);
+      this.displayError('Error on access!', 'Could not access configuration page as the provided ID is invalid.');
+    } else {
+      return null;
+    }
+  }
 
   ngOnInit(): void {
+    this.serverId = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        params.get('id')
+      )
+    );
   }
 
   onSubmitButtonClick(): void {
@@ -69,8 +94,8 @@ export class ServerConfigurationComponent implements OnInit {
       this.deployTemplate.image = this.dockerImage.value;
 
       this.api.deployContainer({body: this.deployTemplate}).subscribe((result) => {
-        this.router.navigate(['dashboard']);
-        this.displaySuccess('Success!', 'Your container ' + result.id + ' has been deployed!');
+        this.router.navigate(ServerConfigurationComponent.dashboardRoute);
+        this.displaySuccess('Success!', 'Your container ' + /*result. +*/ ' has been deployed!');
       },
       (error) => {
         this.displayError('Deployment error', 'An error occurred while deploying your container: ' + error);
