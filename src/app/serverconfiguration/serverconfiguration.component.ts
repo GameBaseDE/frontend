@@ -8,6 +8,11 @@ import { Observable } from 'rxjs/internal/Observable';
 import { Constants, StringUtils } from '../global';
 import {rejects} from "assert";
 
+enum PortType {
+  UDP = 'udp',
+  TCP = 'tcp'
+}
+
 @Component({
   selector: 'app-serverconfiguration',
   templateUrl: './serverconfiguration.component.html',
@@ -28,8 +33,11 @@ export class ServerConfigurationComponent implements OnInit {
   // }
 
   generalDetails = {
-    serverName: '',
-    description: null, // ToDo: this.currentServer.description!
+    serverName: {
+      value: '',
+      hasError: false,
+    },
+    description: undefined, // ToDo: this.currentServer.description!
     ownerId: Constants.dummyOwnerId // ToDo: this.currentServer.ownerId?
   }
 
@@ -42,14 +50,23 @@ export class ServerConfigurationComponent implements OnInit {
     memoryAlloc: {
       value: '',
       hasError: false,
-      errorMessage: null,
+      errorMessage: undefined,
     },
     portAlloc: {
-      rawValue: '',
-      parsedValues: [],
-      hasError: false,
-      errorMessage: null,
-      faultyValues: [],
+      tcp: {
+        rawValue: '',
+        parsedValues: [],
+        hasError: false,
+        errorMessage: undefined,
+        faultyValues: [],
+      },
+      udp: {
+        rawValue: '',
+        parsedValues: [],
+        hasError: false,
+        errorMessage: undefined,
+        faultyValues: [],
+      }
     },
     restartBehavior: ''
   }
@@ -72,7 +89,7 @@ export class ServerConfigurationComponent implements OnInit {
       params => {
         const id = params['id'];
         if (!StringUtils.isEmptyOrNull(id)) {
-          this.api.getStatus(null).subscribe(
+          this.api.getStatus(undefined).subscribe(
             result => {
               const filterResult = result.filter(value => value.id === id);
 
@@ -109,9 +126,10 @@ export class ServerConfigurationComponent implements OnInit {
     console.log('>> Port alloc: ' + resources.portAlloc);
 
     if ((resources.memoryAlloc.hasError || StringUtils.isEmptyOrNull(resources.memoryAlloc.value))
-        && (resources.portAlloc.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.rawValue))
+        && (resources.portAlloc.tcp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.tcp.rawValue))
+        && (resources.portAlloc.udp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.udp.rawValue))
         && (resources.dockerImage.hasError || StringUtils.isEmptyOrNull(resources.dockerImage.value))
-        && StringUtils.isEmptyOrNull(generalDetails.serverName)) {
+        && (generalDetails.serverName.hasError || StringUtils.isEmptyOrNull(generalDetails.serverName.value))) {
       this.displayErrorWithStrings('Error while submitting', 'There are errors in your provided input values.');
       return;
     } else {
@@ -130,7 +148,7 @@ export class ServerConfigurationComponent implements OnInit {
         details: {
           ownerId: Constants.dummyOwnerId,
           description: generalDetails.description,
-          serverName: generalDetails.serverName
+          serverName: generalDetails.serverName.value
         },
         resources: {
           image: resources.dockerImage.value,
@@ -180,36 +198,38 @@ export class ServerConfigurationComponent implements OnInit {
     }
   }
 
-  updatePortAlloc(value: string) {
-    this.resources.portAlloc.hasError = false;
-    this.resources.portAlloc.rawValue = value;
-    this.resources.portAlloc.faultyValues = [];
+  /**
+   * This is a wrapper which is to be used in HTML templates only!
+   */
+  gbPortType = PortType;
 
-    console.log("> onInputPortAlloc(" + value + ")");
-    console.log(">> isNumericList: " + ServerConfigurationComponent.isNumericList(value));
+  updatePortAlloc(portType: PortType, value: string) {
+    this.resources.portAlloc[portType].hasError = false;
+    this.resources.portAlloc[portType].rawValue = value;
+    this.resources.portAlloc[portType].faultyValues = [];
 
-    this.resources.portAlloc.hasError = !ServerConfigurationComponent.isNumericList(value);
-    if (this.resources.portAlloc.hasError) {
-      this.resources.portAlloc.errorMessage = 'Your input does not match a comma-separated list!';
+    this.resources.portAlloc[portType].hasError = !(StringUtils.isEmptyOrNull(value) || ServerConfigurationComponent.isNumericList(value));
+    if (this.resources.portAlloc[portType].hasError) {
+      this.resources.portAlloc[portType].errorMessage = 'Your input does not match a comma-separated list!';
       return;
     }
 
     value.split(",").forEach(element => {
       if (!(element.length > 0)) { return; }
-      this.resources.portAlloc.parsedValues.push(element);
-      console.log(">> isValueInValidRange(" + element + "): " + ServerConfigurationComponent.isValueInValidRange(element));
+      this.resources.portAlloc[portType].parsedValues.push(element);
 
       if (!ServerConfigurationComponent.isValueInValidRange(element)) {
-        this.resources.portAlloc.hasError = true;
-        this.resources.portAlloc.faultyValues.push(element);
+        this.resources.portAlloc[portType].hasError = true;
+        this.resources.portAlloc[portType].faultyValues.push(element);
       }
     });
 
-    this.resources.portAlloc.errorMessage = `The following values are not in allowed range: ${this.resources.portAlloc.faultyValues}`;
+    this.resources.portAlloc[portType].errorMessage = `The following values are not in allowed range: ${this.resources.portAlloc[portType].faultyValues}`;
   }
 
   updateServerName(name: string) {
-    this.generalDetails.serverName = name;
+    this.generalDetails.serverName.hasError = StringUtils.isEmptyOrNull(name);
+    this.generalDetails.serverName.value = name;
   }
 
   updateStartupArgs(args: string) {
@@ -229,9 +249,12 @@ export class ServerConfigurationComponent implements OnInit {
     this.updateDockerImage(this.currentServer.image);
     this.updateMemoryAlloc('-1'/* ToDo: this.currentServer.memory? */);
 
-    if (this.currentServer.ports !== null) {
-      this.updatePortAlloc(this.currentServer.ports.join(','));
-    }
+    // ToDo: this.currentServer.ports.tcp + this.currentServer.ports.udp??
+    // if (this.currentServer.ports !== null) {
+    //   this.updatePortAlloc(this.currentServer.ports.join(','));
+    // }
+    this.updatePortAlloc(PortType.TCP, '');
+    this.updatePortAlloc(PortType.UDP, '');
 
     this.updateServerName(this.currentServer.gameTag);
     this.updateStartupArgs('' /* ToDo: this.currentServer.startUpArgs? */);
@@ -253,7 +276,7 @@ export class ServerConfigurationComponent implements OnInit {
 
   private static isNumericList(input: string): boolean {
     let result = input.match(ServerConfigurationComponent.numericListRegExp);
-    return result !== null && result.length > 0;
+    return result !== undefined && result.length > 0;
   }
 
   private static isValueInValidRange(input: any): boolean {
@@ -262,7 +285,7 @@ export class ServerConfigurationComponent implements OnInit {
 
   private static isNumericOnly(input: any): boolean {
     let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
-    return result !== null && result.length > 0;
+    return result !== undefined && result.length > 0;
   }
 
   /**

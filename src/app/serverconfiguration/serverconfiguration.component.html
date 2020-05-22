@@ -5,7 +5,7 @@
       <form class="form-server-creation">
         <label class="label" for="input-server-name">Server Name</label><br/>
         <div class="description">Name of server that will be displayed on your Dashboard</div>
-        <input  [(ngModel)]="generalDetails.serverName"
+        <input  [(ngModel)]="generalDetails.serverName.value"
                 (keyup)="updateServerName(serverName.value)"
                 class="form-control"
                 name="name"
@@ -15,8 +15,9 @@
                 #serverName
                 type="text"
                 fullWidth
-                [status]="isStringEmptyOrNull(serverName.value) ? 'danger' : 'basic'"
+                [status]="generalDetails.serverName.hasError ? 'danger' : 'basic'"
                 placeholder="Server name">
+        <gb-error-container *ngIf="generalDetails.serverName.hasError" errorMessage="This field must not be empty!"></gb-error-container>
       </form>
 
       <form class="form-server-creation">
@@ -74,24 +75,45 @@
         <gb-error-container *ngIf="resources.dockerImage.hasError" errorMessage="This field must not be empty!"></gb-error-container>
       </form>
 
-      <form class="form-server-creation">
-        <label class="label" for="input-port-allocation">Port allocation</label><br/>
-        <div class="description">Max values: 1024-65565 - Comma-separated values</div>
-        <input [(ngModel)]="resources.portAlloc.rawValue"
-               (keyup)="updatePortAlloc(portAlloc.value)"
-               #portAlloc
-               class="form-control"
-               name="input-port-allocation"
-               required
-               nbInput
-               ngModel
-               #name="ngModel"
-               type="text"
-               fullWidth
-               [status]="resources.portAlloc.hasError ? 'danger' : 'basic'"
-               placeholder="25565">
-        <gb-error-container *ngIf="resources.portAlloc.hasError" [errorMessage]="resources.portAlloc.errorMessage"></gb-error-container>
-      </form>
+      <div class="col-1">
+        <form class="form-server-creation">
+          <label class="label" for="input-tcp-port-allocation">TCP port allocation</label><br/>
+          <div class="description">Max values: 1024-65565 - Comma-separated values</div>
+          <input [(ngModel)]="resources.portAlloc.tcp.rawValue"
+                 (keyup)="updatePortAlloc(gbPortType.TCP, tcpPortAlloc.value)"
+                 #tcpPortAlloc
+                 class="form-control"
+                 name="input-tcp-port-allocation"
+                 required
+                 nbInput
+                 ngModel
+                 type="text"
+                 fullWidth
+                 [status]="resources.portAlloc.tcp.hasError ? 'danger' : 'basic'"
+                 placeholder="25565">
+          <gb-error-container *ngIf="resources.portAlloc.tcp.hasError" [errorMessage]="resources.portAlloc.tcp.errorMessage"></gb-error-container>
+        </form>
+      </div>
+
+      <div class="col-1">
+        <form class="form-server-creation">
+          <label class="label" for="input-udp-port-allocation">UDP port allocation</label><br/>
+          <div class="description">Max values: 1024-65565 - Comma-separated values</div>
+          <input [(ngModel)]="resources.portAlloc.udp.rawValue"
+                 (keyup)="updatePortAlloc(gbPortType.UDP, udpPortAlloc.value)"
+                 #udpPortAlloc
+                 class="form-control"
+                 name="input-udp-port-allocation"
+                 required
+                 nbInput
+                 ngModel
+                 type="text"
+                 fullWidth
+                 [status]="resources.portAlloc.udp.hasError ? 'danger' : 'basic'"
+                 placeholder="7777,1234">
+          <gb-error-container *ngIf="resources.portAlloc.udp.hasError" [errorMessage]="resources.portAlloc.udp.errorMessage"></gb-error-container>
+        </form>
+      </div>
 
       <form class="form-server-creation">
         <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
