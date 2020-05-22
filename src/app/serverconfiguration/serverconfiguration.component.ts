@@ -29,8 +29,8 @@ export class ServerConfigurationComponent implements OnInit {
 
   generalDetails = {
     serverName: '',
-    description: null,
-    ownerId: Constants.dummyOwnerId
+    description: null, // ToDo: this.currentServer.description!
+    ownerId: Constants.dummyOwnerId // ToDo: this.currentServer.ownerId?
   }
 
   resources = {
@@ -78,6 +78,7 @@ export class ServerConfigurationComponent implements OnInit {
 
               if (filterResult && filterResult.length > 0) {
                 this.currentServer = result[0];
+                this.updateAllInfos();
               } else {
                 this.router.navigate(ServerConfigurationComponent.redirectRoute);
                 this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID ${id} is invalid.`);
@@ -164,10 +165,12 @@ export class ServerConfigurationComponent implements OnInit {
 
   updateDockerImage(image: string) {
     this.resources.dockerImage.hasError = !(image.length > 0);
+    this.resources.dockerImage.value = image;
   }
 
   updateMemoryAlloc(value: string) {
     this.resources.memoryAlloc.hasError = false;
+    this.resources.memoryAlloc.value = value;
 
     // @ts-ignore
     if (!(ServerConfigurationComponent.isNumericOnly(value) || value == -1)) {
@@ -179,6 +182,7 @@ export class ServerConfigurationComponent implements OnInit {
 
   updatePortAlloc(value: string) {
     this.resources.portAlloc.hasError = false;
+    this.resources.portAlloc.rawValue = value;
     this.resources.portAlloc.faultyValues = [];
 
     console.log("> onInputPortAlloc(" + value + ")");
@@ -217,6 +221,24 @@ export class ServerConfigurationComponent implements OnInit {
    */
   isStringEmptyOrNull = StringUtils.isEmptyOrNull;
 
+  /**
+   * Updates all models values in this component.
+   */
+  private updateAllInfos() {
+    this.updateDescription(''/* ToDo: this.currentServer.description! */);
+    this.updateDockerImage(this.currentServer.image);
+    this.updateMemoryAlloc('-1'/* ToDo: this.currentServer.memory? */);
+
+    if (this.currentServer.ports !== null) {
+      this.updatePortAlloc(this.currentServer.ports.join(','));
+    }
+
+    this.updateServerName(this.currentServer.gameTag);
+    this.updateStartupArgs('' /* ToDo: this.currentServer.startUpArgs? */);
+
+    this.setRestartBehaviorOption('none'/* ToDo: this.currentServer.restartBehavior */);
+  }
+
   private displayError(title: string, error: any) {
     this.toastr.error(error.details, title);
   }
@@ -241,5 +263,24 @@ export class ServerConfigurationComponent implements OnInit {
   private static isNumericOnly(input: any): boolean {
     let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
     return result !== null && result.length > 0;
+  }
+
+  /**
+   * Set restart behavior option based of a string value.
+   * @param restartBehavior option as string
+   */
+  private setRestartBehaviorOption(restartBehavior: string) {
+    if (restartBehavior === undefined) {
+      return;
+    }
+
+    this.restartBehaviorOptions.forEach(
+      option => {
+        if (option.value === restartBehavior) {
+          this.resources.restartBehavior = restartBehavior;
+          return;
+        }
+      }
+    );
   }
 }
