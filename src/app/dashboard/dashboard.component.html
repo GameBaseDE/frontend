@@ -61,6 +61,10 @@
                 (click)="startServerEvent($event, gameServer.id)" shape="round">
           <nb-icon pack="fas" icon="play"></nb-icon>
         </button>
+        <button class="config-button" nbButton status="success" size="small"
+                (click)="openServerConfiguration(gameServer.id)" shape="round">
+          <nb-icon pack="fas" icon="settings-outline"></nb-icon>
+        </button>
       </div>
       <nb-alert *ngIf="gameServer.status == statusEnum.Error" class="server-status" status="danger">Error</nb-alert>
       <nb-alert *ngIf="gameServer.status == statusEnum.Running" class="server-status" status="success">Running

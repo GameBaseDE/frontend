@@ -15,6 +15,7 @@ const routes: Routes = [
     path: 'server/configure/:id',
     component: ServerConfigurationComponent
   },
+  {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
   {path: '**', component: PageNotFoundComponent}
 ];
 

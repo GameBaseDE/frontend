@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { GameServerConfigurationTemplate } from '../rest-client/models';
+import {GameServerConfigurationTemplate, GameServerStatus} from '../rest-client/models';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../rest-client/services';
 import { Router, ActivatedRoute, ParamMap, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { Constants, StringUtils } from '../global';
+import {rejects} from "assert";
 
 @Component({
   selector: 'app-serverconfiguration',
@@ -57,7 +58,7 @@ export class ServerConfigurationComponent implements OnInit {
   private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
   private static redirectRoute = ['/dashboard'];
 
-  private serverId: string;
+  private currentServer: GameServerStatus;
 
   constructor(
     private toastr: ToastrService,
@@ -66,23 +67,33 @@ export class ServerConfigurationComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {
-    const serverId$ = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => params.get('id'))
-    );
+  async ngOnInit() {
+    await this.route.params.subscribe(
+      params => {
+        const id = params['id'];
+        if (!StringUtils.isEmptyOrNull(id)) {
+          this.api.getStatus(null).subscribe(
+            result => {
+              const filterResult = result.filter(value => value.id === id);
 
-    serverId$.subscribe(
-      value => {
-        if (StringUtils.isEmptyOrNull(value)) {
-          this.router.navigate(ServerConfigurationComponent.redirectRoute);
-          this.displayErrorWithStrings('Error on access!', 'Could not access configuration page as the provided ID is invalid.');
+              if (filterResult && filterResult.length > 0) {
+                this.currentServer = result[0];
+              } else {
+                this.router.navigate(ServerConfigurationComponent.redirectRoute);
+                this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID ${id} is invalid.`);
+              }
+            }
+          );
         } else {
-          this.serverId = value;
+          this.router.navigate(ServerConfigurationComponent.redirectRoute);
+          this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID ${id} is invalid.`);
         }
       },
       error => {
         this.router.navigate(ServerConfigurationComponent.redirectRoute);
-        this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID is invalid. (${error})`);
+        console.error('Fehler!')
+        this.displayErrorWithStrings('Error on access!', `Could not access configuration page. (${error})`);
+        console.error(error);
       }
     );
   }
@@ -132,7 +143,7 @@ export class ServerConfigurationComponent implements OnInit {
       this.api.configureContainer({body: configuration}).subscribe(
         result => {
           this.router.navigate(ServerConfigurationComponent.redirectRoute);
-          this.displaySuccess('Configuration applied', `Your new configurations have been applied to game server #${this.serverId}.`);
+          this.displaySuccess('Configuration applied', `Your new configurations have been applied to game server ${this.currentServer.id}.`);
           console.log(result);
         },
         error => {
@@ -159,7 +170,7 @@ export class ServerConfigurationComponent implements OnInit {
     this.resources.memoryAlloc.hasError = false;
 
     // @ts-ignore
-    if (!(this.isNumericOnly(value) || value == -1)) {
+    if (!(ServerConfigurationComponent.isNumericOnly(value) || value == -1)) {
       this.resources.memoryAlloc.hasError = true;
       this.resources.memoryAlloc.errorMessage = 'Only numeric values are allowed!';
       return;
@@ -171,9 +182,9 @@ export class ServerConfigurationComponent implements OnInit {
     this.resources.portAlloc.faultyValues = [];
 
     console.log("> onInputPortAlloc(" + value + ")");
-    console.log(">> isNumericList: " + this.isNumericList(value));
+    console.log(">> isNumericList: " + ServerConfigurationComponent.isNumericList(value));
 
-    this.resources.portAlloc.hasError = !this.isNumericList(value);
+    this.resources.portAlloc.hasError = !ServerConfigurationComponent.isNumericList(value);
     if (this.resources.portAlloc.hasError) {
       this.resources.portAlloc.errorMessage = 'Your input does not match a comma-separated list!';
       return;
@@ -182,9 +193,9 @@ export class ServerConfigurationComponent implements OnInit {
     value.split(",").forEach(element => {
       if (!(element.length > 0)) { return; }
       this.resources.portAlloc.parsedValues.push(element);
-      console.log(">> isValueInValidRange(" + element + "): " + this.isValueInValidRange(element));
+      console.log(">> isValueInValidRange(" + element + "): " + ServerConfigurationComponent.isValueInValidRange(element));
 
-      if (!this.isValueInValidRange(element)) {
+      if (!ServerConfigurationComponent.isValueInValidRange(element)) {
         this.resources.portAlloc.hasError = true;
         this.resources.portAlloc.faultyValues.push(element);
       }
@@ -218,16 +229,16 @@ export class ServerConfigurationComponent implements OnInit {
     this.toastr.success(description, title);
   }
 
-  private isNumericList(input: string): boolean {
+  private static isNumericList(input: string): boolean {
     let result = input.match(ServerConfigurationComponent.numericListRegExp);
     return result !== null && result.length > 0;
   }
 
-  private isValueInValidRange(input: any): boolean {
+  private static isValueInValidRange(input: any): boolean {
     return input >= 1 && input <= 65565;
   }
 
-  private isNumericOnly(input: any): boolean {
+  private static isNumericOnly(input: any): boolean {
     let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
     return result !== null && result.length > 0;
   }

@@ -4,6 +4,7 @@ import {ToastrService} from 'ngx-toastr';
 import {ApiService} from '../rest-client/services/api.service';
 import { GameServerStatus, Exception, Status } from '../rest-client/models';
 import { Constants } from '../global';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private static ownerId = Constants.dummyOwnerId;
 
-  constructor(iconsLibrary: NbIconLibraries, private theme: NbThemeService, private toastr: ToastrService, private api: ApiService) {
+  constructor(
+    iconsLibrary: NbIconLibraries,
+    private theme: NbThemeService,
+    private toastr: ToastrService,
+    private api: ApiService,
+    private router: Router
+  ) {
     iconsLibrary.registerFontPack('fa', {packClass: 'fa', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('far', {packClass: 'far', iconClassPrefix: 'fa'});
@@ -348,4 +355,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+  openServerConfiguration(id: string) {
+    this.router.navigate([`/server/configure/${id}`]);
+  }
 }
