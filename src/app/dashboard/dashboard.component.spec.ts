@@ -9,6 +9,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ApiModule} from '../rest-client/api.module';
+import {AppRoutingModule} from "../app-routing.module";
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -18,7 +19,7 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
       imports: [NbAccordionModule, NbIconModule, NbAlertModule, BrowserAnimationsModule, NbCardModule, NgxEchartsModule,
-        NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule,
+        NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule, AppRoutingModule,
         ApiModule.forRoot({rootUrl: environment.restApiURL})]
     })
       .compileComponents();
