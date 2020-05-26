@@ -63,7 +63,7 @@
         </button>
         <button class="config-button" nbButton status="success" size="small"
                 (click)="openServerConfiguration(gameServer.id)" shape="round">
-          <nb-icon pack="fas" icon="settings-outline"></nb-icon>
+          <nb-icon pack="fas" icon="cog"></nb-icon>
         </button>
       </div>
       <nb-alert *ngIf="gameServer.status == statusEnum.Error" class="server-status" status="danger">Error</nb-alert>
