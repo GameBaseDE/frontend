@@ -1,9 +1,15 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ServerConfigurationComponent} from './serverconfiguration.component';
-import {NbCardModule, NbRadioModule} from '@nebular/theme';
+import {NbCardModule, NbInputModule, NbRadioModule, NbThemeModule} from '@nebular/theme';
 import {FormsModule} from '@angular/forms';
-import { By } from '@angular/platform-browser';
+import {By} from '@angular/platform-browser';
+import {ToastrModule} from "ngx-toastr";
+import {ApiModule} from "../rest-client/api.module";
+import {environment} from "../../environments/environment";
+import {HttpClientModule} from "@angular/common/http";
+import {AppRoutingModule} from "../app-routing.module";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
@@ -12,7 +18,19 @@ describe('ServerConfigurationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ServerConfigurationComponent],
-      imports: [NbCardModule, FormsModule]
+      imports: [
+        NbCardModule,
+        FormsModule,
+        ToastrModule.forRoot(),
+        HttpClientModule,
+        ApiModule.forRoot({rootUrl: environment.mockAPIURL}),
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        NbThemeModule.forRoot(),
+        FormsModule,
+        NbInputModule,
+        NbRadioModule
+      ]
     })
       .compileComponents();
   }));
@@ -27,112 +45,139 @@ describe('ServerConfigurationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should validate Docker image input and display error', () => {
-  //   let expected = '';
-  //   let input = fixture.debugElement.query(By.css('input[name="input-docker-image"]'));
-  //   let element = input.nativeElement;
+  it('should validate Docker image input and display error', () => {
+    const expected = '';
+    const selector = 'input[name="input-docker-image"]';
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  //   expect(element).toBeTruthy();
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
 
-  //   let actual = component.dockerImage.value;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.dockerImage.hasError).toBeTrue();
-  // });
+    const actual = component.resources.dockerImage.value;
 
-  // it('should validate Docker image input and display no error', () => {
-  //   let expected = 'hello-world';
-  //   let input = fixture.debugElement.query(By.css('input[name="input-docker-image"]'));
-  //   let element = input.nativeElement;
+    expect(actual).toEqual(expected);
+    expect(component.resources.dockerImage.hasError).toBeTrue();
+  });
 
-  //   expect(element).toBeTruthy();
+  it('should validate Docker image input and display no error', () => {
+    const expected = 'hello-world';
+    const selector = 'input[name="input-docker-image"]';
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  //   let actual = component.dockerImage.value;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.dockerImage.hasError).toBeFalse();
-  // });
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
 
-  // it('should validate memory allocation and display error', () => {
-  //   let expected = 'abcdef';
-  //   let input = fixture.debugElement.query(By.css('input[name="input-memory-allocation"]'));
-  //   let element = input.nativeElement;
+    const actual = component.resources.dockerImage.value;
 
-  //   expect(element).toBeTruthy();
+    expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
+    expect(component.resources.dockerImage.hasError).toBeFalsy(`Error is displayed although expected: ${expected} complies to rules.`);
+  });
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+  it('should validate memory allocation and display error', () => {
+    const expected = 'abcdef';
+    const selector = 'input[name="input-memory-allocation"]'
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  //   let actual = component.memoryAlloc.value;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.memoryAlloc.hasError).toBeTrue();
-  // });
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  // it('should validate memory allocation and display no error', () => {
-  //   let expected = '1234';
-  //   let input = fixture.debugElement.query(By.css('input[name="input-memory-allocation"]'));
-  //   let element = input.nativeElement;
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
 
-  //   expect(element).toBeTruthy();
+    const actual = component.resources.memoryAlloc.value;
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
+    expect(component.resources.memoryAlloc.hasError).toBeTruthy(`Error is not displayed although expected: ${expected} is faulty.`);
+  });
 
-  //   let actual = component.memoryAlloc.value;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.memoryAlloc.hasError).toBeFalse();
-  // });
+  it('should validate memory allocation and display no error', () => {
+    const expected = '1234';
+    const selector = 'input[name="input-memory-allocation"]'
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  // it('should validate port allocation and display error', () => {
-  //   let expected = '1354987,,,';
-  //   let input = fixture.debugElement.query(By.css('input[name="input-port-allocation"]'));
-  //   let element = input.nativeElement;
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  //   expect(element).toBeTruthy();
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    const actual = component.resources.memoryAlloc.value;
 
-  //   let actual = component.portAlloc.rawValue;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.portAlloc.hasError).toBeTrue();
-  // });
+    expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
+    expect(component.resources.memoryAlloc.hasError).toBeFalsy(`Error is displayed although expected: ${expected} complies to rules.`);
+  });
 
-  // it('should validate port allocation with invalid port values, display error and parse into faulty values properly', () => {
-  //   let expected = '1,5,54,5123';
-  //   let expectedFaulty = ['1', '5', '54'];
-  //   let input = fixture.debugElement.query(By.css('input[name="input-port-allocation"]'));
-  //   let element = input.nativeElement;
+  it('should validate UDP port allocation with invalid comma-separated values and display error', () => {
+    const expected = '1354987,,,';
+    const selector = 'input[name="input-udp-port-allocation"]';
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  //   expect(element).toBeTruthy();
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
 
-  //   let actual = component.portAlloc.rawValue;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.portAlloc.hasError).toBeTrue();
-  //   expect(component.portAlloc.faultyValues).toEqual(expectedFaulty);
-  // });
+    const actual = component.resources.portAlloc.udp.rawValue;
 
-  // it('should validate port allocation, display no error and parse values properly', () => {
-  //   let expected = '1024,65565';
-  //   let expectedParsed = ['1024', '65565'];
-  //   let input = fixture.debugElement.query(By.css('input[name="input-port-allocation"]'));
-  //   let element = input.nativeElement;
+    expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
+    expect(component.resources.portAlloc.udp.hasError).toBeTruthy(`Error is not displayed although expected: ${expected} is faulty.`);
+  });
 
-  //   expect(element).toBeTruthy();
+  it('should validate UDP port allocation with invalid port values, display error and parse into faulty values properly', () => {
+    const expected = '0,5,54,5123,90000';
+    const expectedFaulty = ['0', '90000'];
+    const selector = 'input[name="input-udp-port-allocation"]';
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
 
-  //   element.value = expected;
-  //   element.dispatchEvent(new Event('input'));
+    expect(element).toBeTruthy(`${selector} could not be found!`);
 
-  //   let actual = component.portAlloc.rawValue;
-  //   expect(actual).toEqual(expected);
-  //   expect(component.portAlloc.hasError).toBeFalse();
-  //   expect(component.portAlloc.parsedValues).toEqual(expectedParsed);
-  // });
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
+
+    const actual = component.resources.portAlloc.udp.rawValue;
+
+    expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
+    expect(component.resources.portAlloc.udp.hasError).toBeTruthy(`Error is not displayed although expected: ${expected} is faulty.`);
+
+    const actualFaulty = component.resources.portAlloc.udp.faultyValues;
+
+    expect(actualFaulty).toEqual(expectedFaulty, `actualFaulty: ${actualFaulty} != expectedFaulty: ${expectedFaulty}`);
+  });
+
+  it('should validate UDP port allocation, display no error and parse values properly', () => {
+    const expected = '1024,65565';
+    const expectedParsed = ['1024', '65565'];
+    const selector = 'input[name="input-udp-port-allocation"]';
+    let input = fixture.debugElement.query(By.css(selector));
+    let element = input.nativeElement;
+
+    expect(element).toBeTruthy(`${selector} could not be found!`);
+
+    element.value = expected;
+    element.dispatchEvent(new Event('input'));
+    element.dispatchEvent(new Event('keyup'));
+
+    const actual = component.resources.portAlloc.udp.rawValue;
+
+    expect(actual).toEqual(expected);
+    expect(component.resources.portAlloc.udp.hasError).toBeFalsy(`Error is displayed although expected: ${expected} complies to rules.`);
+
+    const actualParsed = component.resources.portAlloc.udp.parsedValues;
+
+    expect(actualParsed).toEqual(expectedParsed, `actualParsed: ${actualParsed} != expectedParsed: ${expectedParsed}`);
+  });
 });
