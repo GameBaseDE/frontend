@@ -11,6 +11,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "../app-routing.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
+// @ts-ignore
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
   let fixture: ComponentFixture<ServerConfigurationComponent>;
