@@ -3,7 +3,7 @@ export class Constants {
 }
 
 export class StringUtils {
-  public static isEmptyOrNull(value: string): boolean { return !(value !== null && (value.length > 0)); }
+  public static isEmptyOrNull(value: string): boolean { return !(value !== undefined && (value.length > 0)); }
 }
 
 export class EnumUtils {
