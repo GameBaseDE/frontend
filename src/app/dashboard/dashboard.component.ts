@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 import {ToastrService} from 'ngx-toastr';
-import {ApiService} from '../rest-client/services/api.service';
-import { GameServerStatus, Exception, Status } from '../rest-client/models';
+import {GameContainerStatus, Status} from '../rest-client/models';
 import { Constants } from '../global';
 import {Router} from "@angular/router";
+import {GameserverService} from "../rest-client/services/gameserver.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   statusEnum = Status;
 
-  gameServers: GameServerStatus[] = [];
+  gameServers: GameContainerStatus[] = [];
 
   private static ownerId = Constants.dummyOwnerId;
 
@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     iconsLibrary: NbIconLibraries,
     private theme: NbThemeService,
     private toastr: ToastrService,
-    private api: ApiService,
+    private gameServerService: GameserverService,
     private router: Router
   ) {
     iconsLibrary.registerFontPack('fa', {packClass: 'fa', iconClassPrefix: 'fa'});
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateAll() {
-    this.api.getStatus(null).subscribe(
+    this.gameServerService.getStatus(null).subscribe(
       result => {
         // @ts-ignore
         result = result.filter(value => value.id !== '');
@@ -203,8 +203,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.themeSubscription.unsubscribe();
   }
 
-  deployServer(image: string) {
-    this.api.deployContainer({body: {ownerId: DashboardComponent.ownerId, image: image}}).subscribe(
+  deployServer(templatePath: string) {
+    this.gameServerService.deployContainer({body: {templatePath: templatePath}}).subscribe(
       () => this.updateAll(),
       error => {
         this.displayError(`Deployment failed`, error);
@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param id the id of the deployment to delete
    */
   deleteContainer(id: string) {
-    this.api.deleteContainer({id}).subscribe(
+    this.gameServerService.deleteContainer({id}).subscribe(
       result => {
         this.toastr.success(`Container '${id}' removed`, 'Deletion successful');
         this.gameServers = this.gameServers.filter(value => value.id !== id);
@@ -251,7 +251,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     console.error(`Restarting game server #${id}...`);
 
-    this.api.restartContainer({id}).subscribe(
+    this.gameServerService.restartContainer({id}).subscribe(
       () => {
         gameServer.status = Status.Running;
         this.toastr.success(`Game server ${id} restarted`, `Restart successful`);
@@ -280,7 +280,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const gameServer = this.gameServers.find(server => server.id === id);
     console.log(`Stopping game server #${id}...`);
 
-    this.api.stopContainer({id}).subscribe(
+    this.gameServerService.stopContainer({id}).subscribe(
       () => {
         gameServer.status = Status.Stopped;
         this.toastr.success(`Game server ${id} stopped`, `Stop successful`);
@@ -309,7 +309,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const gameServer = this.gameServers.find(server => server.id === id);
     console.log(`Restarting game server #${id} ...`);
 
-    this.api.startContainer({id}).subscribe(
+    this.gameServerService.startContainer({id}).subscribe(
       () => {
         gameServer.status = Status.Running;
         this.toastr.success(`Game server #${id} started`, `Start successful`);

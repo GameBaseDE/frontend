@@ -48,7 +48,7 @@ describe('ServerConfigurationComponent', () => {
 
   it('should validate Docker image input and display error', () => {
     const expected = '';
-    const selector = 'input[name="input-docker-image"]';
+    const selector = 'input[name="input-template-path"]';
     let input = fixture.debugElement.query(By.css(selector));
     let element = input.nativeElement;
 
@@ -58,15 +58,15 @@ describe('ServerConfigurationComponent', () => {
     element.dispatchEvent(new Event('input'));
     element.dispatchEvent(new Event('keyup'));
 
-    const actual = component.resources.dockerImage.value;
+    const actual = component.resources.templatePath.value;
 
     expect(actual).toEqual(expected);
-    expect(component.resources.dockerImage.hasError).toBeTrue();
+    expect(component.resources.templatePath.hasError).toBeTrue();
   });
 
   it('should validate Docker image input and display no error', () => {
     const expected = 'hello-world';
-    const selector = 'input[name="input-docker-image"]';
+    const selector = 'input[name="input-template-path"]';
     let input = fixture.debugElement.query(By.css(selector));
     let element = input.nativeElement;
 
@@ -76,10 +76,10 @@ describe('ServerConfigurationComponent', () => {
     element.dispatchEvent(new Event('input'));
     element.dispatchEvent(new Event('keyup'));
 
-    const actual = component.resources.dockerImage.value;
+    const actual = component.resources.templatePath.value;
 
     expect(actual).toEqual(expected, `actual: ${actual} != expected: ${expected}`);
-    expect(component.resources.dockerImage.hasError).toBeFalsy(`Error is displayed although expected: ${expected} complies to rules.`);
+    expect(component.resources.templatePath.hasError).toBeFalsy(`Error is displayed although expected: ${expected} complies to rules.`);
   });
 
   it('should validate memory allocation and display error', () => {

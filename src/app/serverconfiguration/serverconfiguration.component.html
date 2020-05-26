@@ -8,7 +8,7 @@
         <input  [(ngModel)]="generalDetails.serverName.value"
                 (keyup)="updateServerName(serverName.value)"
                 class="form-control"
-                name="name"
+                name="input-server-name"
                 required
                 nbInput
                 ngModel
@@ -24,7 +24,7 @@
         <label class="label" for="input-server-owner">Server Owner</label><br/>
         <div class="description">Owner of server that will have full control of this game server</div>
         <input class="form-control"
-               name="owner"
+               name="input-server-owner"
                nbInput
                ngModel
                type="text"
@@ -41,7 +41,7 @@
                   (keyup)="updateDescription(description.value)"
                   #description
                   class="form-control"
-                  name="description"
+                  name="input-server-description"
                   required
                   nbInput
                   ngModel
@@ -59,20 +59,21 @@
   <nb-card-body>
     <div class="col-1">
       <form class="form-server-creation">
-        <label class="label" for="input-docker-image">Docker image</label><br/>
-        <input [(ngModel)]="resources.dockerImage.value"
-               (keyup)="updateDockerImage(dockerImage.value)"
-               #dockerImage
+        <label class="label" for="input-template-path">Template path</label><br/>
+        <div class="description">A path to a template relative to the backend's directory.</div>
+        <input [(ngModel)]="resources.templatePath.value"
+               (keyup)="updateTemplatePath(templatePath.value)"
+               #templatePath
                class="form-control"
-               name="input-docker-image"
+               name="input-template-path"
                required
                nbInput
                ngModel
                type="text"
                fullWidth
-               [status]="resources.dockerImage.hasError ? 'danger' : 'basic'"
-               placeholder="myusername/mycustomgameserver:v1.0">
-        <gb-error-container *ngIf="resources.dockerImage.hasError" errorMessage="This field must not be empty!"></gb-error-container>
+               [status]="resources.templatePath.hasError ? 'danger' : 'basic'"
+               placeholder="steamcmd/mycustomgameserver">
+        <gb-error-container *ngIf="resources.templatePath.hasError" errorMessage="This field must not be empty!"></gb-error-container>
       </form>
 
       <div class="col-1">
@@ -126,7 +127,6 @@
                required
                nbInput
                ngModel
-               #name="ngModel"
                type="text"
                fullWidth
                [status]="resources.memoryAlloc.hasError ? 'danger' : 'basic'"

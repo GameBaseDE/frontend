@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {GameServerConfigurationTemplate, GameServerStatus, RestartBehavior} from '../rest-client/models';
-import { ToastrService } from 'ngx-toastr';
-import { ApiService } from '../rest-client/services';
-import { Router, ActivatedRoute, ParamMap, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs/internal/Observable';
+import {Component, OnInit} from '@angular/core';
+import {GameContainerConfiguration, GameContainerStatus, RestartBehavior} from '../rest-client/models';
+import {ToastrService} from 'ngx-toastr';
+import {GameserverService} from '../rest-client/services';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Constants, EnumUtils, StringUtils} from '../global';
-import {rejects} from "assert";
 
 enum PortType {
   UDP = 'udp',
@@ -20,29 +17,27 @@ enum PortType {
 })
 export class ServerConfigurationComponent implements OnInit {
 
+  private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
+  private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
+  private static redirectRoute = ['/dashboard'];
+
   restartBehaviorOptions = [
-    { value: 'none', label: 'None', checked: true },
-    { value: 'unless-stopped', label: 'Unless stopped' },
-    { value: 'on-failure', label: 'On failure' },
-    { value: 'always', label: 'Always' },
+    {value: 'none', label: 'None', checked: true},
+    {value: 'unless-stopped', label: 'Unless stopped'},
+    {value: 'on-failure', label: 'On failure'},
+    {value: 'always', label: 'Always'},
   ];
-
-  // deployTemplate: GameServerDeployTemplate = {
-  //   image: null,
-  //   ownerId: Global.dummyOwnerId
-  // }
-
   generalDetails = {
     serverName: {
       value: '',
       hasError: false,
     },
     description: undefined,
+    // ToDo: Replace dummyOwnerId with user system in the future
     ownerId: Constants.dummyOwnerId
   }
-
   resources = {
-    dockerImage: {
+    templatePath: {
       value: '',
       hasError: false,
     },
@@ -70,26 +65,42 @@ export class ServerConfigurationComponent implements OnInit {
     },
     restartBehavior: ''
   }
+  /**
+   * This is a wrapper which is to be used in HTML templates only!
+   */
 
-  private static numericListRegExp: RegExp = /^\d{1,5}(,\d{1,5})*$/gm;
-  private static numericValuesOnlyRegExp: RegExp = /^\d+$/g;
-  private static redirectRoute = ['/dashboard'];
+  gbPortType = PortType;
 
-  private currentServer: GameServerStatus;
+  private currentServer: GameContainerStatus;
 
   constructor(
     private toastr: ToastrService,
-    private api: ApiService,
+    private gameServerService: GameserverService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+  }
+
+  private static isNumericList(input: string): boolean {
+    let result = input.match(ServerConfigurationComponent.numericListRegExp);
+    return result !== null && result.length > 0;
+  }
+
+  private static isValueInValidRange(input: any): boolean {
+    return input >= 1 && input <= 65565;
+  }
+
+  private static isNumericOnly(input: any): boolean {
+    let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
+    return result !== null && result.length > 0;
+  }
 
   async ngOnInit() {
     await this.route.params.subscribe(
       params => {
         const id = params['id'];
         if (!StringUtils.isEmptyOrNull(id)) {
-          this.api.getStatus(undefined).subscribe(
+          this.gameServerService.getStatus(undefined).subscribe(
             result => {
               const filterResult = result.filter(value => value.id === id);
 
@@ -109,7 +120,6 @@ export class ServerConfigurationComponent implements OnInit {
       },
       error => {
         this.router.navigate(ServerConfigurationComponent.redirectRoute);
-        console.error('Fehler!')
         this.displayErrorWithStrings('Error on access!', `Could not access configuration page. (${error})`);
         console.error(error);
       }
@@ -119,28 +129,23 @@ export class ServerConfigurationComponent implements OnInit {
   apply() {
     const resources = this.resources;
     const generalDetails = this.generalDetails;
-    console.log('> Create Game Server clicked!');
-    console.log('>> Docker image: ' + resources.dockerImage);
-    console.log('>> Startup args: ' + resources.startupArgs);
-    console.log('>> Memory alloc: ' + resources.memoryAlloc);
-    console.log('>> Port alloc: ' + resources.portAlloc);
 
     if ((resources.memoryAlloc.hasError || StringUtils.isEmptyOrNull(resources.memoryAlloc.value))
-        && (resources.portAlloc.tcp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.tcp.rawValue))
-        && (resources.portAlloc.udp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.udp.rawValue))
-        && (resources.dockerImage.hasError || StringUtils.isEmptyOrNull(resources.dockerImage.value))
-        && (generalDetails.serverName.hasError || StringUtils.isEmptyOrNull(generalDetails.serverName.value))) {
+      && (resources.portAlloc.tcp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.tcp.rawValue))
+      && (resources.portAlloc.udp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.udp.rawValue))
+      && (resources.templatePath.hasError || StringUtils.isEmptyOrNull(resources.templatePath.value))
+      && (generalDetails.serverName.hasError || StringUtils.isEmptyOrNull(generalDetails.serverName.value))) {
       this.displayErrorWithStrings('Error while submitting', 'There are errors in your provided input values.');
       return;
     } else {
-      let configuration: GameServerConfigurationTemplate = {
+      let configuration: GameContainerConfiguration = {
         details: {
           ownerId: Constants.dummyOwnerId,
           description: generalDetails.description,
           serverName: generalDetails.serverName.value
         },
         resources: {
-          image: resources.dockerImage.value,
+          templatePath: resources.templatePath.value,
           memory: resources.memoryAlloc.value as unknown as number,
           ports: {
             tcp: resources.portAlloc.tcp.parsedValues,
@@ -151,9 +156,7 @@ export class ServerConfigurationComponent implements OnInit {
         }
       };
 
-      console.log(configuration);
-
-      this.api.configureContainer({body: configuration}).subscribe(
+      this.gameServerService.configureContainer({id: this.currentServer.id, body: configuration}).subscribe(
         result => {
           this.router.navigate(ServerConfigurationComponent.redirectRoute);
           this.displaySuccess('Configuration applied', `Your new configurations have been applied to game server ${this.currentServer.id}.`);
@@ -175,9 +178,9 @@ export class ServerConfigurationComponent implements OnInit {
     this.generalDetails.description = description;
   }
 
-  updateDockerImage(image: string) {
-    this.resources.dockerImage.hasError = !(image.length > 0);
-    this.resources.dockerImage.value = image;
+  updateTemplatePath(image: string) {
+    this.resources.templatePath.hasError = !(image.length > 0);
+    this.resources.templatePath.value = image;
   }
 
   updateMemoryAlloc(value: string) {
@@ -192,11 +195,6 @@ export class ServerConfigurationComponent implements OnInit {
     }
   }
 
-  /**
-   * This is a wrapper which is to be used in HTML templates only!
-   */
-  gbPortType = PortType;
-
   updatePortAlloc(portType: PortType, value: string) {
     this.resources.portAlloc[portType].hasError = false;
     this.resources.portAlloc[portType].rawValue = value;
@@ -209,7 +207,9 @@ export class ServerConfigurationComponent implements OnInit {
     }
 
     value.split(",").forEach(element => {
-      if (!(element.length > 0)) { return; }
+      if (!(element.length > 0)) {
+        return;
+      }
       this.resources.portAlloc[portType].parsedValues.push(element);
 
       if (!ServerConfigurationComponent.isValueInValidRange(element)) {
@@ -234,21 +234,26 @@ export class ServerConfigurationComponent implements OnInit {
    * Updates all models values in this component.
    */
   private updateAllInfos() {
-    this.updateServerName(this.currentServer.gameTag);
-    this.updateDescription(this.currentServer.description ?? '');
-    this.updateDockerImage(this.currentServer.image);
+    const details = this.currentServer.configuration.details;
+    const resources = this.currentServer.configuration.resources;
+    const ports = this.currentServer.configuration.resources.ports;
 
-    if (this.currentServer.ports) {
-      this.updatePortAlloc(PortType.TCP, this.currentServer.ports.tcp.join(',') ?? '');
-      this.updatePortAlloc(PortType.UDP, this.currentServer.ports.udp.join(',') ?? '');
+    this.updateServerName(details.serverName ?? '');
+    this.updateDescription(details.description ?? '');
+
+
+    if (ports) {
+      this.updatePortAlloc(PortType.TCP, ports.tcp.join(',') ?? '');
+      this.updatePortAlloc(PortType.UDP, ports.udp.join(',') ?? '');
     } else {
       this.updatePortAlloc(PortType.TCP, '');
       this.updatePortAlloc(PortType.UDP, '');
     }
 
-    this.updateMemoryAlloc((this.currentServer.memory ?? '-1').toString());
-    this.updateStartupArgs(this.currentServer.startupArgs ?? '');
-    this.setRestartBehaviorOption(this.currentServer.restartBehavior ?? 'none');
+    this.updateTemplatePath(resources.templatePath ?? '');
+    this.updateMemoryAlloc((resources.memory ?? '-1').toString());
+    this.updateStartupArgs(resources.startupArgs ?? '');
+    this.setRestartBehaviorOption(resources.restartBehavior ?? 'none');
   }
 
   private displayError(title: string, error: any) {
@@ -261,20 +266,6 @@ export class ServerConfigurationComponent implements OnInit {
 
   private displaySuccess(title: string, description: string) {
     this.toastr.success(description, title);
-  }
-
-  private static isNumericList(input: string): boolean {
-    let result = input.match(ServerConfigurationComponent.numericListRegExp);
-    return result !== null && result.length > 0;
-  }
-
-  private static isValueInValidRange(input: any): boolean {
-    return input >= 1 && input <= 65565;
-  }
-
-  private static isNumericOnly(input: any): boolean {
-    let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
-    return result !== null && result.length > 0;
   }
 
   /**
