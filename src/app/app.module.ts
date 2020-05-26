@@ -67,7 +67,7 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     NbRadioModule,
     NgxEchartsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
-    ApiModule.forRoot({rootUrl: environment.restApiURL}),
+    ApiModule.forRoot({rootUrl: environment.mockAPIURL}),
     HttpClientModule,
     NbStepperModule,
     FormsModule,

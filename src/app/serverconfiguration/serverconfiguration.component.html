@@ -119,7 +119,7 @@
         <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
         <div class="description">Values should be in MB - Use -1 to ignore limits</div>
         <input [(ngModel)]="resources.memoryAlloc.value"
-               (keyup)="updateDescription(memoryAlloc.value)"
+               (keyup)="updateMemoryAlloc(memoryAlloc.value)"
                #memoryAlloc
                class="form-control"
                name="input-memory-allocation"
