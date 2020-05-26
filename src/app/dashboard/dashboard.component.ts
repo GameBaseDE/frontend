@@ -3,8 +3,8 @@ import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 import {ToastrService} from 'ngx-toastr';
 import {GameContainerStatus, Status} from '../rest-client/models';
 import { Constants } from '../global';
-import {Router} from "@angular/router";
-import {GameserverService} from "../rest-client/services/gameserver.service";
+import {Router} from '@angular/router';
+import {GameserverService} from '../rest-client/services/gameserver.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,14 +12,6 @@ import {GameserverService} from "../rest-client/services/gameserver.service";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-  options: any = {};
-  themeSubscription: any;
-
-  statusEnum = Status;
-
-  gameServers: GameContainerStatus[] = [];
-
-  private static ownerId = Constants.dummyOwnerId;
 
   constructor(
     iconsLibrary: NbIconLibraries,
@@ -32,6 +24,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('far', {packClass: 'far', iconClassPrefix: 'fa'});
   }
+
+  private static ownerId = Constants.dummyOwnerId;
+  options: any = {};
+  themeSubscription: any;
+
+  statusEnum = Status;
+
+  gameServers: GameContainerStatus[] = [];
 
   ngOnInit() {
     this.updateAll();
@@ -204,7 +204,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   deployServer(templatePath: string) {
-    this.gameServerService.deployContainer({body: {templatePath: templatePath}}).subscribe(
+    this.gameServerService.deployContainer({body: {templatePath}}).subscribe(
       () => this.updateAll(),
       error => {
         this.displayError(`Deployment failed`, error);

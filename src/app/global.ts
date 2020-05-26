@@ -1,9 +1,9 @@
 export class Constants {
-  public static dummyOwnerId: string = 'c6a4f782-9aa2-11ea-bb37-0242ac130002';
+  public static dummyOwnerId = 'c6a4f782-9aa2-11ea-bb37-0242ac130002';
 }
 
 export class StringUtils {
-  public static isEmptyOrNull(value: string): boolean { return !(value !== undefined && (value.length > 0)); }
+  public static isEmptyOrNull(value: string): boolean { return !(value !== null && (value.length > 0)); }
 }
 
 export class EnumUtils {
@@ -13,7 +13,7 @@ export class EnumUtils {
    * @param value Value of key to be found
    */
   public static getKeyByValue(enum$: any, value: any): any {
-    let keys = Object.keys(enum$);
+    const keys = Object.keys(enum$);
 
     for (const key in keys) {
       if (key === value) {

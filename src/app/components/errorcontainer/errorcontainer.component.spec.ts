@@ -24,10 +24,10 @@ describe('ErrorContainerComponent', () => {
   });
 
   it('should display error message', () => {
-    let expected: string = 'This is a test message';
+    const expected = 'This is a test message';
     component.errorMessage = expected;
 
-    let actual: string = component.errorMessage;
+    const actual: string = component.errorMessage;
     expect(actual).toEqual(expected);
   })
 });

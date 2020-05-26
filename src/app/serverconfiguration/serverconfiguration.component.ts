@@ -82,7 +82,7 @@ export class ServerConfigurationComponent implements OnInit {
   }
 
   private static isNumericList(input: string): boolean {
-    let result = input.match(ServerConfigurationComponent.numericListRegExp);
+    const result = input.match(ServerConfigurationComponent.numericListRegExp);
     return result !== null && result.length > 0;
   }
 
@@ -91,14 +91,14 @@ export class ServerConfigurationComponent implements OnInit {
   }
 
   private static isNumericOnly(input: any): boolean {
-    let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
+    const result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
     return result !== null && result.length > 0;
   }
 
   async ngOnInit() {
     await this.route.params.subscribe(
       params => {
-        const id = params['id'];
+        const id = params.id;
         if (!StringUtils.isEmptyOrNull(id)) {
           this.gameServerService.getStatus(undefined).subscribe(
             result => {
@@ -109,18 +109,27 @@ export class ServerConfigurationComponent implements OnInit {
                 this.updateAllInfos();
               } else {
                 this.router.navigate(ServerConfigurationComponent.redirectRoute);
-                this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID ${id} is invalid.`);
+                this.displayErrorWithStrings(
+                  'Error on access!',
+                  `Could not access configuration page as the provided ID ${id} is invalid.`
+                );
               }
             }
           );
         } else {
           this.router.navigate(ServerConfigurationComponent.redirectRoute);
-          this.displayErrorWithStrings('Error on access!', `Could not access configuration page as the provided ID ${id} is invalid.`);
+          this.displayErrorWithStrings(
+            'Error on access!',
+            `Could not access configuration page as the provided ID ${id} is invalid.`
+          );
         }
       },
       error => {
         this.router.navigate(ServerConfigurationComponent.redirectRoute);
-        this.displayErrorWithStrings('Error on access!', `Could not access configuration page. (${error})`);
+        this.displayErrorWithStrings(
+          'Error on access!',
+          `Could not access configuration page. (${error})`
+        );
         console.error(error);
       }
     );
@@ -135,10 +144,13 @@ export class ServerConfigurationComponent implements OnInit {
       && (resources.portAlloc.udp.hasError || StringUtils.isEmptyOrNull(resources.portAlloc.udp.rawValue))
       && (resources.templatePath.hasError || StringUtils.isEmptyOrNull(resources.templatePath.value))
       && (generalDetails.serverName.hasError || StringUtils.isEmptyOrNull(generalDetails.serverName.value))) {
-      this.displayErrorWithStrings('Error while submitting', 'There are errors in your provided input values.');
+      this.displayErrorWithStrings(
+        'Error while submitting',
+        'There are errors in your provided input values.'
+      );
       return;
     } else {
-      let configuration: GameContainerConfiguration = {
+      const configuration: GameContainerConfiguration = {
         details: {
           ownerId: Constants.dummyOwnerId,
           description: generalDetails.description,
@@ -159,7 +171,10 @@ export class ServerConfigurationComponent implements OnInit {
       this.gameServerService.configureContainer({id: this.currentServer.id, body: configuration}).subscribe(
         result => {
           this.router.navigate(ServerConfigurationComponent.redirectRoute);
-          this.displaySuccess('Configuration applied', `Your new configurations have been applied to game server ${this.currentServer.id}.`);
+          this.displaySuccess(
+            'Configuration applied',
+            `Your new configurations have been applied to game server ${this.currentServer.id}.`
+          );
           console.log(result);
         },
         error => {
@@ -188,6 +203,7 @@ export class ServerConfigurationComponent implements OnInit {
     this.resources.memoryAlloc.value = value;
 
     // @ts-ignore
+    // tslint:disable-next-line:triple-equals
     if (!(ServerConfigurationComponent.isNumericOnly(value) || value == -1)) {
       this.resources.memoryAlloc.hasError = true;
       this.resources.memoryAlloc.errorMessage = 'Only numeric values are allowed!';
@@ -200,13 +216,14 @@ export class ServerConfigurationComponent implements OnInit {
     this.resources.portAlloc[portType].rawValue = value;
     this.resources.portAlloc[portType].faultyValues = [];
 
-    this.resources.portAlloc[portType].hasError = !(StringUtils.isEmptyOrNull(value) || ServerConfigurationComponent.isNumericList(value));
+    this.resources.portAlloc[portType].hasError
+      = !(StringUtils.isEmptyOrNull(value) || ServerConfigurationComponent.isNumericList(value));
     if (this.resources.portAlloc[portType].hasError) {
       this.resources.portAlloc[portType].errorMessage = 'Your input does not match a comma-separated list!';
       return;
     }
 
-    value.split(",").forEach(element => {
+    value.split(',').forEach(element => {
       if (!(element.length > 0)) {
         return;
       }
@@ -218,7 +235,8 @@ export class ServerConfigurationComponent implements OnInit {
       }
     });
 
-    this.resources.portAlloc[portType].errorMessage = `The following values are not in allowed range: ${this.resources.portAlloc[portType].faultyValues}`;
+    this.resources.portAlloc[portType].errorMessage
+      = `The following values are not in allowed range: ${this.resources.portAlloc[portType].faultyValues}`;
   }
 
   updateServerName(name: string) {

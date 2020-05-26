@@ -4,14 +4,13 @@ import {ServerConfigurationComponent} from './serverconfiguration.component';
 import {NbCardModule, NbInputModule, NbRadioModule, NbThemeModule} from '@nebular/theme';
 import {FormsModule} from '@angular/forms';
 import {By} from '@angular/platform-browser';
-import {ToastrModule} from "ngx-toastr";
-import {ApiModule} from "../rest-client/api.module";
-import {environment} from "../../environments/environment";
-import {HttpClientModule} from "@angular/common/http";
-import {AppRoutingModule} from "../app-routing.module";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from 'ngx-toastr';
+import {ApiModule} from '../rest-client/api.module';
+import {environment} from '../../environments/environment';
+import {HttpClientModule} from '@angular/common/http';
+import {AppRoutingModule} from '../app-routing.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-// @ts-ignore
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
   let fixture: ComponentFixture<ServerConfigurationComponent>;
@@ -49,8 +48,8 @@ describe('ServerConfigurationComponent', () => {
   it('should validate Docker image input and display error', () => {
     const expected = '';
     const selector = 'input[name="input-template-path"]';
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -67,8 +66,8 @@ describe('ServerConfigurationComponent', () => {
   it('should validate Docker image input and display no error', () => {
     const expected = 'hello-world';
     const selector = 'input[name="input-template-path"]';
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -85,8 +84,8 @@ describe('ServerConfigurationComponent', () => {
   it('should validate memory allocation and display error', () => {
     const expected = 'abcdef';
     const selector = 'input[name="input-memory-allocation"]'
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -103,8 +102,8 @@ describe('ServerConfigurationComponent', () => {
   it('should validate memory allocation and display no error', () => {
     const expected = '1234';
     const selector = 'input[name="input-memory-allocation"]'
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -121,8 +120,8 @@ describe('ServerConfigurationComponent', () => {
   it('should validate UDP port allocation with invalid comma-separated values and display error', () => {
     const expected = '1354987,,,';
     const selector = 'input[name="input-udp-port-allocation"]';
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -140,8 +139,8 @@ describe('ServerConfigurationComponent', () => {
     const expected = '0,5,54,5123,90000';
     const expectedFaulty = ['0', '90000'];
     const selector = 'input[name="input-udp-port-allocation"]';
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 
@@ -163,8 +162,8 @@ describe('ServerConfigurationComponent', () => {
     const expected = '1024,65565';
     const expectedParsed = ['1024', '65565'];
     const selector = 'input[name="input-udp-port-allocation"]';
-    let input = fixture.debugElement.query(By.css(selector));
-    let element = input.nativeElement;
+    const input = fixture.debugElement.query(By.css(selector));
+    const element = input.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
 

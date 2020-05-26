@@ -9,7 +9,7 @@ import {ToastrModule} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ApiModule} from '../rest-client/api.module';
-import {AppRoutingModule} from "../app-routing.module";
+import {AppRoutingModule} from '../app-routing.module';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
