@@ -178,7 +178,7 @@ pages:
   dependencies:
     - Verify Karma test
   script:
-    - mv coverage/GameBase-Frontend/* coverage/
+    - mv coverage/Frontend/* coverage/
     - mkdir -p public/dev/
     - cp -a coverage/* public/dev/
   except:
