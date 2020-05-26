@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {GameServerConfigurationTemplate, GameServerStatus} from '../rest-client/models';
+import {GameServerConfigurationTemplate, GameServerStatus, RestartBehavior} from '../rest-client/models';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from '../rest-client/services';
 import { Router, ActivatedRoute, ParamMap, Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
-import { Constants, StringUtils } from '../global';
+import {Constants, EnumUtils, StringUtils} from '../global';
 import {rejects} from "assert";
 
 enum PortType {
@@ -37,8 +37,8 @@ export class ServerConfigurationComponent implements OnInit {
       value: '',
       hasError: false,
     },
-    description: undefined, // ToDo: this.currentServer.description!
-    ownerId: Constants.dummyOwnerId // ToDo: this.currentServer.ownerId?
+    description: undefined,
+    ownerId: Constants.dummyOwnerId
   }
 
   resources = {
@@ -133,17 +133,6 @@ export class ServerConfigurationComponent implements OnInit {
       this.displayErrorWithStrings('Error while submitting', 'There are errors in your provided input values.');
       return;
     } else {
-      //this.deployTemplate.image = this.dockerImage.value;
-
-      // this.api.deployContainer({body: this.deployTemplate}).subscribe(
-      //   (result) => {
-      //     this.router.navigate(ServerConfigurationComponent.dashboardRoute);
-      //     this.displaySuccess('Success!', `Your game server has been deployed`);
-      //   },
-      //   (error) => {
-      //     this.displayError('Deployment error', error);
-      //     console.error(error);
-      // });
       let configuration: GameServerConfigurationTemplate = {
         details: {
           ownerId: Constants.dummyOwnerId,
@@ -153,11 +142,16 @@ export class ServerConfigurationComponent implements OnInit {
         resources: {
           image: resources.dockerImage.value,
           memory: resources.memoryAlloc.value as unknown as number,
-          //ports: resources.portAlloc.parsedValues,
-          //restartBehavior: resources.restartBehavior,
+          ports: {
+            tcp: resources.portAlloc.tcp.parsedValues,
+            udp: resources.portAlloc.udp.parsedValues
+          },
+          restartBehavior: EnumUtils.getKeyByValue(RestartBehavior, resources.restartBehavior),
           startupArgs: resources.startupArgs
         }
       };
+
+      console.log(configuration);
 
       this.api.configureContainer({body: configuration}).subscribe(
         result => {
@@ -237,29 +231,24 @@ export class ServerConfigurationComponent implements OnInit {
   }
 
   /**
-   * This is a wrapper which is to be used in HTML templates only!
-   */
-  isStringEmptyOrNull = StringUtils.isEmptyOrNull;
-
-  /**
    * Updates all models values in this component.
    */
   private updateAllInfos() {
-    this.updateDescription(''/* ToDo: this.currentServer.description! */);
-    this.updateDockerImage(this.currentServer.image);
-    this.updateMemoryAlloc('-1'/* ToDo: this.currentServer.memory? */);
-
-    // ToDo: this.currentServer.ports.tcp + this.currentServer.ports.udp??
-    // if (this.currentServer.ports !== null) {
-    //   this.updatePortAlloc(this.currentServer.ports.join(','));
-    // }
-    this.updatePortAlloc(PortType.TCP, '');
-    this.updatePortAlloc(PortType.UDP, '');
-
     this.updateServerName(this.currentServer.gameTag);
-    this.updateStartupArgs('' /* ToDo: this.currentServer.startUpArgs? */);
+    this.updateDescription(this.currentServer.description ?? '');
+    this.updateDockerImage(this.currentServer.image);
 
-    this.setRestartBehaviorOption('none'/* ToDo: this.currentServer.restartBehavior */);
+    if (this.currentServer.ports) {
+      this.updatePortAlloc(PortType.TCP, this.currentServer.ports.tcp.join(',') ?? '');
+      this.updatePortAlloc(PortType.UDP, this.currentServer.ports.udp.join(',') ?? '');
+    } else {
+      this.updatePortAlloc(PortType.TCP, '');
+      this.updatePortAlloc(PortType.UDP, '');
+    }
+
+    this.updateMemoryAlloc((this.currentServer.memory ?? '-1').toString());
+    this.updateStartupArgs(this.currentServer.startupArgs ?? '');
+    this.setRestartBehaviorOption(this.currentServer.restartBehavior ?? 'none');
   }
 
   private displayError(title: string, error: any) {
@@ -276,7 +265,7 @@ export class ServerConfigurationComponent implements OnInit {
 
   private static isNumericList(input: string): boolean {
     let result = input.match(ServerConfigurationComponent.numericListRegExp);
-    return result !== undefined && result.length > 0;
+    return result !== null && result.length > 0;
   }
 
   private static isValueInValidRange(input: any): boolean {
@@ -285,7 +274,7 @@ export class ServerConfigurationComponent implements OnInit {
 
   private static isNumericOnly(input: any): boolean {
     let result = input.match(ServerConfigurationComponent.numericValuesOnlyRegExp);
-    return result !== undefined && result.length > 0;
+    return result !== null && result.length > 0;
   }
 
   /**
@@ -293,7 +282,7 @@ export class ServerConfigurationComponent implements OnInit {
    * @param restartBehavior option as string
    */
   private setRestartBehaviorOption(restartBehavior: string) {
-    if (restartBehavior === undefined) {
+    if (restartBehavior === null) {
       return;
     }
 
