@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   restApiURL: 'https://api.game-base.de',
-  mockAPIURL: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/1.1.0'
+  mockAPIURL: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0'
 };
 
 /*

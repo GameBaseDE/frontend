@@ -23,14 +23,16 @@
       <form class="form-server-creation">
         <label class="label" for="input-server-owner">Server Owner</label><br/>
         <div class="description">Owner of server that will have full control of this game server</div>
-        <input class="form-control"
-               name="input-server-owner"
-               nbInput
-               ngModel
-               type="text"
-               fullWidth
-               status="basic"
-               placeholder="Type some letters to start searching user">
+        <input  [(ngModel)]="generalDetails.ownerId"
+                class="form-control"
+                name="input-server-owner"
+                nbInput
+                ngModel
+                disabled
+                type="text"
+                fullWidth
+                status="basic"
+                placeholder="Type some letters to start searching user">
       </form>
     </div>
     <div class="col-2">
