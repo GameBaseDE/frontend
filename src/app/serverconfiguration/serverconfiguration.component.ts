@@ -262,13 +262,8 @@ export class ServerConfigurationComponent implements OnInit {
     this.updateDescription(details.description ?? '');
 
 
-    if (ports) {
-      this.updatePortAlloc(PortType.TCP, ports.tcp.join(',') ?? '');
-      this.updatePortAlloc(PortType.UDP, ports.udp.join(',') ?? '');
-    } else {
-      this.updatePortAlloc(PortType.TCP, '');
-      this.updatePortAlloc(PortType.UDP, '');
-    }
+    this.updatePortAlloc(PortType.TCP, ports?.tcp?.join(',') ?? '');
+    this.updatePortAlloc(PortType.UDP, ports?.udp?.join(',') ?? '');
 
     this.updateTemplatePath(resources.templatePath ?? '');
     this.updateMemoryAlloc((resources.memory ?? '-1').toString());
