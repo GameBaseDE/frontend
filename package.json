@@ -4,12 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build-dev": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.game-base.de",
+    "build-dev": "ng build --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://dev.game-base.de",
     "build-live": "ng build --prod --build-optimizer=true --aot=true --extract-css=true --named-chunks=false --vendor-chunk=true --base-href https://game-base.de",
     "test": "ng test --code-coverage --progress false --watch false",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "openapi": "ng-openapi-gen --input openapi.yaml --output ./src/app/rest-client",
+    "openapi": "ng-openapi-gen --input ./vendor/swagger-rest-api/yaml-resolved/gamebase-api-specification.yaml --output ./src/app/rest-client",
     "preinstall": "npx npm-force-resolutions"
   },
   "private": true,
@@ -56,6 +56,7 @@
     "karma-jasmine": "~3.1.1",
     "karma-jasmine-html-reporter": "^1.5.3",
     "minimist": "^1.2.5",
+    "ng-openapi-gen": "^0.11.1",
     "protractor": "~5.4.3",
     "protractor-cucumber-framework": "^6.2.1",
     "ts-node": "~8.8.1",

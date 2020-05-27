@@ -5,6 +5,7 @@ import {PageNotFoundComponent} from './layout/page-not-found/page-not-found.comp
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 
+import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
 
 const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
@@ -14,6 +15,11 @@ const routes: Routes = [
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
+  {
+    path: 'server/configure/:id',
+    component: ServerConfigurationComponent
+  },
+  {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
   {path: '**', component: PageNotFoundComponent}
 ];
 

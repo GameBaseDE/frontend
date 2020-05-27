@@ -44,3 +44,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Ignore generated REST client as it's generated locally
+/src/app/rest-client
