@@ -1,0 +1,3 @@
+[submodule "vendor/swagger-rest-api"]
+	path = vendor/swagger-rest-api
+	url = https://gitlab.tandashi.de/GameBase/swagger-rest-api

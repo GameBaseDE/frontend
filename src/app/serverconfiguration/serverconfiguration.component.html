@@ -1,0 +1,178 @@
+<nb-card>
+  <nb-card-header>General Details</nb-card-header>
+  <nb-card-body>
+    <div class="col-1">
+      <form class="form-server-creation">
+        <label class="label" for="input-server-name">Server Name</label><br/>
+        <div class="description">Name of server that will be displayed on your Dashboard</div>
+        <input  [(ngModel)]="generalDetails.serverName.value"
+                (keyup)="updateServerName(serverName.value)"
+                class="form-control"
+                name="input-server-name"
+                required
+                nbInput
+                ngModel
+                #serverName
+                type="text"
+                fullWidth
+                [status]="generalDetails.serverName.hasError ? 'danger' : 'basic'"
+                placeholder="Server name">
+        <gb-error-container *ngIf="generalDetails.serverName.hasError" errorMessage="This field must not be empty!"></gb-error-container>
+      </form>
+
+      <form class="form-server-creation">
+        <label class="label" for="input-server-owner">Server Owner</label><br/>
+        <div class="description">Owner of server that will have full control of this game server</div>
+        <input  [(ngModel)]="generalDetails.ownerId"
+                class="form-control"
+                name="input-server-owner"
+                nbInput
+                ngModel
+                disabled
+                type="text"
+                fullWidth
+                status="basic"
+                placeholder="Type some letters to start searching user">
+      </form>
+    </div>
+    <div class="col-2">
+      <form class="form-server-creation">
+        <label class="label" for="input-server-description">Description</label><br/>
+        <div class="description">Short description of this server which will be displayed on the Dashboard</div>
+        <textarea [(ngModel)]="generalDetails.description"
+                  (keyup)="updateDescription(description.value)"
+                  #description
+                  class="form-control"
+                  name="input-server-description"
+                  required
+                  nbInput
+                  ngModel
+                  type="text"
+                  fullWidth
+                  status="basic"
+                  placeholder="This is my game server. It runs v1.0."></textarea>
+      </form>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-header>Resource Allocation & Container Settings</nb-card-header>
+  <nb-card-body>
+    <div class="col-1">
+      <form class="form-server-creation">
+        <label class="label" for="input-template-path">Template path</label><br/>
+        <div class="description">A path to a template relative to the backend's directory.</div>
+        <input [(ngModel)]="resources.templatePath.value"
+               (keyup)="updateTemplatePath(templatePath.value)"
+               #templatePath
+               class="form-control"
+               name="input-template-path"
+               required
+               nbInput
+               ngModel
+               type="text"
+               fullWidth
+               [status]="resources.templatePath.hasError ? 'danger' : 'basic'"
+               placeholder="steamcmd/mycustomgameserver">
+        <gb-error-container *ngIf="resources.templatePath.hasError" errorMessage="This field must not be empty!"></gb-error-container>
+      </form>
+
+      <div class="col-1">
+        <form class="form-server-creation">
+          <label class="label" for="input-tcp-port-allocation">TCP port allocation</label><br/>
+          <div class="description">Max values: 1024-65565 - Comma-separated values</div>
+          <input [(ngModel)]="resources.portAlloc.tcp.rawValue"
+                 (keyup)="updatePortAlloc(gbPortType.TCP, tcpPortAlloc.value)"
+                 #tcpPortAlloc
+                 class="form-control"
+                 name="input-tcp-port-allocation"
+                 required
+                 nbInput
+                 ngModel
+                 type="text"
+                 fullWidth
+                 [status]="resources.portAlloc.tcp.hasError ? 'danger' : 'basic'"
+                 placeholder="25565">
+          <gb-error-container *ngIf="resources.portAlloc.tcp.hasError" [errorMessage]="resources.portAlloc.tcp.errorMessage"></gb-error-container>
+        </form>
+      </div>
+
+      <div class="col-1">
+        <form class="form-server-creation">
+          <label class="label" for="input-udp-port-allocation">UDP port allocation</label><br/>
+          <div class="description">Max values: 1024-65565 - Comma-separated values</div>
+          <input [(ngModel)]="resources.portAlloc.udp.rawValue"
+                 (keyup)="updatePortAlloc(gbPortType.UDP, udpPortAlloc.value)"
+                 #udpPortAlloc
+                 class="form-control"
+                 name="input-udp-port-allocation"
+                 required
+                 nbInput
+                 ngModel
+                 type="text"
+                 fullWidth
+                 [status]="resources.portAlloc.udp.hasError ? 'danger' : 'basic'"
+                 placeholder="7777,1234">
+          <gb-error-container *ngIf="resources.portAlloc.udp.hasError" [errorMessage]="resources.portAlloc.udp.errorMessage"></gb-error-container>
+        </form>
+      </div>
+
+      <form class="form-server-creation">
+        <label class="label" for="input-memory-allocation">Memory allocation</label><br/>
+        <div class="description">Values should be in MB - Use -1 to ignore limits</div>
+        <input [(ngModel)]="resources.memoryAlloc.value"
+               (keyup)="updateMemoryAlloc(memoryAlloc.value)"
+               #memoryAlloc
+               class="form-control"
+               name="input-memory-allocation"
+               required
+               nbInput
+               ngModel
+               type="text"
+               fullWidth
+               [status]="resources.memoryAlloc.hasError ? 'danger' : 'basic'"
+               placeholder="-1">
+        <gb-error-container *ngIf="resources.memoryAlloc.hasError" [errorMessage]="resources.memoryAlloc.errorMessage"></gb-error-container>
+      </form>
+
+    </div>
+    <div class="col-2">
+      <form class="form-server-creation">
+        <label class="label" for="input-startup-arguments">Startup arguments</label><br/>
+        <div class="description">Command with arguments that will be run upon container creation</div>
+        <input  [(ngModel)]="resources.startupArgs"
+                (keyup)="updateStartupArgs(startupArgs.value)"
+                #startupArgs
+                class="form-control"
+                name="input-startup-arguments"
+                required
+                nbInput
+                ngModel
+                type="text"
+                fullWidth
+                status="basic"
+                placeholder="./start_server.sh --myargs random_value">
+      </form>
+
+        <form class="form-server-creation">
+          <label class="label" for="input-restart-behaviors">Restart behavior</label><br />
+          <nb-radio-group [(ngModel)]="resources.restartBehavior" name="restartBehavior">
+            <nb-radio
+              *ngFor="let option of restartBehaviorOptions"
+              [value]="option.value"
+              [checked]="option.checked">
+              {{ option.label }}
+            </nb-radio>
+          </nb-radio-group>
+        </form>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card>
+  <nb-card-body class="button-group">
+    <button nbButton status="basic" (click)="cancel()">Cancel</button>
+    <button nbButton status="info" (click)="apply()">Apply</button>
+  </nb-card-body>
+</nb-card>

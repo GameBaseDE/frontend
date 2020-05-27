@@ -23,7 +23,8 @@ import {
   NbSearchModule,
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
-  NbUserModule
+  NbUserModule,
+  NbRadioModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
@@ -31,6 +32,8 @@ import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import { ServerConfigurationComponent } from './serverconfiguration/serverconfiguration.component';
+import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,9 @@ import {FormsModule} from '@angular/forms';
     DashboardComponent,
     FooterComponent,
     HeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ServerConfigurationComponent,
+    ErrorContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +64,7 @@ import {FormsModule} from '@angular/forms';
     NbContextMenuModule,
     NbAccordionModule,
     NbAlertModule,
+    NbRadioModule,
     NgxEchartsModule,
     ToastrModule.forRoot({positionClass: 'toast-bottom-right'}),
     ApiModule.forRoot({rootUrl: environment.restApiURL}),

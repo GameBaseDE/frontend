@@ -8,6 +8,7 @@ cache: &global_cache
 
 stages:
   - install
+  - Generate Swagger client
   - verify
   - build
   - deploy
@@ -15,6 +16,24 @@ stages:
 Install dependencies:
   stage: install
   script: npm i
+  tags:
+    - GameBase
+    - docker
+    - angular
+
+Generate swagger client:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
+  stage: Generate Swagger client
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script: npm run openapi
+  artifacts:
+    paths:
+      - src/app/rest-client/
   tags:
     - GameBase
     - docker
@@ -33,7 +52,7 @@ Verify lint:
     - GameBase
     - docker
 
-Verify karma-test:
+Verify Karma test:
   cache:
     # inherit all global cache settings
     <<: *global_cache
@@ -49,14 +68,14 @@ Verify karma-test:
     - GameBase
     - docker
 
-Verify E2E-test:
+Verify E2E test:
   cache:
     # inherit all global cache settings
     <<: *global_cache
     # override the policy
     policy: pull
   stage: verify
-  image: trion/ng-cli-e2e
+  image: trion/ng-cli-e2e:9.1.7
   script: npm run e2e
   tags:
     - GameBase
@@ -121,3 +140,27 @@ Deploy dev:
   tags:
     - GameBase
     - shell
+
+pages:
+  stage: deploy
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    key: pages
+    paths:
+      - public
+    policy: pull-push
+  dependencies:
+    - Verify Karma test
+  script:
+    - mkdir -p public/dev/
+    - cp -a coverage/Frontend/* public/dev/
+  except:
+    - master
+  artifacts:
+    name: "$CI_PIPELINE_ID"
+    paths:
+      - public
+  tags:
+    - GameBase
+    - docker
