@@ -1,7 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {LoginComponent} from './login.component';
-import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
+import {NbAuthModule, NbAuthService, NbDummyAuthStrategy} from '@nebular/auth';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NbCardModule, NbCheckboxModule, NbFocusMonitor, NbIconModule, NbThemeModule} from '@nebular/theme';
 
@@ -17,7 +17,7 @@ describe('LoginComponent', () => {
           [NbDummyAuthStrategy.setup(
             {name: 'email', alwaysFail: false})]
       }), RouterTestingModule, NbIconModule, NbThemeModule.forRoot(), NbCardModule, NbCheckboxModule],
-      providers: [NbFocusMonitor]
+      providers: [NbFocusMonitor, NbAuthService]
     })
       .compileComponents();
   }));
