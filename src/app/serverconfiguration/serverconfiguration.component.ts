@@ -222,6 +222,8 @@ export class ServerConfigurationComponent implements OnInit {
       this.resources.portAlloc[portType].errorMessage = 'Your input does not match a comma-separated list!';
       return;
     }
+    
+    this.resources.portAlloc[portType].parsedValues = [];
 
     value.split(',').forEach(element => {
       if (!(element.length > 0)) {
