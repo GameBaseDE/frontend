@@ -1,0 +1,29 @@
+form.form-server-creation {
+    margin: 1em;
+}
+
+div.description {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.button-group button {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    justify-content: flex-end;
+}
+
+div.col-1 {
+  width: 50%;
+  float: left;
+}
+
+div.col-2 {
+  width: 50%;
+  float: right;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 1vh;
+}
