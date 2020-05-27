@@ -8,8 +8,15 @@ import {LoginComponent} from './auth/login/login.component';
 import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
 
 const routes: Routes = [
-  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
-  {path: 'login', component: LoginComponent},
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: '',
     redirectTo: '/dashboard',
@@ -17,7 +24,8 @@ const routes: Routes = [
   },
   {
     path: 'server/configure/:id',
-    component: ServerConfigurationComponent
+    component: ServerConfigurationComponent,
+    canActivate: [AuthGuard]
   },
   {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
   {path: '**', component: PageNotFoundComponent}
