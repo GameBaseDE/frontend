@@ -15,7 +15,7 @@ import {
   NbActionsModule,
   NbAlertModule,
   NbButtonModule,
-  NbCardModule,
+  NbCardModule, NbCheckboxModule,
   NbContextMenuModule,
   NbIconModule, NbInputModule,
   NbLayoutModule,
@@ -30,7 +30,10 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NbAuthJWTToken, NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy} from '@nebular/auth';
+import {AuthGuard} from './auth.guard';
+import {LoginComponent} from './auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,8 @@ import {FormsModule} from '@angular/forms';
     DashboardComponent,
     FooterComponent,
     HeaderComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -65,9 +69,49 @@ import {FormsModule} from '@angular/forms';
     HttpClientModule,
     NbStepperModule,
     FormsModule,
-    NbInputModule
+    NbInputModule,
+    NbAuthModule.forRoot({
+      strategies: [
+        NbPasswordAuthStrategy.setup({
+          name: 'email',
+          token: {
+            class: NbAuthJWTToken,
+            key: 'token' // this parameter tells where to look for the token
+          },
+
+          baseEndpoint: 'http://localhost:4000',
+          // baseEndpoint: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0',
+          // baseEndpoint: environment.restApiURL,
+          login: {
+            endpoint: '/auth/login',
+            method: 'post',
+            redirect: {
+              success: '/dashboard',
+              failure: null // stay on the same page
+            }
+          },
+          register: {
+            endpoint: '/auth/register',
+            method: 'post'
+          }
+        }),
+      ],
+      forms: {
+        login: {
+          redirectDelay: 0, // delay before redirect after a successful login, while success message is shown to the user
+          strategy: 'email',  // strategy id key.
+          rememberMe: false,   // whether to show or not the `rememberMe` checkbox
+          showMessages: {     // show/not show success/error messages
+            success: false,
+            error: true
+          }
+        },
+      },
+    }),
+    ReactiveFormsModule,
+    NbCheckboxModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {
