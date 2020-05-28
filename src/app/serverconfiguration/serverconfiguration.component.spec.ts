@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from '../app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
 
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
@@ -29,7 +30,13 @@ describe('ServerConfigurationComponent', () => {
         NbThemeModule.forRoot(),
         FormsModule,
         NbInputModule,
-        NbRadioModule
+        NbRadioModule,
+        NbAuthModule.forRoot({
+          strategies: [NbDummyAuthStrategy.setup({
+            alwaysFail: false,
+            name: 'email'
+          })]
+        })
       ]
     })
       .compileComponents();
