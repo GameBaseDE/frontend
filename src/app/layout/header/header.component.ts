@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NbSidebarService} from '@nebular/theme';
+import {NbAuthService} from '@nebular/auth';
 
 @Component({
   selector: 'app-header',
@@ -9,17 +10,22 @@ import {NbSidebarService} from '@nebular/theme';
 export class HeaderComponent implements OnInit {
   userMenu = [{title: 'Profile', link: '/profile'}, {title: 'Log out', link: '/logout'}];
 
+  isLoggedIn = false;
+
   user = {
     name: 'Test User',
     pictureOnly: false,
     picture: 'assets/images/eva.png',
   };
 
-  constructor(private sidebarService: NbSidebarService) {
-
+  constructor(private sidebarService: NbSidebarService, public authService: NbAuthService) {
   }
 
   ngOnInit() {
+    this.authService.onTokenChange().subscribe(token => {
+      this.isLoggedIn = token.isValid();
+      // TODO add getTokenPayload
+    })
   }
 
   toggleSidebar(): boolean {

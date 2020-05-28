@@ -31,10 +31,16 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
-import { ServerConfigurationComponent } from './serverconfiguration/serverconfiguration.component';
-import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
+import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
+import {ErrorContainerComponent} from './components/errorcontainer/errorcontainer.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NbAuthJWTToken, NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy} from '@nebular/auth';
+import {
+  NbAuthJWTToken,
+  NbAuthModule,
+  NbAuthSimpleToken,
+  NbDummyAuthStrategy,
+  NbPasswordAuthStrategy
+} from '@nebular/auth';
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 
@@ -78,16 +84,19 @@ import {LoginComponent} from './auth/login/login.component';
     NbInputModule,
     NbAuthModule.forRoot({
       strategies: [
-        NbPasswordAuthStrategy.setup({
+        NbDummyAuthStrategy.setup({
+          name: 'email',
+          alwaysFail: false
+        })
+        /*NbPasswordAuthStrategy.setup({
           name: 'email',
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
           },
 
-          baseEndpoint: 'http://localhost:4000',
           // baseEndpoint: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0',
-          // baseEndpoint: environment.restApiURL,
+          baseEndpoint: environment.restApiURL,
           login: {
             endpoint: '/auth/login',
             method: 'post',
@@ -100,7 +109,7 @@ import {LoginComponent} from './auth/login/login.component';
             endpoint: '/auth/register',
             method: 'post'
           }
-        }),
+        })*/
       ],
       forms: {
         login: {

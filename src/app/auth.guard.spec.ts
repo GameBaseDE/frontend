@@ -4,7 +4,7 @@ import {AuthGuard} from './auth.guard';
 import {NbAuthModule, NbAuthService, NbDummyAuthStrategy} from '@nebular/auth';
 import {RouterTestingModule} from '@angular/router/testing';
 
-describe('AuthGuardGuard', () => {
+describe('AuthGuard', () => {
   let guard: AuthGuard;
 
   beforeEach(() => {

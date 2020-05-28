@@ -1,24 +1,36 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot} from '@angular/router';
 import {NbAuthService} from '@nebular/auth';
 import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
-  constructor(private authService: NbAuthService, private router: Router) {}
+export class AuthGuard implements CanActivate, CanActivateChild {
+  constructor(private authService: NbAuthService, private router: Router) {
+  }
 
-  canActivate() {
+  private activate(state: RouterStateSnapshot) {
     return this.authService.isAuthenticated()
       .pipe(
         tap(authenticated => {
-          console.log(authenticated)
           if (!authenticated) {
-            this.router.navigate(['login']);
+            this.router.navigate(['login'], {
+              queryParams: {
+                return: state.url
+              }
+            });
           }
         }),
       );
+  }
+
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.activate(state);
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    return this.activate(state);
   }
 
 }

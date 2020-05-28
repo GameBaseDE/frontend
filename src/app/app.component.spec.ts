@@ -15,13 +15,20 @@ import {
   NbUserModule
 } from '@nebular/theme';
 import {FooterComponent} from './layout/footer/footer.component';
+import {NbAuthModule, NbAuthService, NbDummyAuthStrategy} from '@nebular/auth';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, NbLayoutModule, NbMenuModule.forRoot(), NbSidebarModule.forRoot(), NbIconModule, NbSearchModule,
-        NbActionsModule, NbUserModule, NbContextMenuModule, NbThemeModule.forRoot({name: 'dark'})],
+        NbActionsModule, NbUserModule, NbContextMenuModule, NbThemeModule.forRoot({name: 'dark'}),
+        NbAuthModule.forRoot({
+          strategies:
+            [NbDummyAuthStrategy.setup(
+              {name: 'email', alwaysFail: false})]
+        })],
       declarations: [AppComponent, LayoutComponent, HeaderComponent, FooterComponent],
+      providers: [NbAuthService]
     }).compileComponents();
   }));
 

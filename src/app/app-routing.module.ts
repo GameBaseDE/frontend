@@ -6,6 +6,7 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 
 import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
+import {NbLogoutComponent} from '@nebular/auth';
 
 const routes: Routes = [
   {
@@ -13,22 +14,30 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuard]
+    path: 'logout',
+    component: NbLogoutComponent
   },
   {
     path: '',
-    redirectTo: '/dashboard',
-    pathMatch: 'full'
+    canActivateChild: [AuthGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'server/configure/:id',
+        component: ServerConfigurationComponent,
+      },
+      {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
+      {path: '**', component: PageNotFoundComponent}
+    ]
   },
-  {
-    path: 'server/configure/:id',
-    component: ServerConfigurationComponent,
-    canActivate: [AuthGuard]
-  },
-  {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
-  {path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({

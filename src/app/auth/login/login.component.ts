@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
-import {NbLoginComponent} from '@nebular/auth';
+import {NbAuthService, NbLoginComponent} from '@nebular/auth';
 import {NbIconLibraries} from '@nebular/theme';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,16 @@ import {NbIconLibraries} from '@nebular/theme';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends NbLoginComponent {
-  constructor(iconsLibrary: NbIconLibraries) {
-    super(undefined, {}, undefined, undefined);
+  constructor(iconsLibrary: NbIconLibraries, authService: NbAuthService, router: Router) {
+    super(authService, {}, undefined, router);
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
+
+    // redirect if authenticated
+    authService.isAuthenticated().subscribe(auth => {
+      if (auth) {
+        // TODO dynamic redirect to return param
+        router.navigate(['dashboard'])
+      }
+    })
   }
 }
