@@ -15,7 +15,7 @@ import {
   NbActionsModule,
   NbAlertModule,
   NbButtonModule,
-  NbCardModule,
+  NbCardModule, NbCheckboxModule,
   NbContextMenuModule,
   NbIconModule, NbInputModule,
   NbLayoutModule,
@@ -31,9 +31,17 @@ import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
 import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import { ServerConfigurationComponent } from './serverconfiguration/serverconfiguration.component';
-import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
+import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
+import {ErrorContainerComponent} from './components/errorcontainer/errorcontainer.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {
+  NbAuthJWTToken,
+  NbAuthModule,
+  NbDummyAuthStrategy,
+  NbPasswordAuthStrategy
+} from '@nebular/auth';
+import {AuthGuard} from './auth.guard';
+import {LoginComponent} from './auth/login/login.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +52,8 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     HeaderComponent,
     PageNotFoundComponent,
     ServerConfigurationComponent,
-    ErrorContainerComponent
+    ErrorContainerComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -71,9 +80,52 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     HttpClientModule,
     NbStepperModule,
     FormsModule,
-    NbInputModule
+    NbInputModule,
+    NbAuthModule.forRoot({
+      strategies: [
+        NbDummyAuthStrategy.setup({
+          name: 'email',
+          alwaysFail: false
+        })
+        /*NbPasswordAuthStrategy.setup({
+          name: 'email',
+          token: {
+            class: NbAuthJWTToken,
+            key: 'token' // this parameter tells where to look for the token
+          },
+
+          // baseEndpoint: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0',
+          baseEndpoint: environment.restApiURL,
+          login: {
+            endpoint: '/auth/login',
+            method: 'post',
+            redirect: {
+              success: '/dashboard',
+              failure: null // stay on the same page
+            }
+          },
+          register: {
+            endpoint: '/auth/register',
+            method: 'post'
+          }
+        })*/
+      ],
+      forms: {
+        login: {
+          redirectDelay: 0, // delay before redirect after a successful login, while success message is shown to the user
+          strategy: 'email',  // strategy id key.
+          rememberMe: true,   // whether to show or not the `rememberMe` checkbox
+          showMessages: {     // show/not show success/error messages
+            success: false,
+            error: true
+          }
+        },
+      },
+    }),
+    ReactiveFormsModule,
+    NbCheckboxModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {

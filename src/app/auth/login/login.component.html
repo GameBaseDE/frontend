@@ -1,0 +1,46 @@
+<nb-card>
+  <nb-card-header>
+    <nav class="navigation">
+      <a href="#" aria-label="Back" class="link back-link">
+        <nb-icon pack="fas" icon="arrow-left"></nb-icon>
+      </a>
+    </nav>
+  </nb-card-header>
+  <nb-card-body>
+    <nb-auth-block style="margin:auto;">
+      <nb-login>
+        <h1 id="title" class="title">Login</h1>
+        <p class="sub-title">Hello! Log in with your email.</p>
+        <form class="ng-pristine ng-invalid ng-touched">
+          <div class="form-control-group" style="position: relative;">
+            <label for="input-email" class="label">Email address:</label>
+            <input id="input-email" pattern=".+@.+\..+" placeholder="Email address" autofocus required
+                   autocomplete="off"
+                   class="input-full-width size-large status-basic shape-rectangle ng-pristine ng-invalid nb-transition ng-touched">
+            <p class="caption status-danger">Email is required!</p>
+          </div>
+          <div class="form-control-group" style="position: relative;">
+            <span class="label-with-link">
+              <label for="input-password" class="label">Password:</label>
+              <a routerLink="request-password"
+                 class="forgot-password caption-2">Forgot Password?</a>
+            </span>
+            <input type="password" id="input-password" placeholder="Password" required minlength="4" maxlength="50"
+                   autocomplete="off"
+                   class="input-full-width size-large status-basic shape-rectangle ng-untouched ng-pristine ng-invalid nb-transition">
+          </div>
+          <div class="form-control-group accept-group">
+            <nb-checkbox class="status-basic ng-untouched ng-pristine ng-valid nb-transition">Remember me</nb-checkbox>
+          </div>
+          <button tabindex="-1"
+                  class="appearance-filled full-width size-large status-primary shape-rectangle btn-disabled nb-transition">
+            Log In
+          </button>
+        </form>
+        <section class="another-action">Don't have an account?
+          <a routerLink="register" class="text-link">Register</a>
+        </section>
+      </nb-login>
+    </nb-auth-block>
+  </nb-card-body>
+</nb-card>
