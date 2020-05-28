@@ -37,7 +37,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
   NbAuthJWTToken,
   NbAuthModule,
-  NbAuthSimpleToken,
   NbDummyAuthStrategy,
   NbPasswordAuthStrategy
 } from '@nebular/auth';

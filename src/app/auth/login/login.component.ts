@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NbAuthService, NbLoginComponent} from '@nebular/auth';
 import {NbIconLibraries} from '@nebular/theme';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +13,9 @@ export class LoginComponent extends NbLoginComponent {
     super(authService, {}, undefined, router);
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
 
-    // redirect if authenticated
+    // redirect if already authenticated
     authService.isAuthenticated().subscribe(auth => {
       if (auth) {
-        // TODO dynamic redirect to return param
         router.navigate(['dashboard'])
       }
     })

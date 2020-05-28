@@ -10,27 +10,23 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private authService: NbAuthService, private router: Router) {
   }
 
-  private activate(state: RouterStateSnapshot) {
+  private activate() {
     return this.authService.isAuthenticated()
       .pipe(
         tap(authenticated => {
           if (!authenticated) {
-            this.router.navigate(['login'], {
-              queryParams: {
-                return: state.url
-              }
-            });
+            this.router.navigate(['login']);
           }
         }),
       );
   }
 
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.activate(state);
+  canActivateChild() {
+    return this.activate();
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return this.activate(state);
+  canActivate() {
+    return this.activate();
   }
 
 }
