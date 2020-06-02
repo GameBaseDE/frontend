@@ -46,6 +46,7 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {CommonModule} from '@angular/common';
+import {GameServerAccordionItemModule} from './components/game-server-accordion-item/game-server-accordion-item.module';
 
 @NgModule({
   declarations: [
@@ -154,7 +155,8 @@ import {CommonModule} from '@angular/common';
       },
     }),
     ReactiveFormsModule,
-    NbCheckboxModule
+    NbCheckboxModule,
+    GameServerAccordionItemModule
   ],
   providers: [
     AuthGuard,
