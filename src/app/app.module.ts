@@ -24,7 +24,7 @@ import {
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule,
-  NbRadioModule
+  NbRadioModule, NbAccordionComponent
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
@@ -45,6 +45,7 @@ import {
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -56,10 +57,11 @@ import {RegisterComponent} from './auth/register/register.component';
     PageNotFoundComponent,
     ServerConfigurationComponent,
     ErrorContainerComponent,
-    LoginComponent,
-    RegisterComponent
+    LoginComponent
   ],
   imports: [
+    NbAccordionModule,
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -75,7 +77,6 @@ import {RegisterComponent} from './auth/register/register.component';
     NbSearchModule,
     NbUserModule,
     NbContextMenuModule,
-    NbAccordionModule,
     NbAlertModule,
     NbRadioModule,
     NgxEchartsModule,
