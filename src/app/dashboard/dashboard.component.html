@@ -35,7 +35,6 @@
           <button nbButton (click)="stepper.reset()">Try again</button>
         </div>
       </nb-step>
-
     </nb-stepper>
   </nb-card-body>
 </nb-card>
@@ -77,7 +76,8 @@
     <nb-accordion-item-body>
       <div class="col-1">
         <p class="title">Description</p>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <p *ngIf="gameServer.configuration.details.description">{{ gameServer.configuration.details.description }}</p>
+        <p class="unavailable-text" *ngIf="!gameServer.configuration.details.description">This server does have no description.</p>
         <button nbButton status="danger" outline (click)="deleteContainer(gameServer.id)">Delete Container <nb-icon icon="trash"></nb-icon></button>
       </div>
       <div class="col-2">
@@ -85,27 +85,44 @@
           <tbody>
           <tr>
             <td class="title">Template</td>
-            <td>/mytemplate</td>
+            <td *ngIf="gameServer.configuration.resources.templatePath">{{ gameServer.configuration.resources.templatePath }}</td>
+            <td class="unavailable-text" *ngIf="!gameServer.configuration.resources.templatePath">Unknown template</td>
           </tr>
-          <tr>
+          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null || gameServer.configuration.resources.ports.udp != null">
             <td class="title">Port Allocation</td>
           </tr>
-          <tr>
+          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null">
             <td>TCP</td>
             <td>
+              <ul *ngFor="let port of gameServer.configuration.resources.ports.tcp">
+                <li>{{ port }}</li>
+              </ul>
+            </td>
+          </tr>
+          <tr *ngIf="gameServer.configuration.resources.ports.udp != null">
+            <td>UDP</td>
+            <td>
+              <ul *ngFor="let port of gameServer.configuration.resources.ports.udp">
+                <li>{{ port }}</li>
+              </ul>
+            </td>
+          </tr>
+          <tr *ngIf="gameServer.configuration.resources.environmentVars != null">
+            <td class="title">Environment Variables</td>
+            <td *ngFor="let env of gameServer.configuration.resources.environmentVars.key">
               <ul>
-                <li>1234</li>
-                <li>4711</li>
+                <li>{{ env }}: {{ gameServer.configuration.resources.environmentVars.key[env] }}</li>
               </ul>
             </td>
           </tr>
           <tr>
             <td class="title">Memory Allocation</td>
-            <td>512 MB</td>
+            <td *ngIf="gameServer.configuration.resources.memory">{{ gameServer.configuration.resources.memory }}</td>
+            <td class="unavailable-text" *ngIf="!gameServer.configuration.resources.memory">Unknown</td>
           </tr>
           <tr>
             <td class="title">Restart Behavior</td>
-            <td>On failure</td>
+            <td>{{ gameServer.configuration.resources.restartBehavior || "None" }}</td>
           </tr>
           <tr>
             <td class="title">Startup Arguments</td>
