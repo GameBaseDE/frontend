@@ -44,7 +44,7 @@
 </nb-card>
 
 <nb-accordion multi>
-  <nb-accordion-item expanded="true" *ngFor="let gameServer of gameServers">
+  <nb-accordion-item *ngFor="let gameServer of gameServers">
     <nb-accordion-item-header>
       {{ gameServer.id }}: {{ gameServer.configuration.resources.templatePath }}
       <div class="button-group">
