@@ -61,7 +61,6 @@ import {GameServerAccordionItemModule} from './components/game-server-accordion-
     LoginComponent
   ],
   imports: [
-    NbAccordionModule,
     CommonModule,
     BrowserModule,
     AppRoutingModule,
@@ -156,7 +155,7 @@ import {GameServerAccordionItemModule} from './components/game-server-accordion-
     }),
     ReactiveFormsModule,
     NbCheckboxModule,
-    GameServerAccordionItemModule
+    NbAccordionModule,
   ],
   providers: [
     AuthGuard,

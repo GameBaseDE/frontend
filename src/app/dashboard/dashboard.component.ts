@@ -13,6 +13,15 @@ import {GameserverService} from '../rest-client/services/gameserver.service';
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  private static ownerId = Constants.dummyOwnerId;
+
+  statusEnum = Status;
+
+  options: any = {};
+  themeSubscription: any;
+
+  gameServers: GameContainerStatus[] = [];
+
   constructor(
     iconsLibrary: NbIconLibraries,
     private theme: NbThemeService,
@@ -24,12 +33,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     iconsLibrary.registerFontPack('fas', {packClass: 'fas', iconClassPrefix: 'fa'});
     iconsLibrary.registerFontPack('far', {packClass: 'far', iconClassPrefix: 'fa'});
   }
-
-  private static ownerId = Constants.dummyOwnerId;
-  options: any = {};
-  themeSubscription: any;
-
-  gameServers: GameContainerStatus[] = [];
 
   ngOnInit() {
     this.updateAll();
@@ -211,16 +214,149 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  /**
+   * Deletes a deployment
+   *
+   * @param id the id of the deployment to delete
+   */
+  deleteContainer(id: string) {
+    this.gameServerService.deleteContainer({id}).subscribe(
+      result => {
+        this.toastr.success(`Container '${id}' removed`, 'Deletion successful');
+        this.gameServers = this.gameServers.filter(value => value.id !== id);
+      },
+      error => {
+        this.displayError(`Deletion of container #${id} failed`, error);
+        console.warn(error);
+      }
+    );
+  }
+
+
+  /**
+   * Button click event handler for the restart GameServer button
+   *
+   * @param event the click event
+   * @param id the GameServer id to restart
+   */
+  restartServerEvent(event: Event, id: string) {
+    event.stopPropagation();
+
+    if (!this.restartPossible(id)) {
+      // user shouldn't be able to get here unless he hacks his way here
+      return;
+    }
+
+    const gameServer = this.gameServers.find(server => server.id === id);
+    gameServer.status = Status.Restarting;
+
+    console.error(`Restarting game server #${id}...`);
+
+    this.gameServerService.restartContainer({id}).subscribe(
+      () => {
+        gameServer.status = Status.Running;
+        this.toastr.success(`Game server ${id} restarted`, `Restart successful`);
+      },
+      error => {
+        gameServer.status = Status.Error;
+        this.displayError('Restart failed', error);
+      }
+    );
+  }
+
+  /**
+   * Button click event handler for the stop GameServer button
+   *
+   * @param event the click event
+   * @param id the GameServer id to stop
+   */
+  stopServerEvent(event: Event, id: string) {
+    event.stopPropagation();
+
+    if (!this.stopPossible(id)) {
+      // user shouldn't be able to get here unless he hacks his way here
+      return;
+    }
+
+    const gameServer = this.gameServers.find(server => server.id === id);
+    console.log(`Stopping game server #${id}...`);
+
+    this.gameServerService.stopContainer({id}).subscribe(
+      () => {
+        gameServer.status = Status.Stopped;
+        this.toastr.success(`Game server ${id} stopped`, `Stop successful`);
+      },
+      error => {
+        gameServer.status = Status.Error;
+        this.displayError('stop', error);
+      }
+    );
+  }
+
+  /**
+   * Button click event handler for the start GameServer button
+   *
+   * @param event the click event
+   * @param id the GameServer id to start
+   */
+  startServerEvent(event: Event, id: string) {
+    event.stopPropagation();
+
+    if (!this.startPossible(id)) {
+      // user shouldn't be able to get here unless he hacks his way here
+      return;
+    }
+
+    const gameServer = this.gameServers.find(server => server.id === id);
+    console.log(`Restarting game server #${id} ...`);
+
+    this.gameServerService.startContainer({id}).subscribe(
+      () => {
+        gameServer.status = Status.Running;
+        this.toastr.success(`Game server #${id} started`, `Start successful`);
+      },
+      error => {
+        gameServer.status = Status.Error;
+        this.displayError(`Starting game server #${id} failed`, error);
+      }
+    );
+  }
+
+
   displayError(step: string, error: any) {
     console.error(error);
     this.toastr.error(`Error during ${step}: ${error.details}`, `${step} failed`);
   }
 
   /**
-   * Delegate method for event of game server accordion item deletion
-   * @param id of game server whose accordion item needs to be destroyed
+   *  Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
    */
-  deleteGameServerAccordionItem(id: string) {
-    this.gameServers = this.gameServers.filter(server => server.id !== id);
+  restartPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.Running;
+  }
+
+  /**
+   * Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
+   */
+  stopPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.Running;
+  }
+
+  /**
+   * Returns whether a restart is possible for a specific GameServer
+   * @param id the id of the GameServer to check
+   */
+  startPossible(id: string) {
+    const gameServer = this.gameServers.find(value => value.id === id);
+    return gameServer.status === Status.Stopped || gameServer.status === Status.Error;
+  }
+
+
+  openServerConfiguration(id: string) {
+    this.router.navigate([`/server/configure/${id}`]);
   }
 }
