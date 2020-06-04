@@ -112,15 +112,15 @@
           </tr>
           <tr>
             <td colspan="2">
-              <input type="text"
-                     placeholder="./myserver --port 1234 --api-port 4711"
-                     name="startup-args"
-                     required
-                     nbInput
-                     ngModel
-                     fullWidth
-                     #startupArgs
-                     status="basic">
+              <input  [(ngModel)]="gameServer.configuration.resources.startupArgs"
+                      type="text"
+                      placeholder="No custom startup arguments set"
+                      name="startup-args"
+                      nbInput
+                      ngModel
+                      fullWidth
+                      readonly
+                      status="basic">
             </td>
           </tr>
           </tbody>
@@ -128,5 +128,4 @@
       </div>
     </nb-accordion-item-body>
   </nb-accordion-item>
-
 </nb-accordion>
