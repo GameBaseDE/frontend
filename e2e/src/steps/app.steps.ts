@@ -40,3 +40,15 @@ Then(/^I am redirected to the detail page for the game server$/, () => {
 Then(/^the game server is not reconfigured$/, () => {
 
 });
+Then(/^I can see (\d+) game servers$/, () => {
+
+});
+Then(/^The game server details are collapsed$/, () => {
+
+});
+When(/^I click on a game server entry$/, () => {
+
+});
+Then(/^The clicked game server entry expands itself$/, () => {
+
+});
