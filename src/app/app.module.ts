@@ -30,11 +30,13 @@ import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
 import {ErrorContainerComponent} from './components/errorcontainer/errorcontainer.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
+  NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+  NbAuthJWTInterceptor,
   NbAuthJWTToken,
   NbAuthModule,
   NbDummyAuthStrategy,
@@ -125,7 +127,19 @@ import {LoginComponent} from './auth/login/login.component';
     ReactiveFormsModule,
     NbCheckboxModule
   ],
-  providers: [AuthGuard],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NbAuthJWTInterceptor,
+      multi: true
+    }, // nebular token interceptor for api auth header
+    {
+      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue() {
+        return false;
+      }
+    } // Filter override to allow the interceptor to be working in the first place (don't ask questions)
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
