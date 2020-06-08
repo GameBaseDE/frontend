@@ -11,6 +11,23 @@ import {HttpClientModule} from '@angular/common/http';
 import {ApiModule} from '../rest-client/api.module';
 import {AppRoutingModule} from '../app-routing.module';
 import {By} from '@angular/platform-browser';
+import {GameContainerStatus} from '../rest-client/models/game-container-status';
+import {Status} from '../rest-client/models/status';
+
+function loadFakeGameServers(): GameContainerStatus[] {
+  return [
+    {
+      id: 'testm652l',
+      status: Status.Running,
+      configuration: {
+        details: {},
+        resources: {
+          ports: {}
+        }
+      }
+    }
+  ]
+}
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -29,6 +46,7 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    fixture.componentInstance.gameServers = loadFakeGameServers();
     fixture.detectChanges();
   });
 
