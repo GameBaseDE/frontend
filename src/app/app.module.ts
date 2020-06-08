@@ -44,6 +44,7 @@ import {
 } from '@nebular/auth';
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
+import {RegisterComponent} from './auth/register/register.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {LoginComponent} from './auth/login/login.component';
     PageNotFoundComponent,
     ServerConfigurationComponent,
     ErrorContainerComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -88,9 +90,9 @@ import {LoginComponent} from './auth/login/login.component';
         NbDummyAuthStrategy.setup({
           name: 'email',
           alwaysFail: false
-        })
-        /*NbPasswordAuthStrategy.setup({
-          name: 'email',
+        }),
+        NbPasswordAuthStrategy.setup({
+          name: 'email_real', // remove _real if backend is implemented
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
@@ -106,11 +108,23 @@ import {LoginComponent} from './auth/login/login.component';
               failure: null // stay on the same page
             }
           },
+          logout: {
+            endpoint: '/auth/logout',
+            method: 'delete',
+            redirect: {
+              success: '/login',
+              failure: null
+            }
+          },
           register: {
             endpoint: '/auth/register',
-            method: 'post'
+            method: 'post',
+            redirect: {
+              success: '/login',
+              failure: null // stay on the same page
+            }
           }
-        })*/
+        })
       ],
       forms: {
         login: {
@@ -122,6 +136,20 @@ import {LoginComponent} from './auth/login/login.component';
             error: true
           }
         },
+        register: {
+          redirectDelay: 0,
+          strategy: 'email',
+          fullName: false,
+          showMessages: {
+            success: false,
+            error: true,
+          },
+          terms: false,
+        },
+        logout: {
+          redirectDelay: 0,
+          strategy: 'email',
+        }
       },
     }),
     ReactiveFormsModule,
