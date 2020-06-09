@@ -99,6 +99,19 @@ Build release:
     - docker
     - angular
 
+SoarQube Scanner:
+  cache:
+    # inherit all global cache settings
+    <<: *global_cache
+    # override the policy
+    policy: pull
+  stage: build
+  image: trion/ng-cli-e2e:9.1.7
+  script: npm run sonarqube -- -Dsonar.login=$SONARQUBE_PROJECT_TOKEN
+  tags:
+    - GameBase
+    - docker
+
 Build dev:
   cache:
     # inherit all global cache settings
