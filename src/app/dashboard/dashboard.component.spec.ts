@@ -2,7 +2,16 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {environment} from '../../environments/environment';
 
 import {DashboardComponent} from './dashboard.component';
-import {NbAccordionModule, NbAlertModule, NbCardModule, NbIconModule, NbInputModule, NbStepperModule, NbThemeModule} from '@nebular/theme';
+import {
+  NbAccordionModule,
+  NbAlertModule,
+  NbCardModule,
+  NbIconModule,
+  NbInputModule,
+  NbRadioModule,
+  NbStepperModule,
+  NbThemeModule
+} from '@nebular/theme';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
@@ -13,6 +22,8 @@ import {AppRoutingModule} from '../app-routing.module';
 import {By} from '@angular/platform-browser';
 import {GameContainerStatus} from '../rest-client/models/game-container-status';
 import {Status} from '../rest-client/models/status';
+import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
+import {NbEvaIconsModule} from '@nebular/eva-icons';
 
 function loadFakeGameServers(): GameContainerStatus[] {
   return [
@@ -35,10 +46,33 @@ describe('DashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [DashboardComponent],
-      imports: [NbAccordionModule, NbIconModule, NbAlertModule, BrowserAnimationsModule, NbCardModule, NgxEchartsModule,
-        NbThemeModule.forRoot(), ToastrModule.forRoot(), NbStepperModule, FormsModule, NbInputModule, HttpClientModule, AppRoutingModule,
-        ApiModule.forRoot({rootUrl: environment.mockAPIURL})]
+      declarations: [
+          DashboardComponent
+      ],
+      imports: [
+        NbCardModule,
+        FormsModule,
+        ToastrModule.forRoot(),
+        HttpClientModule,
+        ApiModule.forRoot({rootUrl: environment.mockAPIURL}),
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        NbThemeModule.forRoot(),
+        FormsModule,
+        NbInputModule,
+        NbRadioModule,
+        NbStepperModule,
+        NbAccordionModule,
+        NbIconModule,
+        NbAlertModule,
+        NbEvaIconsModule,
+        NbAuthModule.forRoot({
+          strategies: [NbDummyAuthStrategy.setup({
+            alwaysFail: false,
+            name: 'email'
+          })]
+        })
+      ]
     })
       .compileComponents();
   }));
@@ -46,7 +80,7 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    fixture.componentInstance.gameServers = loadFakeGameServers();
+    component.gameServers = loadFakeGameServers();
     fixture.detectChanges();
   });
 
