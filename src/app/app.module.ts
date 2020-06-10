@@ -46,7 +46,6 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {CommonModule} from '@angular/common';
-import {GameServerAccordionItemModule} from './components/game-server-accordion-item/game-server-accordion-item.module';
 
 @NgModule({
   declarations: [
@@ -88,12 +87,12 @@ import {GameServerAccordionItemModule} from './components/game-server-accordion-
     NbInputModule,
     NbAuthModule.forRoot({
       strategies: [
-        NbDummyAuthStrategy.setup({
+        /* environment.production ? NbPasswordAuthStrategy.setup({
           name: 'email',
           alwaysFail: false
-        }),
-        NbPasswordAuthStrategy.setup({
-          name: 'email_real', // remove _real if backend is implemented
+        })
+        /*NbPasswordAuthStrategy.setup({
+          name: 'email',
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
@@ -125,7 +124,7 @@ import {GameServerAccordionItemModule} from './components/game-server-accordion-
               failure: null // stay on the same page
             }
           }
-        })
+        })*/
       ],
       forms: {
         login: {
