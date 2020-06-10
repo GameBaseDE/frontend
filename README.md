@@ -1,3 +1,9 @@
+[![Bugs](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=bugs)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
+[![Coverage](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=coverage)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
+[![Maintainability Rating](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=sqale_rating)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
+[![Quality Gate Status](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=alert_status)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
+[![Security Rating](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=security_rating)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
+[![Vulnerabilities](https://sonarqube.gahr.dev/api/project_badges/measure?project=GB-F&metric=vulnerabilities)](https://sonarqube.gahr.dev/dashboard?id=GB-F)
 # GameBaseFrontend
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
