@@ -6,12 +6,17 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 
 import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
-import {NbLogoutComponent} from '@nebular/auth';
+import {NbLogoutComponent, NbRegisterComponent} from '@nebular/auth';
+import {RegisterComponent} from './auth/register/register.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
   },
   {
     path: 'logout',
