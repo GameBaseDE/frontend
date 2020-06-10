@@ -40,7 +40,7 @@ Then(/^I am redirected to the detail page for the game server$/, () => {
 Then(/^the game server is not reconfigured$/, () => {
 
 });
-Then(/^I can see (\d+) game servers$/, () => {
+Then(/^I can see (\d+) game servers$/, amountGameServers => {
 
 });
 Then(/^The game server details are collapsed$/, () => {
