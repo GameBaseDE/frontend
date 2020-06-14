@@ -90,7 +90,7 @@ describe('ServerConfigurationComponent', () => {
 
   it('should validate memory allocation and display error', () => {
     const expected = 'abcdef';
-    const selector = 'input[name="input-memory-allocation"]'
+    const selector = 'input[name="input-memory-allocation"]';
     const input = fixture.debugElement.query(By.css(selector));
     const element = input.nativeElement;
 
@@ -108,7 +108,7 @@ describe('ServerConfigurationComponent', () => {
 
   it('should validate memory allocation and display no error', () => {
     const expected = '1234';
-    const selector = 'input[name="input-memory-allocation"]'
+    const selector = 'input[name="input-memory-allocation"]';
     const input = fixture.debugElement.query(By.css(selector));
     const element = input.nativeElement;
 

@@ -24,7 +24,7 @@ import {
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule,
-  NbRadioModule
+  NbRadioModule, NbAccordionComponent
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
@@ -45,6 +45,7 @@ import {
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {RegisterComponent} from './auth/register/register.component';
     RegisterComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -75,7 +77,6 @@ import {RegisterComponent} from './auth/register/register.component';
     NbSearchModule,
     NbUserModule,
     NbContextMenuModule,
-    NbAccordionModule,
     NbAlertModule,
     NbRadioModule,
     NgxEchartsModule,
@@ -87,12 +88,12 @@ import {RegisterComponent} from './auth/register/register.component';
     NbInputModule,
     NbAuthModule.forRoot({
       strategies: [
-        NbDummyAuthStrategy.setup({
+        /* environment.production ? NbPasswordAuthStrategy.setup({
           name: 'email',
           alwaysFail: false
-        }),
-        NbPasswordAuthStrategy.setup({
-          name: 'email_real', // remove _real if backend is implemented
+        })
+        /*NbPasswordAuthStrategy.setup({
+          name: 'email',
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
@@ -124,7 +125,7 @@ import {RegisterComponent} from './auth/register/register.component';
               failure: null // stay on the same page
             }
           }
-        })
+        })*/
       ],
       forms: {
         login: {
@@ -153,7 +154,8 @@ import {RegisterComponent} from './auth/register/register.component';
       },
     }),
     ReactiveFormsModule,
-    NbCheckboxModule
+    NbCheckboxModule,
+    NbAccordionModule,
   ],
   providers: [
     AuthGuard,
