@@ -57,7 +57,8 @@ import {CommonModule} from '@angular/common';
     PageNotFoundComponent,
     ServerConfigurationComponent,
     ErrorContainerComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,
