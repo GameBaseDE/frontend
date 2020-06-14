@@ -88,12 +88,12 @@ import {CommonModule} from '@angular/common';
     NbInputModule,
     NbAuthModule.forRoot({
       strategies: [
-        /* environment.production ? NbPasswordAuthStrategy.setup({
+        NbDummyAuthStrategy.setup({
           name: 'email',
           alwaysFail: false
-        })
-        /*NbPasswordAuthStrategy.setup({
-          name: 'email',
+        }),
+        NbPasswordAuthStrategy.setup({
+          name: 'email-disabled',
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
@@ -125,7 +125,7 @@ import {CommonModule} from '@angular/common';
               failure: null // stay on the same page
             }
           }
-        })*/
+        })
       ],
       forms: {
         login: {
