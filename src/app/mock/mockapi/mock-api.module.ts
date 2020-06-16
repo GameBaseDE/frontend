@@ -1,4 +1,4 @@
-import {NgModule, Optional, SkipSelf} from '@angular/core';
+import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 import {GameserverMockService} from './services/gameserver-mock.service';
 import {ApiModule} from '../../rest-client/api.module';
 

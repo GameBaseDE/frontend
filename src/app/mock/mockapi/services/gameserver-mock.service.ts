@@ -1,32 +1,39 @@
 import { Injectable } from '@angular/core';
 import {GameserverService} from '../../../rest-client/services';
-import {ApiConfiguration} from '../../../rest-client/api-configuration';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {StrictHttpResponse} from '../../../rest-client/strict-http-response';
-import {GameContainerConfiguration, GameContainerDeployment, GameContainerStatus} from '../../../rest-client/models';
+import {
+  GameContainerConfiguration,
+  GameContainerDeployment,
+  GameContainerStatus
+} from '../../../rest-client/models';
+import {ResponseMocks} from './responses/game-container-status';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameserverMockService extends GameserverService {
-  constructor(
-    config: ApiConfiguration,
-    http: HttpClient
-  ) {
-    super(config, http);
+  private static readonly errorTexts = {
+    doNotUse: 'Please use the other corresponding function instead!'
+  }
+
+  /**
+   * Skip HttpClient and ApiConfiguration as we mock everything thus are not needed.
+   */
+  constructor() {
+    super(null, null);
   }
 
   getStatus$Response(params?: {}): Observable<StrictHttpResponse<Array<GameContainerStatus>>> {
-    return super.getStatus$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   getStatus(params?: {}): Observable<Array<GameContainerStatus>> {
-    return super.getStatus(params);
+    return of(ResponseMocks.GameContainerStatus());
   }
 
   startContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
-    return super.startContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   startContainer(params: { id: string }): Observable<void> {
@@ -34,7 +41,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   stopContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
-    return super.stopContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   stopContainer(params: { id: string }): Observable<void> {
@@ -42,7 +49,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   restartContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
-    return super.restartContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   restartContainer(params: { id: string }): Observable<void> {
@@ -50,7 +57,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   deployContainer$Response(params: { body: GameContainerDeployment }): Observable<StrictHttpResponse<void>> {
-    return super.deployContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   deployContainer(params: { body: GameContainerDeployment }): Observable<void> {
@@ -58,7 +65,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   configureContainer$Response(params: { id: string; body: GameContainerConfiguration }): Observable<StrictHttpResponse<void>> {
-    return super.configureContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   configureContainer(params: { id: string; body: GameContainerConfiguration }): Observable<void> {
@@ -66,7 +73,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   deleteContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
-    return super.deleteContainer$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   deleteContainer(params: { id: string }): Observable<void> {
@@ -74,7 +81,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   listTemplates$Response(params?: {}): Observable<StrictHttpResponse<Array<string>>> {
-    return super.listTemplates$Response(params);
+    throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
   listTemplates(params?: {}): Observable<Array<string>> {
