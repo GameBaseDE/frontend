@@ -13,33 +13,16 @@ import {
   NbThemeModule
 } from '@nebular/theme';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {ApiModule} from '../rest-client/api.module';
 import {AppRoutingModule} from '../app-routing.module';
 import {By} from '@angular/platform-browser';
-import {GameContainerStatus} from '../rest-client/models/game-container-status';
-import {Status} from '../rest-client/models/status';
 import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
-
-function loadFakeGameServers(): GameContainerStatus[] {
-  return [
-    {
-      id: 'testm652l',
-      status: Status.Running,
-      configuration: {
-        details: {},
-        resources: {
-          startupArgs: 'mytestserver.sh --karma-test',
-          ports: {}
-        }
-      }
-    }
-  ]
-}
+import {MockApiModule} from '../mock/mockapi/mock-api.module';
+import {GameserverService} from '../rest-client/services';
+import {GameserverMockService} from '../mock/mockapi/services/gameserver-mock.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -50,12 +33,15 @@ describe('DashboardComponent', () => {
       declarations: [
           DashboardComponent
       ],
+      providers: [
+        { provide: GameserverService, useClass: GameserverMockService }
+      ],
       imports: [
         NbCardModule,
         FormsModule,
         ToastrModule.forRoot(),
         HttpClientModule,
-        ApiModule.forRoot({rootUrl: environment.mockAPIURL}),
+        MockApiModule, // Mock Module
         AppRoutingModule,
         BrowserAnimationsModule,
         NbThemeModule.forRoot(),
@@ -81,7 +67,6 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    component.gameServers = loadFakeGameServers();
     fixture.detectChanges();
   });
 
@@ -92,6 +77,7 @@ describe('DashboardComponent', () => {
   it('should display game server accordion with at least one entry', () => {
     const selector = 'nb-accordion > nb-accordion-item';
     const accordion = fixture.debugElement.query(By.css(selector));
+    console.log(accordion);
     const element = accordion.nativeElement;
 
     expect(element).toBeTruthy(`${selector} could not be found!`);
