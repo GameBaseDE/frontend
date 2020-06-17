@@ -1,7 +1,7 @@
 import {GameContainerStatus, RestartBehavior, Status} from '../../../../rest-client/models';
 
 export class ResponseMocks {
-  public static GameContainerStatus = (): Array<GameContainerStatus> => {
+  static GameContainerStatus = (): Array<GameContainerStatus> => {
     return [
       {
         id: 'string',
@@ -39,5 +39,9 @@ export class ResponseMocks {
         }
       },
     ]
+  }
+
+  static TemplatesList(): Array<string> {
+    return [ "minecraft:latest", "my/custom/template", "my/custom/template2" ]
   }
 }

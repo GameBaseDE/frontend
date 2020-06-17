@@ -24,6 +24,11 @@ export class GameserverMockService extends GameserverService {
     super(null, null);
   }
 
+  /**
+   * These $Response functions are basically the same like their corresponding functions,
+   * with the difference of having access to the request/response header.
+   * If this is needed in the future, feel free to implement them.
+   */
   getStatus$Response(params?: {}): Observable<StrictHttpResponse<Array<GameContainerStatus>>> {
     throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
@@ -36,8 +41,12 @@ export class GameserverMockService extends GameserverService {
     throw new Error(GameserverMockService.errorTexts.doNotUse);
   }
 
+  /**
+   * TODO: Should this simply return an empty body like in GameserverService
+   *       or should we return an status code as well? (This requires implementation of $Response)
+   */
   startContainer(params: { id: string }): Observable<void> {
-    return super.startContainer(params);
+    return of(undefined);
   }
 
   stopContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
@@ -45,7 +54,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   stopContainer(params: { id: string }): Observable<void> {
-    return super.stopContainer(params);
+    return of(undefined);
   }
 
   restartContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
@@ -53,7 +62,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   restartContainer(params: { id: string }): Observable<void> {
-    return super.restartContainer(params);
+    return of(undefined);
   }
 
   deployContainer$Response(params: { body: GameContainerDeployment }): Observable<StrictHttpResponse<void>> {
@@ -61,7 +70,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   deployContainer(params: { body: GameContainerDeployment }): Observable<void> {
-    return super.deployContainer(params);
+    return of(undefined);
   }
 
   configureContainer$Response(params: { id: string; body: GameContainerConfiguration }): Observable<StrictHttpResponse<void>> {
@@ -69,7 +78,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   configureContainer(params: { id: string; body: GameContainerConfiguration }): Observable<void> {
-    return super.configureContainer(params);
+    return of(undefined);
   }
 
   deleteContainer$Response(params: { id: string }): Observable<StrictHttpResponse<void>> {
@@ -77,7 +86,7 @@ export class GameserverMockService extends GameserverService {
   }
 
   deleteContainer(params: { id: string }): Observable<void> {
-    return super.deleteContainer(params);
+    return of(undefined);
   }
 
   listTemplates$Response(params?: {}): Observable<StrictHttpResponse<Array<string>>> {
@@ -85,6 +94,6 @@ export class GameserverMockService extends GameserverService {
   }
 
   listTemplates(params?: {}): Observable<Array<string>> {
-    return super.listTemplates(params);
+    return of(ResponseMocks.TemplatesList());
   }
 }
