@@ -42,6 +42,6 @@ export class ResponseMocks {
   }
 
   static TemplatesList(): Array<string> {
-    return [ "minecraft:latest", "my/custom/template", "my/custom/template2" ]
+    return [ 'minecraft:latest', 'my/custom/template', 'my/custom/template2' ]
   }
 }

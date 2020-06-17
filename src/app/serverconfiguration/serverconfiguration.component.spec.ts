@@ -11,9 +11,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from '../app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
-import {GameserverService} from "../rest-client/services/gameserver.service";
-import {GameserverMockService} from "../mock/mockapi/services/gameserver-mock.service";
-import {MockApiModule} from "../mock/mockapi/mock-api.module";
+import {GameserverService} from '../rest-client/services/gameserver.service';
+import {GameserverMockService} from '../mock/mockapi/services/gameserver-mock.service';
+import {MockApiModule} from '../mock/mockapi/mock-api.module';
 
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
