@@ -16,6 +16,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {FooterComponent} from './footer/footer.component';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NbAuthModule, NbAuthService, NbDummyAuthStrategy} from '@nebular/auth';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -24,9 +25,25 @@ describe('LayoutComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LayoutComponent, HeaderComponent, FooterComponent],
-      imports: [NbMenuModule.forRoot(), NbSidebarModule.forRoot(), RouterTestingModule, NbLayoutModule, NbIconModule, NbSearchModule,
-        NbActionsModule, NbUserModule, NbContextMenuModule, NbThemeModule.forRoot({name: 'dark'}), NbEvaIconsModule,
-        BrowserAnimationsModule]
+      imports: [
+        NbMenuModule.forRoot(),
+        NbSidebarModule.forRoot(),
+        RouterTestingModule,
+        NbLayoutModule,
+        NbIconModule,
+        NbSearchModule,
+        NbActionsModule,
+        NbUserModule,
+        NbContextMenuModule,
+        NbThemeModule.forRoot({name: 'dark'}),
+        NbEvaIconsModule,
+        BrowserAnimationsModule,
+        NbAuthModule.forRoot({
+          strategies:
+            [NbDummyAuthStrategy.setup(
+              {name: 'email', alwaysFail: false})]
+        })],
+      providers: [NbAuthService]
     })
       .compileComponents();
   }));

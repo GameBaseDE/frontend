@@ -12,6 +12,7 @@ import {
 } from '@nebular/theme';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
+import {NbAuthModule, NbAuthService, NbDummyAuthStrategy, NbTokenService, NbTokenStorage} from '@nebular/auth';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -21,7 +22,13 @@ describe('HeaderComponent', () => {
     TestBed.configureTestingModule({
       declarations: [HeaderComponent],
       imports: [NbIconModule, NbSearchModule, NbActionsModule, NbUserModule, NbContextMenuModule, NbSidebarModule.forRoot(),
-        NbThemeModule.forRoot(), RouterTestingModule, NbMenuModule.forRoot(), NbEvaIconsModule]
+        NbThemeModule.forRoot(), RouterTestingModule, NbMenuModule.forRoot(), NbEvaIconsModule,
+        NbAuthModule.forRoot({
+          strategies:
+            [NbDummyAuthStrategy.setup(
+              {name: 'email', alwaysFail: false})]
+        })],
+      providers: [NbAuthService]
     })
       .compileComponents();
   }));
