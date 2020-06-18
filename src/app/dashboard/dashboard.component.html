@@ -35,6 +35,7 @@
           <button nbButton (click)="stepper.reset()">Try again</button>
         </div>
       </nb-step>
+
     </nb-stepper>
   </nb-card-body>
 </nb-card>
@@ -46,7 +47,7 @@
 <nb-accordion multi>
   <nb-accordion-item *ngFor="let gameServer of gameServers">
     <nb-accordion-item-header>
-      {{ gameServer.id }}: {{ gameServer.configuration.resources.templatePath }}
+      {{gameServer.id }}: {{gameServer.image}}
       <div class="button-group">
         <button class="status-button" nbButton [disabled]="!restartPossible(gameServer.id)" status="info" size="small"
                 (click)="restartServerEvent($event, gameServer.id)" shape="round">
@@ -74,78 +75,15 @@
       </nb-alert>
     </nb-accordion-item-header>
     <nb-accordion-item-body>
-      <div class="col-1">
-        <p class="title">Description</p>
-        <p *ngIf="gameServer.configuration.details.description">{{ gameServer.configuration.details.description }}</p>
-        <p class="unavailable-text" *ngIf="!gameServer.configuration.details.description">This server does have no description.</p>
-        <button nbButton status="danger" outline (click)="deleteContainer(gameServer.id)">Delete Container <nb-icon icon="trash"></nb-icon></button>
-      </div>
-      <div class="col-2">
-        <table>
-          <tbody>
-          <tr>
-            <td class="title">Template</td>
-            <td *ngIf="gameServer.configuration.resources.templatePath">{{ gameServer.configuration.resources.templatePath }}</td>
-            <td class="unavailable-text" *ngIf="!gameServer.configuration.resources.templatePath">Unknown template</td>
-          </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null || gameServer.configuration.resources.ports.udp != null">
-            <td class="title">Port Allocation</td>
-          </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null">
-            <td>TCP</td>
-            <td>
-              <ul *ngFor="let port of gameServer.configuration.resources.ports.tcp">
-                <li>{{ port }}</li>
-              </ul>
-            </td>
-          </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.udp != null">
-            <td>UDP</td>
-            <td>
-              <ul *ngFor="let port of gameServer.configuration.resources.ports.udp">
-                <li>{{ port }}</li>
-              </ul>
-            </td>
-          </tr>
-          <tr *ngIf="gameServer.configuration.resources.environmentVars != null">
-            <td class="title">Environment Variables</td>
-            <td *ngFor="let env of gameServer.configuration.resources.environmentVars.key">
-              <ul>
-                <li>{{ env }}: {{ gameServer.configuration.resources.environmentVars.key[env] }}</li>
-              </ul>
-            </td>
-          </tr>
-          <tr>
-            <td class="title">Memory Allocation</td>
-            <td *ngIf="gameServer.configuration.resources.memory">{{ gameServer.configuration.resources.memory }}</td>
-            <td class="unavailable-text" *ngIf="!gameServer.configuration.resources.memory">Unknown</td>
-          </tr>
-          <tr>
-            <td class="title">Restart Behavior</td>
-            <td>{{ gameServer.configuration.resources.restartBehavior || "None" }}</td>
-          </tr>
-          <tr>
-            <td class="title">Startup Arguments</td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              <label for="startup-args">
-                <input  [(ngModel)]="gameServer.configuration.resources.startupArgs"
-                        type="text"
-                        placeholder="No custom startup arguments set"
-                        id="startup-args"
-                        name="startup-args"
-                        nbInput
-                        ngModel
-                        fullWidth
-                        readonly
-                        status="basic">
-              </label>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+      <nb-card>
+        <nb-card-header>Interesting Values that make sense</nb-card-header>
+        <nb-card-body>
+          <button nbButton status="danger" outline (click)="deleteContainer(gameServer.id)">Delete Container <nb-icon icon="trash"></nb-icon></button>
+          <div echarts [options]="options" class="echart"></div>
+        </nb-card-body>
+        This is a {{gameServer.image}} image
+      </nb-card>
+
     </nb-accordion-item-body>
   </nb-accordion-item>
 </nb-accordion>

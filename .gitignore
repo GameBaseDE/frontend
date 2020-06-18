@@ -47,5 +47,3 @@ Thumbs.db
 
 # Ignore generated REST client as it's generated locally
 /src/app/rest-client
-# sonarqube
-.scannerwork/

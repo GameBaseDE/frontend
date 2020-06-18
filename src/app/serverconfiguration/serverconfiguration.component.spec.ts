@@ -10,10 +10,6 @@ import {environment} from '../../environments/environment';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from '../app-routing.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NbAuthModule, NbDummyAuthStrategy} from '@nebular/auth';
-import {GameserverService} from '../rest-client/services/gameserver.service';
-import {GameserverMockService} from '../mock/mockapi/services/gameserver-mock.service';
-import {MockApiModule} from '../mock/mockapi/mock-api.module';
 
 describe('ServerConfigurationComponent', () => {
   let component: ServerConfigurationComponent;
@@ -22,27 +18,18 @@ describe('ServerConfigurationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ServerConfigurationComponent],
-      providers: [
-        { provide: GameserverService, useClass: GameserverMockService }
-      ],
       imports: [
         NbCardModule,
         FormsModule,
         ToastrModule.forRoot(),
         HttpClientModule,
-        MockApiModule, // Mock Module
+        ApiModule.forRoot({rootUrl: environment.mockAPIURL}),
         AppRoutingModule,
         BrowserAnimationsModule,
         NbThemeModule.forRoot(),
         FormsModule,
         NbInputModule,
-        NbRadioModule,
-        NbAuthModule.forRoot({
-          strategies: [NbDummyAuthStrategy.setup({
-            alwaysFail: false,
-            name: 'email'
-          })]
-        })
+        NbRadioModule
       ]
     })
       .compileComponents();
@@ -96,7 +83,7 @@ describe('ServerConfigurationComponent', () => {
 
   it('should validate memory allocation and display error', () => {
     const expected = 'abcdef';
-    const selector = 'input[name="input-memory-allocation"]';
+    const selector = 'input[name="input-memory-allocation"]'
     const input = fixture.debugElement.query(By.css(selector));
     const element = input.nativeElement;
 
@@ -114,7 +101,7 @@ describe('ServerConfigurationComponent', () => {
 
   it('should validate memory allocation and display no error', () => {
     const expected = '1234';
-    const selector = 'input[name="input-memory-allocation"]';
+    const selector = 'input[name="input-memory-allocation"]'
     const input = fixture.debugElement.query(By.css(selector));
     const element = input.nativeElement;
 
