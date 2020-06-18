@@ -15,7 +15,7 @@ import {
   NbActionsModule,
   NbAlertModule,
   NbButtonModule,
-  NbCardModule,
+  NbCardModule, NbCheckboxModule,
   NbContextMenuModule,
   NbIconModule, NbInputModule,
   NbLayoutModule,
@@ -24,16 +24,28 @@ import {
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule,
-  NbRadioModule
+  NbRadioModule, NbAccordionComponent
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
 import {ToastrModule} from 'ngx-toastr';
 import {ApiModule} from './rest-client/api.module';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import { ServerConfigurationComponent } from './serverconfiguration/serverconfiguration.component';
-import { ErrorContainerComponent } from './components/errorcontainer/errorcontainer.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
+import {ErrorContainerComponent} from './components/errorcontainer/errorcontainer.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {
+  NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
+  NbAuthJWTInterceptor,
+  NbAuthJWTToken,
+  NbAuthModule,
+  NbDummyAuthStrategy,
+  NbPasswordAuthStrategy
+} from '@nebular/auth';
+import {AuthGuard} from './auth.guard';
+import {LoginComponent} from './auth/login/login.component';
+import {RegisterComponent} from './auth/register/register.component';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -44,9 +56,12 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     HeaderComponent,
     PageNotFoundComponent,
     ServerConfigurationComponent,
-    ErrorContainerComponent
+    ErrorContainerComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -62,7 +77,6 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     NbSearchModule,
     NbUserModule,
     NbContextMenuModule,
-    NbAccordionModule,
     NbAlertModule,
     NbRadioModule,
     NgxEchartsModule,
@@ -71,9 +85,91 @@ import { ErrorContainerComponent } from './components/errorcontainer/errorcontai
     HttpClientModule,
     NbStepperModule,
     FormsModule,
-    NbInputModule
+    NbInputModule,
+    NbAuthModule.forRoot({
+      strategies: [
+        NbDummyAuthStrategy.setup({
+          name: 'email',
+          alwaysFail: false
+        }),
+        NbPasswordAuthStrategy.setup({
+          name: 'email-disabled',
+          token: {
+            class: NbAuthJWTToken,
+            key: 'token' // this parameter tells where to look for the token
+          },
+
+          // baseEndpoint: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0',
+          baseEndpoint: environment.restApiURL,
+          login: {
+            endpoint: '/auth/login',
+            method: 'post',
+            redirect: {
+              success: '/dashboard',
+              failure: null // stay on the same page
+            }
+          },
+          logout: {
+            endpoint: '/auth/logout',
+            method: 'delete',
+            redirect: {
+              success: '/login',
+              failure: null
+            }
+          },
+          register: {
+            endpoint: '/auth/register',
+            method: 'post',
+            redirect: {
+              success: '/login',
+              failure: null // stay on the same page
+            }
+          }
+        })
+      ],
+      forms: {
+        login: {
+          redirectDelay: 0, // delay before redirect after a successful login, while success message is shown to the user
+          strategy: 'email',  // strategy id key.
+          rememberMe: true,   // whether to show or not the `rememberMe` checkbox
+          showMessages: {     // show/not show success/error messages
+            success: false,
+            error: true
+          }
+        },
+        register: {
+          redirectDelay: 0,
+          strategy: 'email',
+          fullName: false,
+          showMessages: {
+            success: false,
+            error: true,
+          },
+          terms: false,
+        },
+        logout: {
+          redirectDelay: 0,
+          strategy: 'email',
+        }
+      },
+    }),
+    ReactiveFormsModule,
+    NbCheckboxModule,
+    NbAccordionModule,
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NbAuthJWTInterceptor,
+      multi: true
+    }, // nebular token interceptor for api auth header
+    {
+      provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue() {
+        return false;
+      }
+    } // Filter override to allow the interceptor to be working in the first place (don't ask questions)
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
