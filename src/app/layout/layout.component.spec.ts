@@ -25,9 +25,20 @@ describe('LayoutComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [LayoutComponent, HeaderComponent, FooterComponent],
-      imports: [NbMenuModule.forRoot(), NbSidebarModule.forRoot(), RouterTestingModule, NbLayoutModule, NbIconModule, NbSearchModule,
-        NbActionsModule, NbUserModule, NbContextMenuModule, NbThemeModule.forRoot({name: 'dark'}), NbEvaIconsModule,
-        BrowserAnimationsModule, NbAuthModule.forRoot({
+      imports: [
+        NbMenuModule.forRoot(),
+        NbSidebarModule.forRoot(),
+        RouterTestingModule,
+        NbLayoutModule,
+        NbIconModule,
+        NbSearchModule,
+        NbActionsModule,
+        NbUserModule,
+        NbContextMenuModule,
+        NbThemeModule.forRoot({name: 'dark'}),
+        NbEvaIconsModule,
+        BrowserAnimationsModule,
+        NbAuthModule.forRoot({
           strategies:
             [NbDummyAuthStrategy.setup(
               {name: 'email', alwaysFail: false})]
