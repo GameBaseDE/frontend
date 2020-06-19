@@ -4,7 +4,7 @@ import {ToastrService} from 'ngx-toastr';
 import {GameContainerStatus, Status} from '../rest-client/models';
 import {Constants} from '../global';
 import {Router} from '@angular/router';
-import {GameserverService} from '../rest-client/services/gameserver.service';
+import {GameserverService} from '../rest-client/services';
 
 @Component({
   selector: 'app-dashboard',
