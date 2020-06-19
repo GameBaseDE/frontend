@@ -1,1 +1,79 @@
-<p>user-settings works!</p>
+<nb-card>
+    <nb-card-header>General Details</nb-card-header>
+    <nb-card-body>
+        <div class="col-1">
+            <form class="form-general-details">
+                <label class="label" for="input-username">User name</label><br/>
+                <div class="description"><b>NOTE:</b> This does not affect your login!</div>
+                <input [(ngModel)]="generalDetails.username"
+                        (keyup)="updateUserName(username.value)"
+                        class="form-control"
+                        id="input-username"
+                        name="input-username"
+                        required
+                        nbInput
+                        ngModel
+                        #username
+                        type="text"
+                        fullWidth
+                        [status]="generalDetails.username.hasError ? 'danger' : 'basic'"
+                        placeholder="Server name">
+                <gb-error-container *ngIf="generalDetails.servername.hasError" errorMessage="This field must not be empty!"></gb-error-container>
+            </form>
+
+            <form class="form-server-creation">
+                <label class="label" for="input-server-owner">Server Owner</label><br/>
+                <div class="description">Owner of server that will have full control of this game server</div>
+                <input  [(ngModel)]="generalDetails.ownerId"
+                        class="form-control"
+                        name="input-server-owner"
+                        nbInput
+                        ngModel
+                        disabled
+                        type="text"
+                        fullWidth
+                        status="basic"
+                        placeholder="Type some letters to start searching user">
+            </form>
+        </div>
+        <div class="col-2">
+            <form class="form-server-creation">
+                <label class="label" for="input-server-description">Description</label><br/>
+                <div class="description">Short description of this server which will be displayed on the Dashboard</div>
+                <textarea [(ngModel)]="generalDetails.description"
+                          (keyup)="updateDescription(description.value)"
+                          #description
+                          class="form-control"
+                          name="input-server-description"
+                          required
+                          nbInput
+                          ngModel
+                          type="text"
+                          fullWidth
+                          status="basic"
+                          placeholder="This is my game server. It runs v1.0."></textarea>
+            </form>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<nb-card class="col-2">
+    <nb-card-header>Change password</nb-card-header>
+    <nb-card-body>
+        Some fun stuff here
+    </nb-card-body>
+</nb-card>
+
+<nb-card class="col-1">
+    <nb-card-header>Gravatar</nb-card-header>
+    <nb-card-body>
+        Some fun stuff here
+    </nb-card-body>
+</nb-card>
+
+<nb-card>
+    <nb-card-body class="button-group">
+        <button nbButton status="basic" (click)="cancel()">Cancel</button>
+        <button nbButton status="info" (click)="apply()">Apply</button>
+    </nb-card-body>
+</nb-card>
