@@ -2,9 +2,9 @@ import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {NbIconLibraries, NbThemeService} from '@nebular/theme';
 import {ToastrService} from 'ngx-toastr';
 import {GameContainerStatus, Status} from '../rest-client/models';
-import {Constants} from '../global';
+import { Constants } from '../global';
 import {Router} from '@angular/router';
-import {GameserverService} from '../rest-client/services';
+import {GameserverService} from '../rest-client/services/gameserver.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,16 +12,6 @@ import {GameserverService} from '../rest-client/services';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  private static ownerId = Constants.dummyOwnerId;
-
-  statusEnum = Status;
-
-  options: any = {};
-  themeSubscription: any;
-  updateInterval;
-
-  gameServers: GameContainerStatus[] = [];
 
   constructor(
     iconsLibrary: NbIconLibraries,
@@ -35,9 +25,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     iconsLibrary.registerFontPack('far', {packClass: 'far', iconClassPrefix: 'fa'});
   }
 
+  private static ownerId = Constants.dummyOwnerId;
+  options: any = {};
+  themeSubscription: any;
+
+  statusEnum = Status;
+
+  gameServers: GameContainerStatus[] = [];
+
   ngOnInit() {
     this.updateAll();
-    this.updateInterval = setInterval(() => this.updateAll(), 5000);
+    setInterval(() => this.updateAll(), 5000);
   }
 
   updateAll() {
@@ -203,7 +201,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
-    clearInterval(this.updateInterval);
   }
 
   deployServer(templatePath: string) {
