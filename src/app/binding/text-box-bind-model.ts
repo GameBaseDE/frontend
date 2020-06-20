@@ -1,4 +1,4 @@
-import {ErrorBindModel} from './bindingmodels';
+import {ErrorBindModel} from './error-bind-model';
 
 interface ITextBoxBindModel {
   value?: string;
@@ -7,6 +7,6 @@ interface ITextBoxBindModel {
 
 export class TextBoxBindModel implements ITextBoxBindModel {
   value = '';
-  error: ErrorBindModel;
+  error = new ErrorBindModel();
 }
 
