@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  restApiURL: 'https://api.game-base.de'
+  // tslint:disable-next-line
+  restApiURL: window['env']['restApiURL'] || 'https://api.game-base.de'
 };
