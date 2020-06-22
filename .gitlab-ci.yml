@@ -130,11 +130,26 @@ Build dev:
     - docker
     - angular
 
+publish docker image:
+  stage: deploy
+  image: docker
+  cache: {}  # no cache required for deployment
+  before_script:
+    - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
+  script:
+    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG" .
+    - docker push "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG"
+  except:
+    - master
+  tags:
+    - GameBase
+    - docker
+
 Deploy release:
   stage: deploy
   cache: {}  # no cache required for deployment
   script:
-    - rm /opt/gamebase/frontend/live/*
+    - rm -r /opt/gamebase/frontend/live/*
     - cp -r dist/GameBase-Frontend/* /opt/gamebase/frontend/live/
   only:
     - master
@@ -146,7 +161,7 @@ Deploy dev:
   stage: deploy
   cache: {}  # no cache required for deployment
   script:
-    - rm /opt/gamebase/frontend/dev/*
+    - rm -r /opt/gamebase/frontend/dev/*
     - cp -r dist/GameBase-Frontend/* /opt/gamebase/frontend/dev/
   except:
     - master
