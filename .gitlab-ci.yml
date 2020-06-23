@@ -100,6 +100,7 @@ Build release:
     - angular
 
 SoarQube Scanner:
+  # required after karma tests for test coverage report...
   cache:
     # inherit all global cache settings
     <<: *global_cache
@@ -130,7 +131,7 @@ Build dev:
     - docker
     - angular
 
-publish docker image:
+publish docker image dev:
   stage: deploy
   image: docker
   cache: {}  # no cache required for deployment
@@ -140,6 +141,21 @@ publish docker image:
     - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG" .
     - docker push "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG"
   except:
+    - master
+  tags:
+    - GameBase
+    - docker
+
+publish docker image:
+  stage: deploy
+  image: docker
+  cache: {}  # no cache required for deployment
+  before_script:
+    - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
+  script:
+    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG" -t "gamebaseproject/frontend:latest" .
+    - docker push "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG"
+  only:
     - master
   tags:
     - GameBase
