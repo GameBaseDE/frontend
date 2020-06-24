@@ -138,8 +138,8 @@ publish docker image dev:
   before_script:
     - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
   script:
-    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG" .
-    - docker push "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG"
+    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_SHA" .
+    - docker push "gamebaseproject/frontend:$CI_COMMIT_SHA"
   except:
     - master
   tags:
@@ -153,8 +153,9 @@ publish docker image:
   before_script:
     - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
   script:
-    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG" -t "gamebaseproject/frontend:latest" .
-    - docker push "gamebaseproject/frontend:$CI_COMMIT_REF_SLUG"
+    - docker build --pull -t "gamebaseproject/frontend:$CI_COMMIT_SHA" -t "gamebaseproject/frontend:latest" .
+    - docker push "gamebaseproject/frontend:$CI_COMMIT_SHA"
+    - docker push "gamebaseproject/frontend:latest"
   only:
     - master
   tags:
