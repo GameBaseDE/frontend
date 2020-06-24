@@ -10,6 +10,24 @@
 
 This is the frontend component of our software. It allows game server management, such as creating, starting, stopping and restarting containers.
 
+# Installation
+The latest version is always published to docker hub.
+1. Pull the image with `docker pull gamebaseproject/frontend`
+2. Run the image with `docker run --restart unless-stopped -d -p 8080:80 -e API_ROOT_URL="https://myapi.com" gamebaseproject/frontend`
+
+Or use it within a *docker-compose.yml*:
+```yaml
+version: '3'
+services:
+  angular:
+    image: gamebaseproject/frontend
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    environment:
+      - API_ROOT_URL=https://myapi.com
+```
+
 # Angular related stuff
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 
