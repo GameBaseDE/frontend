@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  restApiURL: 'https://api.dev.game-base.de',
+  // tslint:disable-next-line
+  restApiURL: window['env']['restApiURL'] || `${location.protocol}//${location.hostname}`,
   mockAPIURL: 'https://virtserver.swaggerhub.com/GameBase9/gamebase_communication_api/2.0.0'
 };
 
