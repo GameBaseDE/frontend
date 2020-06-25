@@ -24,7 +24,7 @@ import {
   NbSidebarModule, NbStepperModule,
   NbThemeModule,
   NbUserModule,
-  NbRadioModule, NbAccordionComponent
+  NbRadioModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {NgxEchartsModule} from 'ngx-echarts';
@@ -38,9 +38,7 @@ import {
   NB_AUTH_TOKEN_INTERCEPTOR_FILTER,
   NbAuthJWTInterceptor,
   NbAuthJWTToken,
-  NbAuthModule,
-  NbDummyAuthStrategy,
-  NbPasswordAuthStrategy
+  NbAuthModule, NbPasswordAuthStrategy
 } from '@nebular/auth';
 import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
@@ -88,12 +86,8 @@ import {CommonModule} from '@angular/common';
     NbInputModule,
     NbAuthModule.forRoot({
       strategies: [
-        NbDummyAuthStrategy.setup({
-          name: 'email',
-          alwaysFail: false
-        }),
         NbPasswordAuthStrategy.setup({
-          name: 'email-disabled',
+          name: 'email',
           token: {
             class: NbAuthJWTToken,
             key: 'token' // this parameter tells where to look for the token
