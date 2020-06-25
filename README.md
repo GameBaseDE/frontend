@@ -28,6 +28,8 @@ services:
       - API_ROOT_URL=https://myapi.com
 ```
 
+The environment variable "API_ROOT_URL" is optional. If it's unset, the api is assumed to be reachable by the frontend nginx with the hostname "gamebase-backend".
+
 # Angular related stuff
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.8.
 
