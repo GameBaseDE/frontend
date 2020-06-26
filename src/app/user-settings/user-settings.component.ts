@@ -128,7 +128,7 @@ export class UserSettingsComponent implements OnInit {
       }
     }
   }
-  
+
   private haveNoErrors = (): boolean => {
     return !(
       this.generalDetails.password.repeat.error.hasError && this.generalDetails.password.$new.error.hasError &&
