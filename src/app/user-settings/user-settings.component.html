@@ -17,7 +17,7 @@
                type="text"
                fullWidth
                [status]="generalDetails.username.error?.hasError ? 'danger' : 'basic'"
-               placeholder="Server name">
+               placeholder="User name">
         <gb-error-container *ngIf="generalDetails.username.error?.hasError"
                             [errorMessage]="generalDetails.username.error?.errorMessage"></gb-error-container>
       </form>
