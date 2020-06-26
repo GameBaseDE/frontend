@@ -8,5 +8,14 @@ form {
 }
 
 .button-group-container {
-  float: left;
+  float: right;
+}
+
+.button-group-nb-card {
+  width: 100%;
+  float: unset;
+}
+
+nb-card {
+  margin: 0.5em;
 }
