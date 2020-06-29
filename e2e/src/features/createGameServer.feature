@@ -1,6 +1,7 @@
 Feature: Create game server
   Scenario: User creates a game server
-    Given I am on the dashboard page
+    Given I am logged in
+    And I am on the dashboard page
     And I click on the "Create game server" button
     When I fill the form with the required information
     And I click on the "Create" button

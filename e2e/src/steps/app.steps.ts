@@ -1,8 +1,16 @@
 import {Given, Then, When} from 'cucumber';
 import {expect} from 'chai';
+import {LoginPage} from "../pages/login.po";
+import {DashboardPage} from "../pages/dashboard.po";
+import {browser} from "protractor";
 
-Given(/^I am on the dashboard page$/, () => {
+let loginPage: LoginPage;
+let dashboardPage: DashboardPage;
 
+Given(/^I am on the dashboard page$/, async () => {
+  dashboardPage = new DashboardPage();
+  await dashboardPage.navigateTo();
+  browser.getCurrentUrl().then(console.log);
 });
 Given(/^I click on the "([^"]*)" button$/, button => {
 
@@ -51,4 +59,10 @@ When(/^I click on a game server entry$/, () => {
 });
 Then(/^The clicked game server entry expands itself$/, () => {
 
+});
+Given(/^I am logged in$/, async () => {
+  loginPage = new LoginPage();
+
+  await loginPage.navigateTo();
+  await loginPage.login();
 });
