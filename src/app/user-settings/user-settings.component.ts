@@ -7,6 +7,8 @@ import { TextBoxBindModel } from '../binding/bindingmodels';
 import {Md5} from 'ts-md5';
 import {assertNotNull} from '@angular/compiler/src/output/output_ast';
 import {StringUtils} from '../global';
+import {UserService} from '../rest-client/services/user.service';
+import {UserProfile} from '../rest-client/models/user-profile';
 
 class GeneralDetails {
   username: TextBoxBindModel = new TextBoxBindModel();
@@ -14,8 +16,7 @@ class GeneralDetails {
   password = {
     old: new TextBoxBindModel(),
     $new: new TextBoxBindModel(),
-    repeat: new TextBoxBindModel(),
-    equals: false
+    repeat: new TextBoxBindModel()
   };
   gravatarEmail: TextBoxBindModel = new TextBoxBindModel();
 }
@@ -29,7 +30,7 @@ export class UserSettingsComponent implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    private gameServerService: GameserverService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -53,10 +54,22 @@ export class UserSettingsComponent implements OnInit {
   }
 
   apply() {
-    // TODO API Call
-    if (this.haveNoErrors) {
-      this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
-      this.toastr.success('Your new changes have been applied.', 'Profile updated!');
+    console.log('Clicked apply?');
+    if (!this.hasErrors) {
+      this.userService.updateUserProfile({body: this.userProfile()})
+        .subscribe(
+          result => {
+            this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+            this.toastr.success('Your new changes have been applied.', 'Profile updated!');
+          },
+          error => {
+            if (error.error.details) {
+              this.toastr.error(`An error occurred: (${error.error.details}). Please try again later!`, 'Error when applying changes!');
+            } else {
+              this.toastr.error('An unknown error occurred. Please try again later!', 'Error when applying changes!');
+            }
+          }
+        );
     } else {
       this.toastr.error('There are errors in your changes. Please correct them before proceeding.', 'Error when applying changes!');
     }
@@ -140,11 +153,21 @@ export class UserSettingsComponent implements OnInit {
     }
   }
 
-  private haveNoErrors = (): boolean => {
-    return !(
-      this.generalDetails.password.repeat.error.hasError && this.generalDetails.password.$new.error.hasError &&
-      this.generalDetails.password.old.error.hasError && this.generalDetails.gravatarEmail.error.hasError &&
-      this.generalDetails.emailAddress.error.hasError && this.generalDetails.username.error.hasError
-    );
+  userProfile = (): UserProfile => {
+    return {
+      email: this.generalDetails.emailAddress.value,
+      gravatar: this.generalDetails.gravatarEmail.value,
+      password: {
+        old: this.generalDetails.password.old.value,
+        new: this.generalDetails.password.$new.value
+      },
+      username: this.generalDetails.username.value
+    };
+  }
+
+  private hasErrors = (): boolean => {
+    return this.generalDetails.password.repeat.error.hasError || this.generalDetails.password.$new.error.hasError ||
+      this.generalDetails.password.old.error.hasError || this.generalDetails.gravatarEmail.error.hasError ||
+      this.generalDetails.emailAddress.error.hasError || this.generalDetails.username.error.hasError;
   }
 }
