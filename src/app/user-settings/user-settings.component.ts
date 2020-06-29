@@ -40,6 +40,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   private static redirectRoute = ['/dashboard'];
+  private static emailRegex = /.+@.+\..+/g;
 
   generalDetails: GeneralDetails;
 
@@ -105,11 +106,11 @@ export class UserSettingsComponent implements OnInit {
 
   updateEmail(value: string) {
     this.resetModel(this.generalDetails.emailAddress)
-    if (!StringUtils.isEmptyOrNull(value)) {
+    if (!StringUtils.isEmptyOrNull(value) && this.isEmailAddressValid(value)) {
       this.generalDetails.emailAddress.value = value;
     } else {
       this.generalDetails.emailAddress.error.hasError = true;
-      this.generalDetails.emailAddress.error.errorMessage = 'Your name cannot be empty!';
+      this.generalDetails.emailAddress.error.errorMessage = `Your e-mail address has to be a valid address and cannot be empty!`;
     }
   }
 
@@ -137,10 +138,6 @@ export class UserSettingsComponent implements OnInit {
     }
   }
 
-  areNewPasswordsEqual = (): boolean => {
-    return this.generalDetails.password.$new.value === this.generalDetails.password.repeat.value
-  }
-
   updateGravatarEmail(value: string) {
     this.resetModel(this.generalDetails.gravatarEmail)
     if (!StringUtils.isEmptyOrNull(value)) {
@@ -149,11 +146,6 @@ export class UserSettingsComponent implements OnInit {
       this.generalDetails.gravatarEmail.error.hasError = true;
       this.generalDetails.gravatarEmail.error.errorMessage = 'Your name cannot be empty!';
     }
-  }
-
-  gravatarUrl = (): string => {
-    const hash = Md5.hashStr(UserSettingsComponent.sanitizeString(this.generalDetails.gravatarEmail.value));
-    return `https://www.gravatar.com/avatar/${hash}`;
   }
 
   clearPasswordForm() {
@@ -176,6 +168,19 @@ export class UserSettingsComponent implements OnInit {
       },
       username: this.generalDetails.username.value
     };
+  }
+
+  gravatarUrl = (): string => {
+    const hash = Md5.hashStr(UserSettingsComponent.sanitizeString(this.generalDetails.gravatarEmail.value));
+    return `https://www.gravatar.com/avatar/${hash}`;
+  }
+
+  areNewPasswordsEqual = (): boolean => {
+    return this.generalDetails.password.$new.value === this.generalDetails.password.repeat.value
+  }
+
+  isEmailAddressValid = (value: string): boolean => {
+    return value.match(UserSettingsComponent.emailRegex) != null;
   }
 
   private hasErrors = (): boolean => {
