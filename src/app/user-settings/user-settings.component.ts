@@ -9,6 +9,7 @@ import {assertNotNull} from '@angular/compiler/src/output/output_ast';
 import {StringUtils} from '../global';
 import {UserService} from '../rest-client/services/user.service';
 import {UserProfile} from '../rest-client/models/user-profile';
+import {NbAuthService} from '@nebular/auth';
 
 class GeneralDetails {
   username: TextBoxBindModel = new TextBoxBindModel();
@@ -32,7 +33,8 @@ export class UserSettingsComponent implements OnInit {
     private toastr: ToastrService,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: NbAuthService
   ) {
     this.generalDetails = new GeneralDetails();
   }
@@ -46,6 +48,18 @@ export class UserSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getToken()
+      .subscribe(
+        result => {
+          // TODO: User details are still missing; result.getPayload()
+          this.updateUserName('Test User');
+          this.updateEmail('test123@test.de');
+        },
+        error => {
+          this.toastr.warning('User details could not be retrieved. Token might be invalid?', 'User details retrieval failed!');
+          this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+        }
+      );
   }
 
   cancel() {
@@ -54,7 +68,6 @@ export class UserSettingsComponent implements OnInit {
   }
 
   apply() {
-    console.log('Clicked apply?');
     if (!this.hasErrors) {
       this.userService.updateUserProfile({body: this.userProfile()})
         .subscribe(
