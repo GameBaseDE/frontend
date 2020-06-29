@@ -125,7 +125,7 @@ import {CommonModule} from '@angular/common';
         login: {
           redirectDelay: 0, // delay before redirect after a successful login, while success message is shown to the user
           strategy: 'email',  // strategy id key.
-          rememberMe: true,   // whether to show or not the `rememberMe` checkbox
+          rememberMe: false,   // whether to show or not the `rememberMe` checkbox
           showMessages: {     // show/not show success/error messages
             success: false,
             error: true
