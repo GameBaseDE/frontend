@@ -14,7 +14,8 @@ class GeneralDetails {
   password = {
     old: new TextBoxBindModel(),
     $new: new TextBoxBindModel(),
-    repeat: new TextBoxBindModel()
+    repeat: new TextBoxBindModel(),
+    equals: false
   };
   gravatarEmail: TextBoxBindModel = new TextBoxBindModel();
 }
@@ -26,10 +27,6 @@ class GeneralDetails {
 })
 export class UserSettingsComponent implements OnInit {
 
-  private static redirectRoute = ['/dashboard'];
-
-  generalDetails: GeneralDetails;
-
   constructor(
     private toastr: ToastrService,
     private gameServerService: GameserverService,
@@ -37,6 +34,14 @@ export class UserSettingsComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.generalDetails = new GeneralDetails();
+  }
+
+  private static redirectRoute = ['/dashboard'];
+
+  generalDetails: GeneralDetails;
+
+  private static sanitizeString(value: string) {
+    return value.toLowerCase().trim();
   }
 
   ngOnInit(): void {
@@ -83,7 +88,13 @@ export class UserSettingsComponent implements OnInit {
   }
 
   updateOldPassword(value: string) {
-    this.generalDetails.password.old.value = value;
+    this.resetModel(this.generalDetails.password.old)
+    if (!StringUtils.isEmptyOrNull(value)) {
+      this.generalDetails.password.old.value = value;
+    } else {
+      this.generalDetails.password.old.error.hasError = true;
+      this.generalDetails.password.old.error.errorMessage = 'Your old mustn\'t be empty!';
+    }
   }
 
   updateNewPassword(value: string) {
@@ -94,10 +105,14 @@ export class UserSettingsComponent implements OnInit {
     this.resetModel(this.generalDetails.password.repeat)
     this.generalDetails.password.repeat.value = value;
 
-    if (value !== this.generalDetails.password.$new.value) {
+    if (!this.areNewPasswordsEqual()) {
       this.generalDetails.password.repeat.error.hasError = true;
       this.generalDetails.password.repeat.error.errorMessage = 'Your input does not match with your new password!';
     }
+  }
+
+  areNewPasswordsEqual = (): boolean => {
+    return this.generalDetails.password.$new.value === this.generalDetails.password.repeat.value
   }
 
   updateGravatarEmail(value: string) {
@@ -111,12 +126,8 @@ export class UserSettingsComponent implements OnInit {
   }
 
   gravatarUrl = (): string => {
-    const hash = Md5.hashStr(this.sanitizeString(this.generalDetails.gravatarEmail.value));
+    const hash = Md5.hashStr(UserSettingsComponent.sanitizeString(this.generalDetails.gravatarEmail.value));
     return `https://www.gravatar.com/avatar/${hash}`;
-  }
-
-  private sanitizeString(value: string) {
-    return value.toLowerCase().trim();
   }
 
   clearPasswordForm() {
