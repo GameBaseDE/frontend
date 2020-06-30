@@ -11,6 +11,7 @@ stages:
   - Generate Swagger client
   - verify
   - build
+  - docker
   - deploy
 
 Install dependencies:
@@ -132,7 +133,7 @@ Build dev:
     - angular
 
 publish docker image dev:
-  stage: deploy
+  stage: docker
   image: docker
   cache: {}  # no cache required for deployment
   before_script:
@@ -148,7 +149,7 @@ publish docker image dev:
     - docker
 
 publish docker image tag:
-  stage: deploy
+  stage: docker
   image: docker
   cache: {}  # no cache required for deployment
   before_script:
@@ -166,11 +167,21 @@ publish docker image tag:
 Deploy release:
   stage: deploy
   cache: {}  # no cache required for deployment
+  before_script:
+    - docker login -u "$DOCKER_HUB_USER" -p "$DOCKER_HUB_PASSWORD"
   script:
-    - rm -r /opt/gamebase/frontend/live/*
-    - cp -r dist/GameBase-Frontend/* /opt/gamebase/frontend/live/
+    - docker pull gamebaseproject/frontend:$CI_COMMIT_REF_NAME
+    - docker rm -f gamebase-frontend-live || true
+    - >
+      docker run
+      --detach
+      --restart unless-stopped
+      -p 6666:80
+      --name gamebase-frontend-live
+      -e REST_API_URL="https://api.game-base.de"
+      gamebaseproject/frontend:$CI_COMMIT_REF_NAME
   only:
-    - master
+    - tags
   tags:
     - GameBase
     - shell
@@ -179,8 +190,16 @@ Deploy dev:
   stage: deploy
   cache: {}  # no cache required for deployment
   script:
-    - rm -r /opt/gamebase/frontend/dev/*
-    - cp -r dist/GameBase-Frontend/* /opt/gamebase/frontend/dev/
+    - docker pull gamebaseproject/frontend:$CI_COMMIT_SHA
+    - docker rm -f gamebase-frontend-dev || true
+    - >
+      docker run
+      --detach
+      --restart unless-stopped
+      -p 5555:80
+      --name gamebase-frontend-dev
+      -e REST_API_URL="https://api.dev.game-base.de"
+      gamebaseproject/frontend:$CI_COMMIT_SHA
   except:
     - master
   tags:
