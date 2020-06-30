@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {
   GameContainerConfiguration,
   GameContainerStatus,
-  PortMapping,
   Protocol,
   RestartBehavior
 } from '../rest-client/models';
 import {ToastrService} from 'ngx-toastr';
 import {GameserverService} from '../rest-client/services';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Constants, EnumUtils, StringUtils} from '../global';
+import {EnumUtils, StringUtils} from '../global';
 
 enum PortType {
   UDP = 'udp',
@@ -265,8 +264,8 @@ export class ServerConfigurationComponent implements OnInit {
     this.updateServerName(details.serverName ?? '');
     this.updateDescription(details.description ?? '');
 
-    let tcpList = ports.filter(port => port.protocol === "TCP").map(port => port.containerPort);
-    let udpList = ports.filter(port => port.protocol === "UDP").map(port => port.containerPort);
+    const tcpList = ports.filter(port => port.protocol === 'TCP').map(port => port.containerPort);
+    const udpList = ports.filter(port => port.protocol === 'UDP').map(port => port.containerPort);
 
 
     this.updatePortAlloc(PortType.TCP, tcpList.join(',') ?? '');
