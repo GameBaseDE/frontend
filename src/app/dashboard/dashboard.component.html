@@ -72,6 +72,8 @@
       </nb-alert>
       <nb-alert *ngIf="gameServer.status == statusEnum.Stopped" class="server-status" status="warning">Stopped
       </nb-alert>
+      <nb-alert *ngIf="gameServer.status == statusEnum.Unknown" class="server-status" status="warning">Unknown
+      </nb-alert>
     </nb-accordion-item-header>
     <nb-accordion-item-body>
       <div class="col-1">
