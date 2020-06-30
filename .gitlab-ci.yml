@@ -11,6 +11,7 @@ stages:
   - Generate Swagger client
   - verify
   - build
+  - docker
   - deploy
 
 Install dependencies:
@@ -132,7 +133,7 @@ Build dev:
     - angular
 
 publish docker image dev:
-  stage: deploy
+  stage: docker
   image: docker
   cache: {}  # no cache required for deployment
   before_script:
@@ -148,7 +149,7 @@ publish docker image dev:
     - docker
 
 publish docker image tag:
-  stage: deploy
+  stage: docker
   image: docker
   cache: {}  # no cache required for deployment
   before_script:
