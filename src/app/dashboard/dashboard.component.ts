@@ -250,7 +250,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const gameServer = this.gameServers.find(server => server.id === id);
-    gameServer.status = Status.Restarting;
+    gameServer.status = Status.Starting;
 
     console.error(`Restarting game server #${id}...`);
 

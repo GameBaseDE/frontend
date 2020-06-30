@@ -68,7 +68,7 @@
       <nb-alert *ngIf="gameServer.status == statusEnum.Error" class="server-status" status="danger">Error</nb-alert>
       <nb-alert *ngIf="gameServer.status == statusEnum.Running" class="server-status" status="success">Running
       </nb-alert>
-      <nb-alert *ngIf="gameServer.status == statusEnum.Starting" class="server-status" status="info">Restarting
+      <nb-alert *ngIf="gameServer.status == statusEnum.Starting" class="server-status" status="info">Starting
       </nb-alert>
       <nb-alert *ngIf="gameServer.status == statusEnum.Stopped" class="server-status" status="warning">Stopped
       </nb-alert>
@@ -90,22 +90,13 @@
             <td *ngIf="gameServer.configuration.resources.templatePath">{{ gameServer.configuration.resources.templatePath }}</td>
             <td class="unavailable-text" *ngIf="!gameServer.configuration.resources.templatePath">Unknown template</td>
           </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null || gameServer.configuration.resources.ports.udp != null">
+          <tr *ngIf="gameServer.configuration.resources.ports != null">
             <td class="title">Port Allocation</td>
           </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.tcp != null">
-            <td>TCP</td>
+          <tr>
             <td>
-              <ul *ngFor="let port of gameServer.configuration.resources.ports.tcp">
-                <li>{{ port }}</li>
-              </ul>
-            </td>
-          </tr>
-          <tr *ngIf="gameServer.configuration.resources.ports.udp != null">
-            <td>UDP</td>
-            <td>
-              <ul *ngFor="let port of gameServer.configuration.resources.ports.udp">
-                <li>{{ port }}</li>
+              <ul *ngFor="let port of gameServer.configuration.resources.ports">
+                <li>{{ port.protocol }} - {{ port.nodePort }}:{{ port.containerPort }}</li>
               </ul>
             </td>
           </tr>

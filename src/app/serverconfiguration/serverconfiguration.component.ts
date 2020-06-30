@@ -1,5 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {GameContainerConfiguration, GameContainerStatus, RestartBehavior} from '../rest-client/models';
+import {
+  GameContainerConfiguration,
+  GameContainerStatus,
+  PortMapping,
+  Protocol,
+  RestartBehavior
+} from '../rest-client/models';
 import {ToastrService} from 'ngx-toastr';
 import {GameserverService} from '../rest-client/services';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -32,9 +38,7 @@ export class ServerConfigurationComponent implements OnInit {
       value: '',
       hasError: false,
     },
-    description: undefined,
-    // ToDo: Replace dummyOwnerId with user system in the future
-    ownerId: Constants.dummyOwnerId
+    description: undefined
   }
   resources = {
     templatePath: {
@@ -152,17 +156,17 @@ export class ServerConfigurationComponent implements OnInit {
     } else {
       const configuration: GameContainerConfiguration = {
         details: {
-          ownerId: Constants.dummyOwnerId,
           description: generalDetails.description,
           serverName: generalDetails.serverName.value
         },
         resources: {
           templatePath: resources.templatePath.value,
           memory: resources.memoryAlloc.value as unknown as number,
-          ports: {
-            tcp: resources.portAlloc.tcp.parsedValues,
-            udp: resources.portAlloc.udp.parsedValues
-          },
+          ports: resources.portAlloc.tcp.parsedValues.map(value => {
+            return {protocol: Protocol.Tcp, containerPort: value, nodePort: value}
+          }).concat(resources.portAlloc.udp.parsedValues.map(value => {
+            return {protocol: Protocol.Udp, containerPort: value, nodePort: value}
+          })),
           restartBehavior: EnumUtils.getKeyByValue(RestartBehavior, resources.restartBehavior),
           startupArgs: resources.startupArgs
         }
@@ -261,9 +265,12 @@ export class ServerConfigurationComponent implements OnInit {
     this.updateServerName(details.serverName ?? '');
     this.updateDescription(details.description ?? '');
 
+    let tcpList = ports.filter(port => port.protocol === "TCP").map(port => port.containerPort);
+    let udpList = ports.filter(port => port.protocol === "UDP").map(port => port.containerPort);
 
-    this.updatePortAlloc(PortType.TCP, ports?.tcp?.join(',') ?? '');
-    this.updatePortAlloc(PortType.UDP, ports?.udp?.join(',') ?? '');
+
+    this.updatePortAlloc(PortType.TCP, tcpList.join(',') ?? '');
+    this.updatePortAlloc(PortType.UDP, udpList.join(',') ?? '');
 
     this.updateTemplatePath(resources.templatePath ?? '');
     this.updateMemoryAlloc((resources.memory ?? '-1').toString());
