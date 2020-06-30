@@ -1,4 +1,4 @@
-import {GameContainerStatus, RestartBehavior, Status} from '../../../../rest-client/models';
+import {GameContainerStatus, Protocol, RestartBehavior, Status} from '../../../../rest-client/models';
 
 export class ResponseMocks {
   static GameContainerStatus = (): Array<GameContainerStatus> => {
@@ -9,19 +9,21 @@ export class ResponseMocks {
         configuration: {
           details: {
             serverName: 'string',
-            ownerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             description: 'string'
           },
           resources: {
             templatePath: 'string',
-            ports: {
-              tcp: [
-                0
-              ],
-              udp: [
-                0
-              ]
-            },
+            ports: [
+              {
+                protocol: Protocol.Tcp,
+                nodePort: 0,
+                containerPort: 0
+              }, {
+                protocol: Protocol.Udp,
+                nodePort: 1,
+                containerPort: 1
+              }
+            ],
             memory: 0,
             startupArgs: 'string',
             restartBehavior: RestartBehavior.None,
@@ -42,6 +44,6 @@ export class ResponseMocks {
   }
 
   static TemplatesList(): Array<string> {
-    return [ 'minecraft:latest', 'my/custom/template', 'my/custom/template2' ]
+    return ['minecraft:latest', 'my/custom/template', 'my/custom/template2']
   }
 }
