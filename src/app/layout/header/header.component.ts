@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NbSidebarService} from '@nebular/theme';
 import {NbAuthService} from '@nebular/auth';
+import {Md5} from 'ts-md5';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,7 @@ export class HeaderComponent implements OnInit {
   isLoggedIn = false;
 
   user = {
-    name: 'Test User',
+    name: '',
     pictureOnly: false,
     picture: 'assets/images/eva.png',
   };
@@ -24,7 +25,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authService.onTokenChange().subscribe(token => {
       this.isLoggedIn = token.isValid();
-      // TODO add getTokenPayload
+      const payload = token.getPayload();
+      if (payload) {
+        this.user.name = payload.user_name;
+        if (payload.gravatar || payload.user_email) {
+          this.user.picture = this.gravatarUrl(payload.gravatar || payload.user_email)
+        } else {
+          this.user.pictureOnly = false;
+        }
+      }
     })
   }
 
@@ -34,5 +43,11 @@ export class HeaderComponent implements OnInit {
 
     return false;
   }
+
+  gravatarUrl(email: string): string {
+    const hash = Md5.hashStr(email);
+    return `https://www.gravatar.com/avatar/${hash}`;
+  }
+
 
 }
