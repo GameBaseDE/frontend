@@ -9,6 +9,7 @@
                 (keyup)="updateServerName(serverName.value)"
                 class="form-control"
                 name="input-server-name"
+                id="input-server-name"
                 required
                 nbInput
                 ngModel
@@ -18,21 +19,6 @@
                 [status]="generalDetails.serverName.hasError ? 'danger' : 'basic'"
                 placeholder="Server name">
         <gb-error-container *ngIf="generalDetails.serverName.hasError" errorMessage="This field must not be empty!"></gb-error-container>
-      </form>
-
-      <form class="form-server-creation">
-        <label class="label" for="input-server-owner">Server Owner</label><br/>
-        <div class="description">Owner of server that will have full control of this game server</div>
-        <input  [(ngModel)]="generalDetails.ownerId"
-                class="form-control"
-                name="input-server-owner"
-                nbInput
-                ngModel
-                disabled
-                type="text"
-                fullWidth
-                status="basic"
-                placeholder="Type some letters to start searching user">
       </form>
     </div>
     <div class="col-2">
@@ -44,6 +30,7 @@
                   #description
                   class="form-control"
                   name="input-server-description"
+                  id="input-server-description"
                   required
                   nbInput
                   ngModel
@@ -68,6 +55,7 @@
                #templatePath
                class="form-control"
                name="input-template-path"
+               id="input-template-path"
                required
                nbInput
                ngModel
@@ -87,6 +75,7 @@
                  #tcpPortAlloc
                  class="form-control"
                  name="input-tcp-port-allocation"
+                 id="input-tcp-port-allocation"
                  required
                  nbInput
                  ngModel
@@ -107,6 +96,7 @@
                  #udpPortAlloc
                  class="form-control"
                  name="input-udp-port-allocation"
+                 id="input-udp-port-allocation"
                  required
                  nbInput
                  ngModel
@@ -126,6 +116,7 @@
                #memoryAlloc
                class="form-control"
                name="input-memory-allocation"
+               id="input-memory-allocation"
                required
                nbInput
                ngModel
@@ -146,6 +137,7 @@
                 #startupArgs
                 class="form-control"
                 name="input-startup-arguments"
+                id="input-startup-arguments"
                 required
                 nbInput
                 ngModel
@@ -157,7 +149,7 @@
 
         <form class="form-server-creation">
           <label class="label" for="input-restart-behaviors">Restart behavior</label><br />
-          <nb-radio-group [(ngModel)]="resources.restartBehavior" name="restartBehavior">
+          <nb-radio-group [(ngModel)]="resources.restartBehavior" name="restartBehavior" id="input-restart-behaviors">
             <nb-radio
               *ngFor="let option of restartBehaviorOptions"
               [value]="option.value"
