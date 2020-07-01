@@ -2,5 +2,5 @@
   window["env"] = window["env"] || {};
 
   // Environment variables
-  window["env"]["restApiURL"] = "https://api.game-base.de";
+  window["env"]["restApiURL"] = `${location.protocol}//${location.hostname}:${location.port}`;
 })(this);
