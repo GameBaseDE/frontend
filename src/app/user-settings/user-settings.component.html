@@ -1,0 +1,147 @@
+<div class="col-1">
+  <nb-card>
+    <nb-card-header>General Details</nb-card-header>
+    <nb-card-body>
+      <form class="form-general-details">
+        <label class="label" for="input-username">User name</label><br/>
+        <div class="description"><b>NOTE:</b> This does not affect your login!</div>
+        <input [(ngModel)]="generalDetails.username.value"
+               (keyup)="updateUserName(username.value)"
+               class="form-control"
+               id="input-username"
+               name="input-username"
+               required
+               nbInput
+               ngModel
+               #username
+               type="text"
+               fullWidth
+               [status]="generalDetails.username.error?.hasError ? 'danger' : 'basic'"
+               placeholder="User name">
+        <gb-error-container *ngIf="generalDetails.username.error?.hasError"
+                            [errorMessage]="generalDetails.username.error?.errorMessage"></gb-error-container>
+      </form>
+      <form class="form-general-details">
+        <label class="label" for="input-mail-address">E-mail address</label><br/>
+        <div class="description">Used for login and password recovery</div>
+        <input [(ngModel)]="generalDetails.emailAddress.value"
+               (keyup)="updateEmail(email.value)"
+               class="form-control"
+               id="input-mail-address"
+               name="input-mail-address"
+               required
+               nbInput
+               ngModel
+               #email
+               type="email"
+               fullWidth
+               [status]="generalDetails.emailAddress.error?.hasError ? 'danger' : 'basic'"
+               placeholder="example@example.com">
+        <gb-error-container *ngIf="generalDetails.emailAddress.error?.hasError"
+                            [errorMessage]="generalDetails.emailAddress.error?.errorMessage"></gb-error-container>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>
+
+<div class="col-2">
+  <nb-card>
+    <nb-card-header>Change password</nb-card-header>
+    <nb-card-body>
+      <form class="form-change-password">
+        <label class="label" for="input-old-password">Old password</label><br/>
+        <input [(ngModel)]="generalDetails.password.old.value"
+               (keyup)="updateOldPassword(oldPassword.value)"
+               class="form-control"
+               id="input-old-password"
+               name="input-old-password"
+               required
+               nbInput
+               ngModel
+               #oldPassword
+               type="password"
+               fullWidth
+               [status]="generalDetails.password.old.error?.hasError ? 'danger' : 'basic'">
+        <gb-error-container *ngIf="generalDetails.password.old.error?.hasError"
+                            [errorMessage]="generalDetails.password.old.error?.errorMessage"></gb-error-container>
+      </form>
+      <form class="form-change-password">
+        <label class="label" for="input-new-password">New password</label><br/>
+        <input [(ngModel)]="generalDetails.password.$new.value"
+               (keyup)="updateNewPassword(newPassword.value)"
+               class="form-control"
+               id="input-new-password"
+               name="input-new-password"
+               required
+               nbInput
+               ngModel
+               #newPassword
+               type="password"
+               fullWidth
+               [status]="generalDetails.password.$new.error?.hasError ? 'danger' : 'basic'">
+        <gb-error-container *ngIf="generalDetails.password.$new.error?.hasError"
+                            [errorMessage]="generalDetails.password.$new.error?.errorMessage"></gb-error-container>
+      </form>
+
+      <form class="form-change-password">
+        <label class="label" for="input-repeat-password">Repeat new password</label><br/>
+        <input [(ngModel)]="generalDetails.password.repeat.value"
+               (keyup)="updateRepeatPassword(repeatPassword.value)"
+               class="form-control"
+               id="input-repeat-password"
+               name="input-repeat-password"
+               required
+               nbInput
+               ngModel
+               #repeatPassword
+               type="password"
+               fullWidth
+               [status]="generalDetails.password.repeat.error?.hasError ? 'danger' : 'basic'">
+        <gb-error-container *ngIf="generalDetails.password.repeat.error?.hasError"
+                            [errorMessage]="generalDetails.password.repeat.error?.errorMessage"></gb-error-container>
+      </form>
+
+      <form class="form-change-password">
+        <button nbButton status="info" (click)="clearPasswordForm()">Clear</button>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>
+
+<div class="col-1">
+  <nb-card>
+    <nb-card-header>Gravatar</nb-card-header>
+    <nb-card-body>
+      <form class="form-gravatar-email">
+        <div class="user-gravatar">
+          <nb-user size="large" onlyPicture [picture]="gravatarUrl()">
+          </nb-user>
+        </div>
+        <label class="label" for="input-gravatar-email">Gravatar e-mail address</label><br/>
+        <input [(ngModel)]="generalDetails.gravatarEmail.value"
+               (change)="updateGravatarEmail(gravatarEmail.value)"
+               id="input-gravatar-email"
+               name="input-gravatar-email"
+               required
+               nbInput
+               ngModel
+               #gravatarEmail
+               type="email"
+               [status]="generalDetails.gravatarEmail.error?.hasError ? 'danger' : 'basic'"
+               placeholder="example@example.com">
+        <gb-error-container *ngIf="generalDetails.gravatarEmail.error?.hasError"
+                            [errorMessage]="generalDetails.gravatarEmail.error?.errorMessage"></gb-error-container>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>
+
+<nb-card class="button-group-nb-card">
+  <nb-card-body class="button-group">
+    <div class="button-group-container">
+      <button nbButton status="basic" (click)="cancel()">Cancel</button>
+      <button nbButton status="info" (click)="apply()">Apply</button>
+    </div>
+  </nb-card-body>
+</nb-card>
+
