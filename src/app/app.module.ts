@@ -44,6 +44,7 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {CommonModule} from '@angular/common';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {CommonModule} from '@angular/common';
     ServerConfigurationComponent,
     ErrorContainerComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    UserSettingsComponent
   ],
   imports: [
     CommonModule,

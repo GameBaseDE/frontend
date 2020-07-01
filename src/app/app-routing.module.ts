@@ -6,8 +6,9 @@ import {AuthGuard} from './auth.guard';
 import {LoginComponent} from './auth/login/login.component';
 
 import {ServerConfigurationComponent} from './serverconfiguration/serverconfiguration.component';
-import {NbLogoutComponent, NbRegisterComponent} from '@nebular/auth';
+import {NbLogoutComponent} from '@nebular/auth';
 import {RegisterComponent} from './auth/register/register.component';
+import {UserSettingsComponent} from './user-settings/user-settings.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
       {
         path: 'server/configure/:id',
         component: ServerConfigurationComponent,
+      },
+      {
+        path: 'profile',
+        component: UserSettingsComponent
       },
       {path: 'server/configure', redirectTo: '/dashboard', pathMatch: 'full'}, // Redirect empty path param 'id'
       {path: '**', component: PageNotFoundComponent}
