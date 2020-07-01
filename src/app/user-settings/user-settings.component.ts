@@ -52,9 +52,19 @@ export class UserSettingsComponent implements OnInit {
     this.authService.getToken()
       .subscribe(
         result => {
-          // TODO: User details are still missing; result.getPayload()
-          this.updateUserName('Test User');
-          this.updateEmail('test123@test.de');
+          this.authService.getToken().subscribe(
+            token => {
+              const payload = token.getPayload();
+
+              if (payload) {
+                this.updateEmail(payload.user_email);
+                if (payload.gravatar || payload.user_email) {
+                  this.updateGravatarEmail(payload.gravatar || payload.user_email);
+                }
+                this.updateUserName(payload.user_name);
+              }
+            }
+          );
         },
         error => {
           this.toastr.warning('User details could not be retrieved. Token might be invalid?', 'User details retrieval failed!');
