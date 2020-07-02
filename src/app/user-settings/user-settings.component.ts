@@ -39,7 +39,10 @@ export class UserSettingsComponent implements OnInit {
     this.generalDetails = new GeneralDetails();
   }
 
-  private static redirectRoute = ['/dashboard'];
+  private static redirectRoute = {
+    dashboard: ['/dashboard'],
+    logout: ['/logout']
+  };
   private static emailRegex = /.+@.+\..+/g;
 
   generalDetails: GeneralDetails;
@@ -68,13 +71,13 @@ export class UserSettingsComponent implements OnInit {
         },
         error => {
           this.toastr.warning('User details could not be retrieved. Token might be invalid?', 'User details retrieval failed!');
-          this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+          this.router.navigate(UserSettingsComponent.redirectRoute.dashboard).then(r => { return; });
         }
       );
   }
 
   cancel() {
-    this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+    this.router.navigate(UserSettingsComponent.redirectRoute.dashboard).then(r => { return; });
     this.toastr.info('Profile changes have not been applied.', 'Profile change cancelled!');
   }
 
@@ -83,8 +86,8 @@ export class UserSettingsComponent implements OnInit {
       this.userService.updateUserProfile({body: this.userProfile()})
         .subscribe(
           result => {
-            this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
-            this.toastr.success('Your new changes have been applied.', 'Profile updated!');
+            this.router.navigate(UserSettingsComponent.redirectRoute.logout).then(r => { return; });
+            this.toastr.success('Your new changes have been applied. Please log in again.', 'Profile updated!');
           },
           error => {
             const err = JSON.parse(error.error);

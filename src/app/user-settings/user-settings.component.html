@@ -1,3 +1,5 @@
+<nb-alert outline="warning">If you choose to change any of these settings, you have to log in again.</nb-alert>
+
 <div class="col-1">
   <nb-card>
     <nb-card-header>General Details</nb-card-header>
@@ -50,6 +52,7 @@
     <nb-card-body>
       <form class="form-change-password">
         <label class="label" for="input-old-password">Old password</label><br/>
+        <div class="description"><b>NOTE:</b> You need to provide this if you change any settings!</div>
         <input [(ngModel)]="generalDetails.password.old.value"
                (keyup)="updateOldPassword(oldPassword.value)"
                class="form-control"
