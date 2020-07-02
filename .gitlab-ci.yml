@@ -202,6 +202,7 @@ Deploy dev:
       gamebaseproject/frontend:$CI_COMMIT_SHA
   except:
     - master
+    - tags
   tags:
     - GameBase
     - shell
