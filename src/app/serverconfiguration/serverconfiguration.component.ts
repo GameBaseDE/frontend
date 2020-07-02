@@ -160,11 +160,11 @@ export class ServerConfigurationComponent implements OnInit {
         },
         resources: {
           templatePath: resources.templatePath.value,
-          memory: resources.memoryAlloc.value as unknown as number,
+          memory: parseInt(resources.memoryAlloc.value, 10),
           ports: resources.portAlloc.tcp.parsedValues.map(value => {
-            return {protocol: Protocol.Tcp, containerPort: value, nodePort: value}
+            return {protocol: Protocol.Tcp, containerPort: parseInt(value, 10), nodePort: parseInt(value, 10)}
           }).concat(resources.portAlloc.udp.parsedValues.map(value => {
-            return {protocol: Protocol.Udp, containerPort: value, nodePort: value}
+            return {protocol: Protocol.Udp, containerPort: parseInt(value, 10), nodePort: parseInt(value, 10)}
           })),
           restartBehavior: EnumUtils.getKeyByValue(RestartBehavior, resources.restartBehavior),
           startupArgs: resources.startupArgs
