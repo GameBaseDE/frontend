@@ -39,7 +39,10 @@ export class UserSettingsComponent implements OnInit {
     this.generalDetails = new GeneralDetails();
   }
 
-  private static redirectRoute = ['/dashboard'];
+  private static redirectRoute = {
+    dashboard: ['/dashboard'],
+    logout: ['/logout']
+  };
   private static emailRegex = /.+@.+\..+/g;
 
   generalDetails: GeneralDetails;
@@ -68,27 +71,28 @@ export class UserSettingsComponent implements OnInit {
         },
         error => {
           this.toastr.warning('User details could not be retrieved. Token might be invalid?', 'User details retrieval failed!');
-          this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+          this.router.navigate(UserSettingsComponent.redirectRoute.dashboard).then(r => { return; });
         }
       );
   }
 
   cancel() {
-    this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
+    this.router.navigate(UserSettingsComponent.redirectRoute.dashboard).then(r => { return; });
     this.toastr.info('Profile changes have not been applied.', 'Profile change cancelled!');
   }
 
   apply() {
-    if (!this.hasErrors) {
+    if (!this.hasErrors()) {
       this.userService.updateUserProfile({body: this.userProfile()})
         .subscribe(
           result => {
-            this.router.navigate(UserSettingsComponent.redirectRoute).then(r => { return; });
-            this.toastr.success('Your new changes have been applied.', 'Profile updated!');
+            this.router.navigate(UserSettingsComponent.redirectRoute.logout).then(r => { return; });
+            this.toastr.success('Your new changes have been applied. Please log in again.', 'Profile updated!');
           },
           error => {
-            if (error.error.details) {
-              this.toastr.error(`An error occurred: (${error.error.details}). Please try again later!`, 'Error when applying changes!');
+            const err = JSON.parse(error.error);
+            if (err.details) {
+              this.toastr.error(`An error occurred: ${err.details}. Please try again later!`, 'Error when applying changes!');
             } else {
               this.toastr.error('An unknown error occurred. Please try again later!', 'Error when applying changes!');
             }
@@ -194,6 +198,13 @@ export class UserSettingsComponent implements OnInit {
   }
 
   private hasErrors = (): boolean => {
+    console.log(this.generalDetails.password.repeat.error);
+    console.log(this.generalDetails.password.$new.error.hasError);
+    console.log(this.generalDetails.password.old.error.hasError);
+    console.log(this.generalDetails.gravatarEmail.error.hasError);
+    console.log(this.generalDetails.emailAddress.error.hasError);
+    console.log(this.generalDetails.username.error.hasError);
+
     return this.generalDetails.password.repeat.error.hasError || this.generalDetails.password.$new.error.hasError ||
       this.generalDetails.password.old.error.hasError || this.generalDetails.gravatarEmail.error.hasError ||
       this.generalDetails.emailAddress.error.hasError || this.generalDetails.username.error.hasError;
