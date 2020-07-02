@@ -79,7 +79,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   apply() {
-    if (!this.hasErrors) {
+    if (!this.hasErrors()) {
       this.userService.updateUserProfile({body: this.userProfile()})
         .subscribe(
           result => {
@@ -87,8 +87,9 @@ export class UserSettingsComponent implements OnInit {
             this.toastr.success('Your new changes have been applied.', 'Profile updated!');
           },
           error => {
-            if (error.error.details) {
-              this.toastr.error(`An error occurred: (${error.error.details}). Please try again later!`, 'Error when applying changes!');
+            const err = JSON.parse(error.error);
+            if (err.details) {
+              this.toastr.error(`An error occurred: ${err.details}. Please try again later!`, 'Error when applying changes!');
             } else {
               this.toastr.error('An unknown error occurred. Please try again later!', 'Error when applying changes!');
             }
@@ -194,6 +195,13 @@ export class UserSettingsComponent implements OnInit {
   }
 
   private hasErrors = (): boolean => {
+    console.log(this.generalDetails.password.repeat.error);
+    console.log(this.generalDetails.password.$new.error.hasError);
+    console.log(this.generalDetails.password.old.error.hasError);
+    console.log(this.generalDetails.gravatarEmail.error.hasError);
+    console.log(this.generalDetails.emailAddress.error.hasError);
+    console.log(this.generalDetails.username.error.hasError);
+
     return this.generalDetails.password.repeat.error.hasError || this.generalDetails.password.$new.error.hasError ||
       this.generalDetails.password.old.error.hasError || this.generalDetails.gravatarEmail.error.hasError ||
       this.generalDetails.emailAddress.error.hasError || this.generalDetails.username.error.hasError;
